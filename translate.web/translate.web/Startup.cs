@@ -37,6 +37,8 @@ namespace translate.web
                 opt.Password.RequireDigit = true;
                 opt.Password.RequireUppercase = true;
                 opt.Password.RequiredLength = 8;
+                opt.Password.RequireLowercase = true;
+                opt.Password.RequireNonAlphanumeric = false;
             });
 
             services.ConfigureApplicationCookie(options => 

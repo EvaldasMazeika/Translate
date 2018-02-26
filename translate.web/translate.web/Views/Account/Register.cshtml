@@ -1,0 +1,56 @@
+﻿@model RegisterViewModel
+@{
+
+    Layout = "~/Views/Shared/_Account.cshtml";
+}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <div class="card">
+            <div class="card-header">
+                Registracija
+            </div>
+            <div class="card-body">
+                <form asp-action="Register">
+                    <div class="form-group">
+                        <label asp-for="Name">Vardas</label>
+                        <input type="text" asp-for="Name" class="form-control" placeholder="" required>
+                        <span asp-validation-for="Name"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Surname">Pavardė</label>
+                        <input type="text" asp-for="Surname" class="form-control" placeholder="" required>
+                        <span asp-validation-for="Surname"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email">El. paštas</label>
+                        <input type="email" asp-for="Email" class="form-control" placeholder="" required>
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber">Telefono numeris</label>
+                        <input type="text" asp-for="PhoneNumber" class="form-control" placeholder="" required>
+                        <span asp-validation-for="PhoneNumber"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="BirthDate">Gimimo data</label>
+                        <input type="date" asp-for="BirthDate" class="form-control" placeholder="" required>
+                        <span asp-validation-for="BirthDate"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserName">Slapyvardis</label>
+                        <input type="text" asp-for="UserName" class="form-control" placeholder="" required>
+                        <span asp-validation-for="UserName"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password">Slaptažodis</label>
+                        <input type="password" class="form-control" asp-for="Password" aria-describedby="passwordHelp" placeholder="" required>
+                        <span asp-validation-for="Password"></span>
+                        <small id="passwordHelp" class="form-text text-muted">Slaptažodis turi susidaryti iš skaičiaus, didžiosios raidės ir ne mažiau kaip 8 simbolių.</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Užsiregistruoti</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

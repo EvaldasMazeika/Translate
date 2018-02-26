@@ -1,0 +1,38 @@
+﻿@model LoginViewModel
+@{
+    Layout = "~/Views/Shared/_Account.cshtml";
+}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <div class="card">
+            <div class="card-header">
+                Prisijungimas
+            </div>
+            <div class="card-body">
+                <form asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]"> 
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-user-secret"></i></span>
+                        </div>
+                        <input type="text" class="form-control" asp-for="Username" placeholder="Slapyvardis" aria-label="Slapyvardis" aria-describedby="basic-addon1" required>
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-asterisk"></i></span>
+                        </div>
+                        <input type="password" class="form-control" asp-for="Password" placeholder="Slaptažodis" aria-label="Slaptažodis" aria-describedby="basic-addon1" required>
+                    </div>
+                    <div class="col-auto my-1">
+                        <div class="custom-control custom-checkbox mr-sm-2">
+                            <input type="checkbox" asp-for="RememberMe" class="custom-control-input" id="customControlAutosizing">
+                            <label class="custom-control-label" for="customControlAutosizing">Prisiminti mane?</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Prisijungti</button>
+                </form>
+            </div>
+        </div>
+        <a asp-action="Register">Naujas vartotojas?</a>
+    </div>
+</div>
