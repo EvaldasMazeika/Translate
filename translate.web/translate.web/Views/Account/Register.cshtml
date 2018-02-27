@@ -3,51 +3,55 @@
 
     Layout = "~/Views/Shared/_Account.cshtml";
 }
+@inject translate.web.Resources.LocService SharedLocalizer
 <div class="row">
     <div class="col-md-4 offset-md-4">
         <div class="card">
             <div class="card-header">
-                Registracija
+                <div class="row">
+                    <div class="col-4">@SharedLocalizer.GetLocalizedHtmlString("registrationCaption")</div>
+                    <div class="col-8">@await Html.PartialAsync("_SelectLanguagePartial")</div>
+                </div>
             </div>
             <div class="card-body">
                 <form asp-action="Register">
                     <div class="form-group">
-                        <label asp-for="Name">Vardas</label>
+                        <label asp-for="Name"></label>
                         <input type="text" asp-for="Name" class="form-control" placeholder="" required>
                         <span asp-validation-for="Name"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Surname">Pavardė</label>
+                        <label asp-for="Surname"></label>
                         <input type="text" asp-for="Surname" class="form-control" placeholder="" required>
                         <span asp-validation-for="Surname"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Email">El. paštas</label>
+                        <label asp-for="Email"></label>
                         <input type="email" asp-for="Email" class="form-control" placeholder="" required>
                         <span asp-validation-for="Email"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="PhoneNumber">Telefono numeris</label>
+                        <label asp-for="PhoneNumber"></label>
                         <input type="text" asp-for="PhoneNumber" class="form-control" placeholder="" required>
                         <span asp-validation-for="PhoneNumber"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="BirthDate">Gimimo data</label>
+                        <label asp-for="BirthDate"></label>
                         <input type="date" asp-for="BirthDate" class="form-control" placeholder="" required>
                         <span asp-validation-for="BirthDate"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="UserName">Slapyvardis</label>
+                        <label asp-for="UserName"></label>
                         <input type="text" asp-for="UserName" class="form-control" placeholder="" required>
                         <span asp-validation-for="UserName"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Password">Slaptažodis</label>
+                        <label asp-for="Password"></label>
                         <input type="password" class="form-control" asp-for="Password" aria-describedby="passwordHelp" placeholder="" required>
                         <span asp-validation-for="Password"></span>
-                        <small id="passwordHelp" class="form-text text-muted">Slaptažodis turi susidaryti iš skaičiaus, didžiosios raidės ir ne mažiau kaip 8 simbolių.</small>
+                        <small id="passwordHelp" class="form-text text-muted">@SharedLocalizer.GetLocalizedHtmlString("registrationPassSMALL")</small>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Užsiregistruoti</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">@SharedLocalizer.GetLocalizedHtmlString("registrationButton")</button>
                 </form>
             </div>
         </div>

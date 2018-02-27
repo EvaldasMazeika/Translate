@@ -18,4 +18,13 @@
   <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
 </ItemGroup>
 
+<ItemGroup>
+  <EmbeddedResource Update="Resources\SharedResource.en-US.resx">
+    <Generator>ResXFileCodeGenerator</Generator>
+  </EmbeddedResource>
+  <EmbeddedResource Update="Resources\SharedResource.lt.resx">
+    <Generator>ResXFileCodeGenerator</Generator>
+  </EmbeddedResource>
+</ItemGroup>
+
 </Project>

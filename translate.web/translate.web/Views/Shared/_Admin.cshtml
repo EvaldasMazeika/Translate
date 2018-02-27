@@ -1,6 +1,4 @@
-﻿
-@inject translate.web.Resources.LocService SharedLocalizer
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -14,10 +12,6 @@
     </environment>
 </head>
 <body>
-    @if (User.IsInRole("Administrator"))
-    {
-    <a class="btn btn-info btn-lg btn-block btn-sm" asp-action="Index" asp-controller="Admin" role="button">@SharedLocalizer.GetLocalizedHtmlString("AdministrationCaption")</a>
-    }
     <div class="container-fluid">
         @RenderBody()
     </div>

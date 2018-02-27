@@ -2,37 +2,41 @@
 @{
     Layout = "~/Views/Shared/_Account.cshtml";
 }
+@inject translate.web.Resources.LocService SharedLocalizer
 <div class="row">
     <div class="col-md-4 offset-md-4">
         <div class="card">
             <div class="card-header">
-                Prisijungimas
+                <div class="row">
+                    <div class="col-4">@SharedLocalizer.GetLocalizedHtmlString("loginCaption")</div>
+                    <div class="col-8">@await Html.PartialAsync("_SelectLanguagePartial")</div>
+                </div>
             </div>
             <div class="card-body">
-                <form asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]"> 
+                <form asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1"><i class="fa fa-user-secret"></i></span>
                         </div>
-                        <input type="text" class="form-control" asp-for="Username" placeholder="Slapyvardis" aria-label="Slapyvardis" aria-describedby="basic-addon1" required>
+                        <input type="text" class="form-control" asp-for="Username" placeholder="@SharedLocalizer.GetLocalizedHtmlString("loginUsernamePlaceholder")" aria-label="Slapyvardis" aria-describedby="basic-addon1" required>
                     </div>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1"><i class="fa fa-asterisk"></i></span>
                         </div>
-                        <input type="password" class="form-control" asp-for="Password" placeholder="Slaptažodis" aria-label="Slaptažodis" aria-describedby="basic-addon1" required>
+                        <input type="password" class="form-control" asp-for="Password" placeholder="@SharedLocalizer.GetLocalizedHtmlString("loginPasswordPlaceholder")" aria-label="Slaptažodis" aria-describedby="basic-addon1" required>
                     </div>
                     <div class="col-auto my-1">
                         <div class="custom-control custom-checkbox mr-sm-2">
                             <input type="checkbox" asp-for="RememberMe" class="custom-control-input" id="customControlAutosizing">
-                            <label class="custom-control-label" for="customControlAutosizing">Prisiminti mane?</label>
+                            <label class="custom-control-label" for="customControlAutosizing">@SharedLocalizer.GetLocalizedHtmlString("loginRemember")</label>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Prisijungti</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">@SharedLocalizer.GetLocalizedHtmlString("loginButton")</button>
                 </form>
             </div>
         </div>
-        <a asp-action="Register">Naujas vartotojas?</a>
+        <a asp-action="Register">@SharedLocalizer.GetLocalizedHtmlString("newUserLink")</a>
     </div>
 </div>

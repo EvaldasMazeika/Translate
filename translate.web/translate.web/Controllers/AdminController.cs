@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace translate.web.Controllers
 {
-    [Authorize(Roles = "Administrator, Translator")]
-    public class HomeController : Controller
+    [Authorize(Roles = "Administrator")]
+    public class AdminController : Controller
     {
         public IActionResult Index()
         {
