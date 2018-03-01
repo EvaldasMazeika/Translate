@@ -14,16 +14,18 @@
         .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
         .ToList();
 }
-<div class="input-group input-group-sm mb-3">
-    <div class="input-group-prepend">
-        <span class="input-group-text" id="inputGroup-sizing-sm">@SharedLocalizer.GetLocalizedHtmlString("language")</span>
-    </div>
-    <form id="selectLanguage" asp-controller="Account"
+
+<form class="form-inline" id="selectLanguage" asp-controller="Account"
           asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path"
-          method="post" class="form-inline" role="form">
-        <select class="custom-select custom-select-sm" name="culture" onchange="this.form.submit();" asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems"></select>
-    </form>
-</div>
+          method="post" role="form">
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">@SharedLocalizer.GetLocalizedHtmlString("language")</span>
+        </div>
+        <select class="custom-select" name="culture" onchange="this.form.submit();" asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems"></select>
+    </div>
+</form>
+
 
 
 

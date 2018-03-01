@@ -1,11 +1,12 @@
 ﻿
 @inject translate.web.Resources.LocService SharedLocalizer
+@inject Microsoft.AspNetCore.Identity.UserManager<AppIdentityUser> manager
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Translate</title>
+    <title>VS</title>
     <environment names="Development">
         <script src="~/dist/main.js"></script>
     </environment>
@@ -16,10 +17,47 @@
 <body>
     @if (User.IsInRole("Administrator"))
     {
-    <a class="btn btn-info btn-lg btn-block btn-sm" asp-action="Index" asp-controller="Admin" role="button">@SharedLocalizer.GetLocalizedHtmlString("AdministrationCaption")</a>
+        <a class="btn btn-info btn-lg btn-block btn-sm" asp-action="Index" asp-controller="Admin" role="button">@SharedLocalizer.GetLocalizedHtmlString("AdministrationCaption")</a>
     }
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" asp-action="Index">VS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       @manager.GetUserAsync(User).Result.UserName
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" asp-action="Account" asp-controller="Home"><i class="fa fa-user-circle"></i> @SharedLocalizer.GetLocalizedHtmlString("AccountButton")</a>
+                        <a class="dropdown-item" asp-action="Logout" asp-controller="Account"><i class="fa fa-frown-o"></i> @SharedLocalizer.GetLocalizedHtmlString("logoutButton")</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    @await Html.PartialAsync("_SelectLanguagePartial")
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="container-fluid">
-        @RenderBody()
+        <div class="row">
+            <div class="col-sm-2">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-action="Projects" asp-controller="Home"><i class="fa fa-folder"></i>  @SharedLocalizer.GetLocalizedHtmlString("subMenuProjects")</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-10">
+                <div class="card">
+                    <div class="card-body">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

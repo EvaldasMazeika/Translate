@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountButton" xml:space="preserve">
+    <value>Account</value>
+  </data>
   <data name="AdministrationCaption" xml:space="preserve">
     <value>Administration</value>
+  </data>
+  <data name="currentPassword" xml:space="preserve">
+    <value>Current password</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>Language</value>
@@ -129,6 +135,9 @@
   <data name="loginCaption" xml:space="preserve">
     <value>Login</value>
   </data>
+  <data name="loginError" xml:space="preserve">
+    <value>Cannot login</value>
+  </data>
   <data name="loginPasswordPlaceholder" xml:space="preserve">
     <value>Password</value>
   </data>
@@ -138,8 +147,23 @@
   <data name="loginUsernamePlaceholder" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="logoutButton" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="newPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
   <data name="newUserLink" xml:space="preserve">
     <value>New user?</value>
+  </data>
+  <data name="passwordCaption" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="passwordInfo" xml:space="preserve">
+    <value>There you can change your password</value>
+  </data>
+  <data name="personalInfoCaption" xml:space="preserve">
+    <value>Personal information</value>
   </data>
   <data name="registerBirthDate" xml:space="preserve">
     <value>Date of birth</value>
@@ -170,5 +194,26 @@
   </data>
   <data name="registrationPassSMALL" xml:space="preserve">
     <value>Password needs a  digit, upper case letter and atleast 8 symbols.</value>
+  </data>
+  <data name="repeatPassword" xml:space="preserve">
+    <value>Repeat new password</value>
+  </data>
+  <data name="required" xml:space="preserve">
+    <value>Required to fill</value>
+  </data>
+  <data name="subMenuProjects" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="tooLong" xml:space="preserve">
+    <value>Too long</value>
+  </data>
+  <data name="tooShort" xml:space="preserve">
+    <value>Too short</value>
+  </data>
+  <data name="updateButton" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="wrongFormat" xml:space="preserve">
+    <value>Wrong format</value>
   </data>
 </root>

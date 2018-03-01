@@ -1,0 +1,15 @@
+﻿@inject translate.web.Resources.LocService SharedLocalizer
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="true">@SharedLocalizer.GetLocalizedHtmlString("personalInfoCaption")</a>
+        <a class="nav-item nav-link" id="nav-password-tab" data-toggle="tab" href="#nav-password" role="tab" aria-controls="nav-password" aria-selected="false">@SharedLocalizer.GetLocalizedHtmlString("passwordCaption")</a>
+    </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        @await Component.InvokeAsync("EditMySelf", new { })
+    </div>
+    <div class="tab-pane fade" id="nav-password" role="tabpanel" aria-labelledby="nav-password-tab">
+        @await Component.InvokeAsync("ChangePassword", new { })
+    </div>
+</div>

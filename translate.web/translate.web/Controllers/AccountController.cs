@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using translate.web.Models;
+using translate.web.Resources;
 using translate.web.ViewModels;
 
 namespace translate.web.Controllers
@@ -17,14 +18,17 @@ namespace translate.web.Controllers
         private readonly SignInManager<AppIdentityUser> _signInManager;
         private readonly UserManager<AppIdentityUser> _userManager;
         private readonly RoleManager<AppIdentityRole> _roleManager;
+        private readonly LocService _loc;
 
         public AccountController(SignInManager<AppIdentityUser> signInManager,
             UserManager<AppIdentityUser> userManager,
-            RoleManager<AppIdentityRole> roleManager)
+            RoleManager<AppIdentityRole> roleManager,
+            LocService loc)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
+            _loc = loc;
         }
 
         [HttpGet]
@@ -41,20 +45,16 @@ namespace translate.web.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
 
-            if(!ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Nepavyko prisijungti"); //TODO VALIDATION
-                return View(model);
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
+                if(result.Succeeded)
+                {
+                    return RedirectToLocal(returnUrl);
+                }
             }
 
-            var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
-
-            if(result.Succeeded)
-            {
-                return RedirectToLocal(returnUrl);
-            }
-
-            ModelState.AddModelError(string.Empty, "Nepavyko prisijungti");
+            ModelState.AddModelError(string.Empty, _loc.GetLocalizedHtmlString("loginError"));
             return View(model); 
         }
 

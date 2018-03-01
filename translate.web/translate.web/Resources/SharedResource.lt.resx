@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AccountButton" xml:space="preserve">
+    <value>Paskyra</value>
+  </data>
   <data name="AdministrationCaption" xml:space="preserve">
     <value>Administracija</value>
+  </data>
+  <data name="currentPassword" xml:space="preserve">
+    <value>Esamas slaptažodis</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>Kalba</value>
@@ -129,6 +135,9 @@
   <data name="loginCaption" xml:space="preserve">
     <value>Prisijungimas</value>
   </data>
+  <data name="loginError" xml:space="preserve">
+    <value>Nepavyko prisijungti</value>
+  </data>
   <data name="loginPasswordPlaceholder" xml:space="preserve">
     <value>Slaptažodis</value>
   </data>
@@ -138,8 +147,23 @@
   <data name="loginUsernamePlaceholder" xml:space="preserve">
     <value>Slapyvardis</value>
   </data>
+  <data name="logoutButton" xml:space="preserve">
+    <value>Atsijungti</value>
+  </data>
+  <data name="newPassword" xml:space="preserve">
+    <value>Naujas slaptažodis</value>
+  </data>
   <data name="newUserLink" xml:space="preserve">
     <value>Naujas vartotojas?</value>
+  </data>
+  <data name="passwordCaption" xml:space="preserve">
+    <value>Slaptažodis</value>
+  </data>
+  <data name="passwordInfo" xml:space="preserve">
+    <value>Čia galite pasikeisti savo slaptažodį</value>
+  </data>
+  <data name="personalInfoCaption" xml:space="preserve">
+    <value>Asmeninė informacija</value>
   </data>
   <data name="registerBirthDate" xml:space="preserve">
     <value>Gimimo data</value>
@@ -170,5 +194,26 @@
   </data>
   <data name="registrationPassSMALL" xml:space="preserve">
     <value>Slaptažodis turi susidaryti iš skaičiaus, didžiosios raidės ir ne mažiau kaip 8 simbolių.</value>
+  </data>
+  <data name="repeatPassword" xml:space="preserve">
+    <value>Pakartotas naujas slaptažodis</value>
+  </data>
+  <data name="required" xml:space="preserve">
+    <value>Šis laukas privalomas</value>
+  </data>
+  <data name="subMenuProjects" xml:space="preserve">
+    <value>Projektai</value>
+  </data>
+  <data name="tooLong" xml:space="preserve">
+    <value>Per ilgas</value>
+  </data>
+  <data name="tooShort" xml:space="preserve">
+    <value>Per trumpas</value>
+  </data>
+  <data name="updateButton" xml:space="preserve">
+    <value>Atnaujinti</value>
+  </data>
+  <data name="wrongFormat" xml:space="preserve">
+    <value>Netinkamas formatas</value>
   </data>
 </root>

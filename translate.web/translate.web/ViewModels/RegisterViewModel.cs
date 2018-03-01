@@ -9,29 +9,29 @@ namespace translate.web.ViewModels
 {
     public class RegisterViewModel
     {
-        [Required]
-        [MaxLength(20)]
+        [Required(ErrorMessage = "required")]
+        [MaxLength(20, ErrorMessage = "tooLong")]
         [Display(Name = "registerName")]
         public string Name { get; set; }
 
-        [Required]
-        [MaxLength(20)]
+        [Required(ErrorMessage = "required")]
+        [MaxLength(20, ErrorMessage = "tooLong")]
         [Display(Name = "registerUserName")]
         public string UserName { get; set; }
 
-        [Required]
-        [MaxLength(20)]
+        [Required(ErrorMessage = "required")]
+        [MaxLength(20, ErrorMessage = "tooLong")]
         [Display(Name = "registerSurname")]
         public string Surname { get; set; }
 
-        [Required]
-        [MaxLength(50)]
+        [Required(ErrorMessage = "required")]
+        [MaxLength(50, ErrorMessage = "tooLong")]
         [Display(Name = "registerEmail")]
         public string Email { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        [MinLength(8)]
+        [Required(ErrorMessage = "required")]
+        [MaxLength(50, ErrorMessage = "tooLong")]
+        [MinLength(8, ErrorMessage = "tooShort")]
         [DataType(DataType.Password)]
         [Display(Name = "registerPassword")]
         public string Password { get; set; }
@@ -42,7 +42,7 @@ namespace translate.web.ViewModels
         public DateTime BirthDate { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        [RegularExpression("^([+])([0-9]{11})$", ErrorMessage = "Netinkamas formatas")]
+        [RegularExpression("^([+])([0-9]{11})$", ErrorMessage = "wrongFormat")]
         [Display(Name = "registerPhoneNumber")]
         public string PhoneNumber { get; set; }
 
