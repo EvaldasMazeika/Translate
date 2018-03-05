@@ -1,22 +1,25 @@
-﻿
-<h2>Index</h2>
+﻿@model IEnumerable<Post>
+<h1 class="display-4">Sveiki atvykę, @User.Identity.Name</h1>
 
-
-<table class="table table-dark">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>mdo</td>
-        </tr>
-    </tbody>
-</table>
+@if (Model.Any())
+{
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Create date</th>
+                <th scope="col">Author</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th><a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a> <span class="badge badge-secondary">New</span></th>
+                    <td>@item.CreatedTime</td>
+                    <td>@item.Employee.Name @item.Employee.Surname</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

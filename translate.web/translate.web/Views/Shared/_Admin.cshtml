@@ -1,9 +1,10 @@
-﻿<!doctype html>
+﻿@inject translate.web.Resources.LocService SharedLocalizer
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Translate</title>
+    <title>VS - Admin</title>
     <environment names="Development">
         <script src="~/dist/main.js"></script>
     </environment>
@@ -12,8 +13,49 @@
     </environment>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" asp-controller="Admin" asp-action="Index">VS</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="nav navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">@SharedLocalizer.GetLocalizedHtmlString("mainWebsiteLink")</a></li>
+                <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Logout">@SharedLocalizer.GetLocalizedHtmlString("logoutButton")</a></li>
+                <li class="nav-item">
+                    @await Html.PartialAsync("_SelectLanguagePartial")
+                </li>
+            </ul>
+        </div>
+    </nav>
     <div class="container-fluid">
-        @RenderBody()
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <h2>@SharedLocalizer.GetLocalizedHtmlString("optionsCaption")</h2><hr style="margin-bottom:5px !important; margin-top:5px !important; " />
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Admin" class="nav-link" asp-action="Index">@SharedLocalizer.GetLocalizedHtmlString("mainMenu")</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Admin" class="nav-link" asp-action="Posts">@SharedLocalizer.GetLocalizedHtmlString("postsLink")</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                @RenderBody()
+            </main>
+        </div>
     </div>
+    <environment names="Development">
+        <script src="~/dist/scripts.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/dist/scripts.js" asp-append-version="true"></script>
+    </environment>
+    @RenderSection("scripts", required: false)
 </body>
 </html>

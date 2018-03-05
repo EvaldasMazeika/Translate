@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using translate.web.Data;
 using translate.web.Models;
 using translate.web.ViewModels;
 
@@ -17,14 +19,54 @@ namespace translate.web.Controllers
     public class HomeController : Controller
     {
         private readonly UserManager<AppIdentityUser> _userManager;
+        private readonly ApplContext _context;
 
-        public HomeController(UserManager<AppIdentityUser> userManager)
+        public HomeController(UserManager<AppIdentityUser> userManager, ApplContext context)
         {
             _userManager = userManager;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            var model = _context.Posts.Include(x => x.Employee).ToList();
+
+            return View(model);
+        }
+        
+        [HttpGet]
+        public IActionResult Post(Guid id)
+        {
+            if(String.IsNullOrEmpty(id.ToString()))
+            {
+              return RedirectToAction("Index");
+            }
+
+            var model = _context.Posts.Include(a =>  a.Comments).Where(x => x.Id == id).FirstOrDefault();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(NewCommentViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+
+                var result = new Comment
+                {
+                    CommentText = model.WrittenText,
+                    CommentDate = DateTime.Now,
+                    PostId = model.PostId,
+                    FullName = $"{user.Name} {user.Surname}"
+                };
+
+                _context.Add(result);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Post");
+
+            }
             return View();
         }
 

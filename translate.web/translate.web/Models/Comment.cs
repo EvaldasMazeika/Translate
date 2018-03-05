@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace translate.web.Models
+{
+    public class Comment
+    {
+        public Guid Id { get; set; }
+
+        public Guid PostId { get; set; }
+
+        public string FullName { get; set; }
+
+        public DateTime CommentDate { get; set; }
+
+        public string CommentText { get; set; }
+
+        public Post Post { get; set; }
+
+    }
+}

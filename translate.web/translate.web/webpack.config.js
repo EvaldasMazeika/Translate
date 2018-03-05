@@ -9,7 +9,8 @@ module.exports = function (env) {
     // Setup base config for all environments
     var config = {
         entry: {
-            main: './Client/js/main'
+            main: './Client/js/main',
+            scripts: './Client/js/scripts'
         },
         output: {
             path: path.join(__dirname, 'wwwroot/dist'),
@@ -20,7 +21,11 @@ module.exports = function (env) {
             extensions: ['.ts', '.tsx', '.js', '.jsx']
         },
         plugins: [
-            new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' })
+            new webpack.ProvidePlugin({
+              $: 'jquery',
+         jQuery: 'jquery',
+'window.jQuery': 'jquery'
+                    })
         ],
         module: {
             rules: [

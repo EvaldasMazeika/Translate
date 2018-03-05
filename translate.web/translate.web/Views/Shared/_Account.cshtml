@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Translate</title>
+    <title>VS</title>
     <environment names="Development">
         <script src="~/dist/main.js"></script>
     </environment>
@@ -15,5 +15,11 @@
     <div class="container-fluid">
         @RenderBody()
     </div>
+    <environment names="Development">
+        <script src="~/dist/scripts.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/dist/scripts.js" asp-append-version="true"></script>
+    </environment>
 </body>
 </html>

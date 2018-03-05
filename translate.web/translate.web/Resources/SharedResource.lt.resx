@@ -150,11 +150,20 @@
   <data name="logoutButton" xml:space="preserve">
     <value>Atsijungti</value>
   </data>
+  <data name="mainMenu" xml:space="preserve">
+    <value>Pagrindinis</value>
+  </data>
+  <data name="mainWebsiteLink" xml:space="preserve">
+    <value>Pagrindinė svetainė</value>
+  </data>
   <data name="newPassword" xml:space="preserve">
     <value>Naujas slaptažodis</value>
   </data>
   <data name="newUserLink" xml:space="preserve">
     <value>Naujas vartotojas?</value>
+  </data>
+  <data name="optionsCaption" xml:space="preserve">
+    <value>Pasirinkimai</value>
   </data>
   <data name="passwordCaption" xml:space="preserve">
     <value>Slaptažodis</value>
@@ -164,6 +173,9 @@
   </data>
   <data name="personalInfoCaption" xml:space="preserve">
     <value>Asmeninė informacija</value>
+  </data>
+  <data name="postsLink" xml:space="preserve">
+    <value>Pranešimai</value>
   </data>
   <data name="registerBirthDate" xml:space="preserve">
     <value>Gimimo data</value>

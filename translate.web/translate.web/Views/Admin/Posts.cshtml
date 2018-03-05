@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Post>
+@{
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+
+
+<h1 class="display-4">Pranešimai</h1>
+
+<a asp-action="NewPost" asp-controller="Admin" class="btn btn-info" role="button">Naujas pranešimas</a>
+<br />
+<br />
+@if (!Model.Any())
+{
+    <div class="alert alert-danger text-center" role="alert">Nėra sukurta pranešimų</div>
+}
+else
+{
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Create date</th>
+                <th scope="col">Options</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th><a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a></th>
+                    <td>@item.CreatedTime</td>
+                    <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#DeletePostModal" data-whatever="@item.Id"><i class="fa fa-ban"></i></button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<div class="modal fade" id="DeletePostModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Ar tikrai norite pašalinti darbuotoją iš sistemos?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
+                <button id="deletePost" type="button" class="btn btn-primary">Taip</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

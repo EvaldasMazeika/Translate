@@ -14,6 +14,8 @@ namespace translate.web.Data
         public ApplContext(DbContextOptions<ApplContext> options) : base(options)
         { }
 
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
 
 
     }
