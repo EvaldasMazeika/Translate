@@ -16,7 +16,16 @@ namespace translate.web.Data
 
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectMember> ProjectMembers { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<ProjectMember>()
+                .HasKey(c => new { c.ProjectId, c.EmployeeId });
+        }
 
     }
 }

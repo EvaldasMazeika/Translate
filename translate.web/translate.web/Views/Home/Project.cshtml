@@ -1,0 +1,13 @@
+﻿@model Project
+
+
+<div class="row">
+    <div class="col-sm-8">
+        <h2>Project</h2>
+        <h3>@Model.Id</h3>
+    </div>
+    <div class="col-sm-4">
+        @await  Component.InvokeAsync("AddToProject", new { ProjectId = Model.Id })
+    </div>
+</div>
+

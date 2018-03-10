@@ -22,4 +22,54 @@
             });
         });
     })
+
+    // accept project invitation
+    $("#acceptInv").click(function (e) {
+        e.preventDefault();
+        var button = $(e.currentTarget);
+        var project = button.data('projectid');
+        var employee = button.data('me');
+        $.ajax({
+            type: "POST",
+            url: "/Home/AcceptInvAsync",
+            data: JSON.stringify({
+                Pr: project,
+                Emp: employee
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#invits").load("Home/Invitations");
+                $("#projects").load("Home/ProjectsAsync");
+            },
+            error: function (response) {
+
+            }
+        });
+    });
+
+    //decline invitation AJAX
+    $("#declineInv").click(function (e) {
+        e.preventDefault();
+        var button = $(e.currentTarget);
+        var project = button.data('projectid');
+        var employee = button.data('me');
+        $.ajax({
+            type: "POST",
+            url: "/Home/DeclineInvAsync",
+            data: JSON.stringify({
+                Pr: project,
+                Emp: employee
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#invits").load("Home/Invitations");
+            },
+            error: function (response) {
+
+            }
+        });
+    });
+
 });

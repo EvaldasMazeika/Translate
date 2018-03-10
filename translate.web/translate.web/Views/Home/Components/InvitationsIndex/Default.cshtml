@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ProjectMember>
+
+<h4>Kvietimai <span class="badge badge-secondary">@Model.Count()</span></h4>
+<hr />
+@if (Model.Any())
+{
+    @foreach (var item in Model)
+    {
+        <div class="card text-white bg-primary mb-3" >
+            <div class="card-header">Kvietimas</div>
+            <div class="card-body">
+                <p class="card-text">Esate kviečiamas prisijungti prie <strong>@item.Project.Name</strong> projekto.</p>
+            <button type="button" id="acceptInv" data-projectid="@item.ProjectId" data-me="@item.EmployeeId" class="btn btn-success"><i class="fa fa-thumbs-up"></i></button>
+            <button type="button" id="declineInv" data-projectid="@item.ProjectId" data-me="@item.EmployeeId" class="btn btn-danger"><i class="fa fa-thumbs-down"></i></button>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <h4 class="text-info">Jus neturite pakvietimu</h4>
+}
+

@@ -1,25 +1,19 @@
-﻿@model IEnumerable<Post>
-<h1 class="display-4">Sveiki atvykę, @User.Identity.Name</h1>
+﻿<h1 class="display-4">Sveiki atvykę, @User.Identity.Name</h1>
+<hr />
+<div class="row">
+    <div id="projects" class="col-6">
+        @await Component.InvokeAsync("ProjectsIndex", new { })
+    </div>
+    <div id="invits" class="col-6">
+        @await Component.InvokeAsync("InvitationsIndex", new { })
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        @await  Component.InvokeAsync("PostsIndex", new { })
+    </div>
+</div>
 
-@if (Model.Any())
-{
-    <table class="table table-hover table-dark">
-        <thead>
-            <tr>
-                <th scope="col">Title</th>
-                <th scope="col">Create date</th>
-                <th scope="col">Author</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <th><a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a> <span class="badge badge-secondary">New</span></th>
-                    <td>@item.CreatedTime</td>
-                    <td>@item.Employee.Name @item.Employee.Surname</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+
+

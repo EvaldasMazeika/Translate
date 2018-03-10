@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Post>
+
+<h4>Pranešimai <span class="badge badge-secondary">@Model.Count()</span></h4>
+<hr />
+@if (Model.Any())
+{
+    <table class="table table-hover table-dark">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Create date</th>
+                <th scope="col">Author</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th><a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a> <span class="badge badge-secondary">New</span></th>
+                    <td>@item.CreatedTime</td>
+                    <td>@item.Employee.Name @item.Employee.Surname</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
