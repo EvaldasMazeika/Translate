@@ -72,4 +72,88 @@
         });
     });
 
+    //INVITE TO PROJECT AJAX CALL
+    $("#addToProject").click(function (e) {
+        e.preventDefault();
+        var projectId = $("#projectid").val();
+        var email = $("#elpastas").val();
+
+        $.ajax({
+            type: "POST",
+            url: "/Project/" + projectId + "/AddToProjectAsync",
+            data: JSON.stringify({
+                ProjectId: projectId,
+                Email: email
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                    $('#AddmemberModal').modal('hide');
+                    $("#alerti").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+  Pakvietimas sėkmingai išsiųstas
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>`);
+            },
+            error: function (response) {
+                $('#AddmemberModal').modal('hide');
+                $("#alerti").append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  Įvyko klaida
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>`);
+            }
+        });
+    });
+
+
+
+    //DELETE MEMBER FROM PROJECT AJAX CALL
+    $('#DeleteMemberModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var memberName = button.data('name')
+        var memberId = button.data('whatever')
+        var projectId = button.data('project')
+        var modal = $(this)
+        modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + memberName + ' iš projekto?')
+        modal.find('#deleteMember').data("whatever", memberId)
+        modal.find('#deleteMember').data("project", projectId)
+    })
+
+    $("#deleteMember").click(function (e) {
+        e.preventDefault();
+        var button = $('#deleteMember')
+        var memberId = button.data('whatever')
+        var projectId = button.data('project')
+
+        $.ajax({
+            type: "POST",
+            url: "/Project/" + projectId + "/RemoveFromProjectAsync",
+            data: JSON.stringify({
+                ProjectId: projectId,
+                MemberId: memberId
+            }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                $('#DeleteMemberModal').modal('hide');
+                window.setTimeout(function () {
+                    $("#teamMembers").load("TeamMembers");  
+                }, 1000);
+                
+            },
+            error: function (result) {
+                $('#DeleteMemberModal').modal('hide');
+                $("#alerti").append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  Įvyko klaida
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>`);
+            }
+        });
+    });
+
 });

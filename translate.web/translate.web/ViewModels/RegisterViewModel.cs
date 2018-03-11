@@ -39,6 +39,7 @@ namespace translate.web.ViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "registerBirthDate")]
+        [AgeCheck]
         public DateTime BirthDate { get; set; }
 
         [DataType(DataType.PhoneNumber)]
@@ -48,4 +49,34 @@ namespace translate.web.ViewModels
 
 
     }
+
+    public class AgeCheck : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var model = validationContext.ObjectInstance as RegisterViewModel;
+
+            if (model == null)
+            {
+                throw new ArgumentException("Attribute not applied on registration");
+            }
+
+            if (model.BirthDate > DateTime.Now.AddYears(-18))
+            {
+                return new ValidationResult(GetErrorMessage(validationContext));
+            }
+
+
+            return ValidationResult.Success;
+        }
+
+        private string GetErrorMessage(ValidationContext validationContext)
+        {
+            if (!string.IsNullOrEmpty(this.ErrorMessage))
+                return this.ErrorMessage;
+
+            return "Negali būti jaunesnis negu 18 metų";
+        }
+    }
+
 }

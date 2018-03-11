@@ -1,4 +1,8 @@
-﻿.sidebar {
+﻿body, html {
+    font-size: .875rem;
+    height: 100%;
+}
+.sidebar {
     position: fixed;
     top: 0;
     bottom: 0;

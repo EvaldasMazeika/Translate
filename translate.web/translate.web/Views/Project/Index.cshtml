@@ -1,0 +1,14 @@
+﻿@model Project
+
+<div class="row">
+    <div class="col-sm-8">
+        @await Component.InvokeAsync("LocalesListIndex", new { ProjectId = Model.Id})
+    </div>
+    <div id="teamMembers" class="col-sm-4">
+        @await Component.InvokeAsync("ProjectMembers", new { ProjectId = Model.Id })
+        <br />
+        @await Component.InvokeAsync("ProjectLocales", new { ProjectId = Model.Id })
+    </div>
+</div>
+
+

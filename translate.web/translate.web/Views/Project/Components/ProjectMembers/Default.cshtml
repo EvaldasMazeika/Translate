@@ -1,0 +1,102 @@
+﻿@model AddToProjectViewModel
+
+@inject Microsoft.AspNetCore.Identity.UserManager<AppIdentityUser> UserManager
+@inject translate.web.Data.ApplContext context
+
+@{
+    var creator = context.ProjectMembers.Where(x => x.EmployeeId.ToString() == UserManager.GetUserId(User)).Single().IsCreator;
+}
+<div class="card">
+    <div class="card-header">
+        Projekto dalyviai
+    </div>
+    <div class="card-body">
+        <div id="alerti"></div>
+        @if (creator == true)
+        {
+            <ul class="list-group">
+                @foreach (var item in Model.Members)
+                {
+                    if (UserManager.GetUserId(User) == item.Id.ToString())
+                    {
+                        <li class="list-group-item list-group-item-secondary">@item.Name @item.Surname</li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">@item.Name @item.Surname <button type="button" data-toggle="modal" data-project="@Model.ProjectId" data-name="@item.Name" data-whatever="@item.Id" data-target="#DeleteMemberModal" class="btn btn-danger btn-sm" style="float:right"><i class="fa fa-trash"></i></button></li>
+                    }
+                }
+            </ul>
+            <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#AddmemberModal" data-whatever="@Model.ProjectId">Pakviesti prie projekto</button>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var item in Model.Members)
+                {
+                    if (UserManager.GetUserId(User) == item.Id.ToString())
+                    {
+                        <li class="list-group-item list-group-item-secondary">@item.Name @item.Surname</li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item">@item.Name @item.Surname</li>
+                    }
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+@if (creator == true)
+{
+    <div class="modal fade" id="DeleteMemberModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Ar tikrai norite pašalinti žmogų iš projekto?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
+                    <button id="deleteMember" type="button" class="btn btn-primary">Taip</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="AddmemberModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Pakviesti į projektą</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Naudokite el. pašto adresą, jei toks vartotojas egzistuoja, jis gaus pakvietimą.</p>
+                    <form>
+                        <input type="hidden" id="projectid" name="projectid" value="@Model.ProjectId">
+                        <div class="form-group">
+                            <label asp-for="Email" class="col-form-label">El. paštas</label>
+                            <input type="text" asp-for="Email" class="form-control" id="elpastas">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
+                    <button id="addToProject" type="button" class="btn btn-primary">Siųsti</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+

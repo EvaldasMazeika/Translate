@@ -15,7 +15,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td><a asp-action="Project" asp-route-id="@item.Project.Id">@item.Project.Name</a></td>
+                    <td><a asp-controller="Project" asp-action="Index" asp-route-projectId="@item.Project.Id">@item.Project.Name</a></td>
                     <td>@item.Project.Description</td>
                 </tr>
             }
