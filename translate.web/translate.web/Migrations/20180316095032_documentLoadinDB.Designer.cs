@@ -11,9 +11,10 @@ using translate.web.Data;
 namespace translate.web.Migrations
 {
     [DbContext(typeof(ApplContext))]
-    partial class ApplContextModelSnapshot : ModelSnapshot
+    [Migration("20180316095032_documentLoadinDB")]
+    partial class documentLoadinDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -315,48 +316,6 @@ namespace translate.web.Migrations
                     b.ToTable("ProjectMembers");
                 });
 
-            modelBuilder.Entity("translate.web.Models.Translation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<Guid>("DocumentId");
-
-                    b.Property<bool>("IsCompleted");
-
-                    b.Property<Guid>("LanguageId");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DocumentId");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("Translations");
-                });
-
-            modelBuilder.Entity("translate.web.Models.TranslationDictionary", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.Property<Guid>("TranslationId");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TranslationId");
-
-                    b.ToTable("TranslationDictionarys");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("translate.web.Models.AppIdentityRole")
@@ -426,7 +385,7 @@ namespace translate.web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("translate.web.Models.Project", "Project")
-                        .WithMany("ProjectDocuments")
+                        .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -434,7 +393,7 @@ namespace translate.web.Migrations
             modelBuilder.Entity("translate.web.Models.ProjectDocumentDictionary", b =>
                 {
                     b.HasOne("translate.web.Models.ProjectDocument", "Document")
-                        .WithMany("ProjectDocumentDictionarys")
+                        .WithMany()
                         .HasForeignKey("DocumentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -449,27 +408,6 @@ namespace translate.web.Migrations
                     b.HasOne("translate.web.Models.Project", "Project")
                         .WithMany("ProjectMembers")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("translate.web.Models.Translation", b =>
-                {
-                    b.HasOne("translate.web.Models.ProjectDocument", "Document")
-                        .WithMany("Translations")
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("translate.web.Models.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("translate.web.Models.TranslationDictionary", b =>
-                {
-                    b.HasOne("translate.web.Models.Translation", "Translations")
-                        .WithMany("TranslationDictionarys")
-                        .HasForeignKey("TranslationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

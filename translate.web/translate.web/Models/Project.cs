@@ -14,6 +14,6 @@ namespace translate.web.Models
         public DateTime CreateDate { get; set; }
 
         public ICollection<ProjectMember> ProjectMembers { get; set; }
-
+        public ICollection<ProjectDocument> ProjectDocuments { get; set; }
     }
 }

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -97,6 +99,12 @@ namespace translate.web
                 };
             });
 
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new RequireHttpsAttribute());
+            });
+
+
             services.AddMvc();
         }
 
@@ -111,6 +119,11 @@ namespace translate.web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            var optionss = new RewriteOptions()
+       .AddRedirectToHttps();
+
+            app.UseRewriter(optionss);
 
             var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);

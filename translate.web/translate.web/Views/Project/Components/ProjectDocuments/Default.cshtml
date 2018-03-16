@@ -1,0 +1,41 @@
+﻿@model IEnumerable<DocumentsViewModel>
+<div class="card">
+    <div class="card-header">
+        Dokumentai
+    </div>
+    <div class="card-body">
+        @if (!Model.Any())
+        {
+            <p class="text-warning text-center">Nėra įkelta dokumentų</p>
+        }
+        else
+        {
+            <ul class="list-group">
+
+                @foreach (var item in Model)
+                {
+                    <li class="list-group-item">
+                        @item.Name
+                        @if (item.IsLoaded)
+                        {
+                            <i class="fa fa-check text-success"></i>
+                        }
+                        else
+                        {
+                            <a class="btn btn-warning btn-sm" asp-controller="Project" asp-action="LoadDoc" asp-route-id="@item.Id" style="float:right" data-toggle="tooltip" data-placement="left" title="Paruošti dokumentą"><i class="fa fa-flask"></i></a>
+                        }
+                        <a class="btn btn-info btn-sm" asp-controller="Project" asp-action="DownloadDoc" asp-route-id="@item.Id" style="float:right"><i class="fa fa-download"></i></a>
+
+                    </li>
+                }
+            </ul>
+        }
+        <a class="btn btn-primary btn-sm btn-block" asp-controller="Project" asp-action="NewDocument">Pridėti dokumentą</a>
+    </div>
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+
+    </script>
+}

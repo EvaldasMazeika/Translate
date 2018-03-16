@@ -17,6 +17,8 @@ namespace translate.web.ViewModels
         [Required(ErrorMessage = "required")]
         [MaxLength(50, ErrorMessage = "tooLong")]
         [Display(Name = "registerEmail")]
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string Email { get; set; }
 
         [DataType(DataType.PhoneNumber)]

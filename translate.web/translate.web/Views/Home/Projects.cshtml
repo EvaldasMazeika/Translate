@@ -4,9 +4,9 @@
 <hr />
 @if (Model.Any())
 {
-    <table class="table table-hover table-dark">
+    <table class="table table-hover">
         <thead>
-            <tr>
+            <tr class="table-warning">
                 <th scope="col">Title</th>
                 <th scope="col">Create date</th>
             </tr>
@@ -14,7 +14,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr class="table-warning">
                     <td><a asp-controller="Project" asp-action="Index" asp-route-projectId="@item.Project.Id">@item.Project.Name</a></td>
                     <td>@item.Project.Description</td>
                 </tr>

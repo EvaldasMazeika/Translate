@@ -14,7 +14,13 @@ namespace translate.web.Data
         {
             context.Database.EnsureCreated();
 
-            if(context.Roles.Any())
+            //var a1 = new Language { Name = "English - en" };
+            //context.Add(a1);
+            //var a2 = new Language { Name = "Lithuanian - lt" };
+            //context.Add(a2);
+            //context.SaveChanges();
+
+            if (context.Roles.Any())
             {
                 return;
             }

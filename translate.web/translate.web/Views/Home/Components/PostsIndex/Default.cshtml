@@ -4,9 +4,9 @@
 <hr />
 @if (Model.Any())
 {
-    <table class="table table-hover table-dark">
+    <table class="table table-hover">
         <thead>
-            <tr>
+            <tr class="table-warning">
                 <th scope="col">Title</th>
                 <th scope="col">Create date</th>
                 <th scope="col">Author</th>
@@ -15,7 +15,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr class="table-warning">
                     <th><a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a> <span class="badge badge-secondary">New</span></th>
                     <td>@item.CreatedTime</td>
                     <td>@item.Employee.Name @item.Employee.Surname</td>

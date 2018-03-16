@@ -4,16 +4,16 @@
 <hr />
 @if (Model.Any())
 {
-    <table class="table table-hover table-dark">
+    <table class="table table-hover">
         <thead>
-            <tr>
+            <tr class="table-warning">
                 <th scope="col">Title</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
+                <tr class="table-warning">
                     <td><a asp-action="Project" asp-route-id="@item.Project.Id">@item.Project.Name</a></td>
                 </tr>
             }

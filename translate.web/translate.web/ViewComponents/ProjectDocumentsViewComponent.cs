@@ -6,21 +6,25 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using translate.web.Data;
+using translate.web.ViewModels;
 
 namespace translate.web.ViewComponents
 {
-    [ViewComponent(Name = "LocalesListIndex")]
-    public class LocalesListIndexViewComponent : ViewComponent
+    [ViewComponent(Name = "ProjectDocuments")]
+    public class ProjectDocumentsViewComponent : ViewComponent
     {
         private readonly ApplContext _context;
 
-        public LocalesListIndexViewComponent(ApplContext context)
+        public ProjectDocumentsViewComponent(ApplContext context)
         {
             _context = context;
         }
+
         public async Task<IViewComponentResult> InvokeAsync(Guid ProjectId)
         {
-            var model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId).ToListAsync();
+            var temp = await _context.ProjectDocuments.Where(x => x.ProjectId == ProjectId).ToListAsync();
+
+            var model = temp.Select(a => new DocumentsViewModel { Id = a.Id, Name = a.Name, IsLoaded = a.IsLoaded }).ToList();
 
             return View(model);
         }

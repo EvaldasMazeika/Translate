@@ -11,9 +11,10 @@ using translate.web.Data;
 namespace translate.web.Migrations
 {
     [DbContext(typeof(ApplContext))]
-    partial class ApplContextModelSnapshot : ModelSnapshot
+    [Migration("20180316105036_Tweaking")]
+    partial class Tweaking
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,24 +340,6 @@ namespace translate.web.Migrations
                     b.ToTable("Translations");
                 });
 
-            modelBuilder.Entity("translate.web.Models.TranslationDictionary", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.Property<Guid>("TranslationId");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TranslationId");
-
-                    b.ToTable("TranslationDictionarys");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("translate.web.Models.AppIdentityRole")
@@ -463,14 +446,6 @@ namespace translate.web.Migrations
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("translate.web.Models.TranslationDictionary", b =>
-                {
-                    b.HasOne("translate.web.Models.Translation", "Translations")
-                        .WithMany("TranslationDictionarys")
-                        .HasForeignKey("TranslationId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

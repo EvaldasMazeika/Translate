@@ -18,6 +18,11 @@ namespace translate.web.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectMember> ProjectMembers { get; set; }
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<ProjectDocument> ProjectDocuments { get; set; }
+        public DbSet<ProjectDocumentDictionary> ProjectDocumentDictionarys { get; set; }
+        public DbSet<Translation> Translations { get; set; }
+        public DbSet<TranslationDictionary> TranslationDictionarys { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -25,6 +30,12 @@ namespace translate.web.Data
 
             builder.Entity<ProjectMember>()
                 .HasKey(c => new { c.ProjectId, c.EmployeeId });
+
+            builder.Entity<Translation>()
+                .HasOne(d => d.Language)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
 
     }

@@ -8,6 +8,8 @@
         @await Component.InvokeAsync("ProjectMembers", new { ProjectId = Model.Id })
         <br />
         @await Component.InvokeAsync("ProjectLocales", new { ProjectId = Model.Id })
+        <br />
+        @await Component.InvokeAsync("ProjectDocuments", new { ProjectId = Model.Id})
     </div>
 </div>
 
