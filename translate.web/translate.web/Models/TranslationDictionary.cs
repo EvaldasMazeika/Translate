@@ -11,7 +11,8 @@ namespace translate.web.Models
         public Guid Id { get; set; }
         public Guid TranslationId { get; set; }
         public string Name { get; set; }
-        public string Value { get; set; }
+        public string GivenValue { get; set; }
+        public string NewValue { get; set; }
 
         public Translation Translations { get; set; }
     }

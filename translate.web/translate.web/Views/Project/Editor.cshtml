@@ -1,3 +1,23 @@
 ﻿@model Translation
 <h2>@Model.Title</h2>
 
+<div class="row">
+    <div id="editorList" class="col-md-4">
+        @await Component.InvokeAsync("WordsList", new { TranslationId = Model.Id })
+    </div>
+    <div id="editor" class="col-md-8">
+
+    </div>
+</div>
+
+@section scripts {
+    <script>
+
+        jQuery('#editorList').on('click', 'button', function (e) {
+            var button = e.currentTarget;
+            var key = button.getAttribute("data-key");
+            var pr = button.getAttribute("data-pr");
+            jQuery("#editor").load("/Project/" + pr + "/GetEditorAsync?id=" + key);
+        });
+    </script>
+}

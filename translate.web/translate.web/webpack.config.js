@@ -24,14 +24,20 @@ module.exports = function (env) {
             new webpack.ProvidePlugin({
               $: 'jquery',
          jQuery: 'jquery',
-'window.jQuery': 'jquery'
+         'window.jQuery': 'jquery',
+                'window.$': 'jquery'
                     })
         ],
         module: {
             rules: [
                 { test: /\.css?$/, use: ['style-loader', 'css-loader'] },
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
-                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
+                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' },
+                {
+                    test: /vendor\/.+\.(jsx|js)$/,
+                    loader: 'imports?jQuery=jquery,$=jquery,this=>window'
+                },
+                { test: /[\/]jquery\.js$/, use: 'expose-loader?$!expose?jQuery' }
             ]
         }
     }

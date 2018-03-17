@@ -138,7 +138,7 @@ namespace translate.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var doc = await _context.ProjectDocuments.Where(x => x.Id == model.DocumentId).SingleOrDefaultAsync();
+                var doc = await _context.ProjectDocuments.Where(x => x.Id == model.DocumentId).Include(a => a.ProjectDocumentDictionarys).SingleOrDefaultAsync();
                 var lang = await _context.Languages.Where(x => x.Id == model.LanguageId).SingleOrDefaultAsync();
 
                 var result = new Translation
@@ -149,17 +149,39 @@ namespace translate.web.Controllers
                     IsCompleted = false,
                     Language = lang,
                 };
-
                 _context.Add(result);
 
                 if (_context.SaveChanges() > 0)
                 {
-                    return RedirectToAction("Index");
-                }
+                    foreach (var item in doc.ProjectDocumentDictionarys)
+                    {
+                        var it = new TranslationDictionary
+                        {
+                            Translations = result,
+                            Name = item.Name,
+                            GivenValue = item.Value,
+                            NewValue = null
+                        };
 
+                        _context.Add(it);
+                    }
+
+                    if (_context.SaveChanges() > 0)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
             }
 
             return View(model);
+        }
+
+        [Route("GetEditorAsync")]
+        public async Task<IActionResult> GetEditorAsync([FromQuery] Guid id)
+        {
+            var model = await _context.TranslationDictionarys.Where(x => x.Id == id).SingleOrDefaultAsync();
+
+            return ViewComponent("EditorPanel",model);
         }
 
         private void PopulateDocumentsDropDown(object selected = null)
@@ -168,6 +190,12 @@ namespace translate.web.Controllers
                         orderby d.Name
                         select d;
             ViewBag.DocumentId = new SelectList(query.AsNoTracking(), "Id", "Name", selected);
+        }
+
+        [Route("GetEditorListAsync")]
+        public IActionResult GetEditorListAsync([FromQuery] Guid id)
+        {
+            return ViewComponent("WordsList", id);
         }
 
         [Route("NewDocument")]
@@ -282,10 +310,29 @@ namespace translate.web.Controllers
         [Route("Editor/{id}")]
         public async Task<IActionResult> Editor(Guid ProjectId, Guid id)
         {
-            var model = await _context.Translations.Where(x => x.Id == id).SingleOrDefaultAsync();
+            var model = await _context.Translations.Where(x => x.Id == id)
+                .Include(a => a.Document)
+                .ThenInclude(z => z.Project).SingleOrDefaultAsync();
 
             return View(model);
         }
+
+        [Route("AddWordToDict")]
+        public async Task<IActionResult> AddWordToDict([FromBody] NewWordViewModel model)
+        {
+            var word = await _context.TranslationDictionarys.Where(x => x.Id == model.Id).SingleOrDefaultAsync();
+
+            word.NewValue = model.NewWord;
+            _context.Update(word);
+
+            if (_context.SaveChanges() > 0)
+            {
+                return new JsonResult("success");
+            }
+
+            return BadRequest();
+        }
+
 
         [HttpGet]
         [Route("DownloadDoc")]

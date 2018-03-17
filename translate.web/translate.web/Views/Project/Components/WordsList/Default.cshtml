@@ -1,0 +1,23 @@
+﻿@model IEnumerable<TranslationDictionary>
+
+@if (Model.Any())
+{
+    <div id="buttons" class="list-group">
+        @foreach (var item in Model)
+        {
+            <button id="li" type="button" class="list-group-item list-group-item-action" data-pr="@item.Translations.Document.ProjectId" data-key="@item.Id">@item.GivenValue</button>
+        }
+    </div>
+}
+else
+{
+    <h3 class="text-success text-center">Viskas išversta!</h3>
+    <button class="btn btn-info">Užbaigti vertimą</button>
+}
+
+<script>
+    window.onload = function () {
+
+
+    };
+</script>

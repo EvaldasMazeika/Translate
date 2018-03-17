@@ -1,0 +1,49 @@
+﻿@model TranslationDictionary
+<div class="card">
+    <div class="card-header">
+        <p style="float:left">Raktas: <strong>@Model.Name</strong></p><p style="float:right">Reikšmė: <strong>@Model.GivenValue</strong></p>
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="form-group">
+                <textarea id="textarea" class="form-control" rows="3"></textarea>
+            </div>
+            <button id="addWord" type="submit" class="btn btn-success" style="float:right">Išsaugoti</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    jQuery('#addWord').click(function (e) {
+        e.preventDefault();
+        var imput = jQuery('#textarea').val();
+
+        if (jQuery.trim(imput) == '') {
+            alert('negali buti tuscia');
+        } else {
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '/Project/@Model.Translations.Document.ProjectId/AddWordToDict',
+                data: JSON.stringify({
+                    Id: '@Model.Id',
+                    NewWord: imput
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    jQuery("#editor").empty();
+                    jQuery('#editorList').load("/Project/@Model.Translations.Document.ProjectId/GetEditorListAsync?id=" + '@Model.TranslationId');
+
+                },
+                error: function (result) {
+
+
+                }
+            });
+
+        }
+
+    });
+</script>
+
