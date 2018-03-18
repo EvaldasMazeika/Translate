@@ -21,7 +21,10 @@ else
                     <td><a asp-controller="Project" asp-action="Editor" asp-route-id="@item.Id">@item.Title</a></td>
                     <td>
                         <div class="btn-group btn-group-sm" style="float:right" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-dark">Parsisiųsti</button>
+                            @if (item.IsCompleted == true)
+                            {                                
+                                <a asp-controller="Project" asp-action="DownloadTranslation" asp-route-id="@item.Id" class="btn btn-dark">Parsisiųsti</a>
+                            }
                             <button type="button" class="btn btn-danger">Ištrinti</button>
                         </div>
                     </td>

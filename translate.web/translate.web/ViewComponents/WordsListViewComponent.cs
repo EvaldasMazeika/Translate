@@ -24,6 +24,8 @@ namespace translate.web.ViewComponents
                 .Include(a=>a.Translations)
                 .ThenInclude(q=>q.Document).ToListAsync();
 
+            ViewBag.trans = TranslationId;
+
             return View(model);
         }
     }

@@ -12,7 +12,10 @@
 else
 {
     <h3 class="text-success text-center">Viskas išversta!</h3>
-    <button class="btn btn-info">Užbaigti vertimą</button>
+    <form asp-controller="Project" asp-action="CompleteTranslation" method="post">
+        <input type="hidden" name="transId" value="@ViewBag.trans" />
+        <button type="submit" class="btn btn-info">Užbaigti vertimą</button>
+    </form>
 }
 
 <script>

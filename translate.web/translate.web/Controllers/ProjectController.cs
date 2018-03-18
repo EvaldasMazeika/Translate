@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -333,6 +334,26 @@ namespace translate.web.Controllers
             return BadRequest();
         }
 
+        [HttpPost]
+        [Route("CompleteTranslation")]
+        public async Task<IActionResult> CompleteTranslation(Guid transId)
+        {
+            var translation = await _context.Translations.Where(x => x.Id == transId).SingleOrDefaultAsync();
+
+            translation.IsCompleted = true;
+            _context.Update(translation);
+
+            _context.SaveChanges();
+          
+            return RedirectToAction("Index");
+        }
+
+        [Route("DownloadTranslation")]
+        public IActionResult DownloadTranslation(Guid ProjectId, Guid id)
+        {
+            return ExportXML(id);
+        }
+
 
         [HttpGet]
         [Route("DownloadDoc")]
@@ -377,6 +398,91 @@ namespace translate.web.Controllers
                 {".csv", "text/csv"},
                 {".resx", "text/xml" }
             };
+        }
+
+        private FileStreamResult ExportXML(Guid mineId)
+        {
+            XmlDocument doc = new XmlDocument();
+
+            XmlDeclaration xmldecl;
+            xmldecl = doc.CreateXmlDeclaration("1.0", null, null);
+            xmldecl.Encoding = "utf-8";
+
+            doc.AppendChild(xmldecl);
+
+            XmlElement root = doc.CreateElement("root");
+            doc.AppendChild(root);
+
+            var what = _context.Translations.Where(x => x.Id == mineId).SingleOrDefault();
+            var document = _context.ProjectDocuments.Where(x => x.Id == what.DocumentId).SingleOrDefault();
+            XmlDocument docs = new XmlDocument();
+            docs.Load(document.FullPath);
+
+            //schema add
+            XmlNodeList nodeScheme = docs.GetElementsByTagName("xsd:schema");
+            foreach (XmlNode item in nodeScheme)
+            {
+                //doc.AppendChild(item);
+                doc.DocumentElement.AppendChild(doc.ImportNode(item, true));
+            }
+
+            //resheader add
+            XmlNodeList node = docs.GetElementsByTagName("resheader");
+
+            foreach (XmlNode item in node)
+            {
+                //doc.AppendChild(item);
+                doc.DocumentElement.AppendChild(doc.ImportNode(item, true));
+            }
+
+            // data add
+            var translations = _context.TranslationDictionarys.Where(x => x.TranslationId == mineId).ToList();
+
+            foreach (var item in translations)
+            {
+                XmlElement trans = doc.CreateElement("data");
+                var atrName = doc.CreateAttribute("name");
+                var space = doc.CreateAttribute("xml:space");
+                atrName.Value = item.Name;
+                space.Value = "preserve";
+                trans.Attributes.Append(atrName);
+                trans.Attributes.Append(space);
+                var word = doc.CreateElement("value");
+                word.InnerText = item.NewValue;
+                trans.AppendChild(word);
+                root.AppendChild(trans);
+            }
+
+
+
+            MemoryStream stream = new MemoryStream();
+            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
+            writer.Formatting = Formatting.Indented;
+            writer.Indentation = 2;
+
+            doc.WriteTo(writer);
+            writer.Flush();
+
+            stream.Position = 0;
+            
+
+
+            return File(stream, "text/xml", "Books.resx");
+
+
+
+        }
+        string FormatXml(string xml)
+        {
+            try
+            {
+                XDocument doc = XDocument.Parse(xml);
+                return doc.ToString();
+            }
+            catch (Exception)
+            {
+                return xml;
+            }
         }
     }
 }
