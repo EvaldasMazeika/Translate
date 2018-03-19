@@ -1,10 +1,33 @@
-﻿
+﻿@model IEnumerable<Translation>
+
 <div class="card">
     <div class="card-header">
         Vertimai
     </div>
     <div class="card-body">
-        <p class="text-warning text-center">Neturite vertimų</p>
+        @if (!Model.Any())
+        {
+            <p class="text-warning text-center">Neturite vertimų</p>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    Išverta dokumentų: @Model.Where(x=> x.IsCompleted == true).Count() / @Model.Count()
+                </div>
+                <div class="col-md-6">
+                    @{ 
+                        var total = 0;
+                        foreach (var item in Model)
+                        {
+                            total += item.TranslationDictionarys.Where(x => x.NewValue != null).Count();
+                        }
+                    }
+                    Išversta žodžių iš viso: @total
+                </div>
+            </div>
+            <br />
+        }
         <a class="btn btn-primary btn-sm btn-block" asp-controller="Project" asp-action="NewLocale">Pridėti vertimą</a>
     </div>
 </div>

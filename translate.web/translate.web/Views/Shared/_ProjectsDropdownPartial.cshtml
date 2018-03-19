@@ -1,0 +1,27 @@
+﻿
+@using Microsoft.EntityFrameworkCore;
+
+@inject translate.web.Resources.LocService SharedLocalizer
+@inject Microsoft.AspNetCore.Identity.UserManager<AppIdentityUser> manager
+@inject translate.web.Data.ApplContext context
+
+@{
+    var user = manager.GetUserId(User);
+    var items = context.ProjectMembers.Where(a => a.EmployeeId.ToString() == user && a.AcceptedInvitation == true).Include(z => z.Project).ToList();
+}
+
+<ul class="navbar-nav mr-auto">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Projektai
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" asp-action="Projects" asp-controller="Home"><i class="fa fa-folder"></i>  @SharedLocalizer.GetLocalizedHtmlString("subMenuProjects")</a>
+            <div class="dropdown-divider"></div>
+            @foreach (var item in items)
+            {
+                <a class="dropdown-item" asp-controller="Project" asp-action="Index" asp-route-projectId="@item.Project.Id">@item.Project.Name</a>
+            }
+        </div>
+    </li>
+</ul>

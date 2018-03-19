@@ -37,7 +37,7 @@ namespace translate.web.Controllers
         {
             if (String.IsNullOrEmpty(projectId.ToString()))
             {
-                return RedirectToAction("Projects","Home");
+                return RedirectToAction("Projects", "Home");
             }
 
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -58,7 +58,7 @@ namespace translate.web.Controllers
         [Route("AddToProjectAsync")]
         public async Task<IActionResult> AddToProjectAsync([FromBody] AddToProjectViewModel model)
         {
-            if(model.Email == null)
+            if (model.Email == null)
             {
                 return BadRequest();
             }
@@ -94,21 +94,21 @@ namespace translate.web.Controllers
         [Route("RemoveFromProjectAsync")]
         public async Task<IActionResult> RemoveFromProjectAsync([FromBody] RemoveFromProjectViewModel model)
         {
-            if(model.MemberId == null || model.ProjectId == null)
+            if (model.MemberId == null || model.ProjectId == null)
             {
                 return BadRequest();
             }
 
             var result = await _context.ProjectMembers.Where(x => x.ProjectId == model.ProjectId && x.EmployeeId == model.MemberId).SingleOrDefaultAsync();
 
-            if(result == null)
+            if (result == null)
             {
                 return BadRequest();
             }
 
             _context.Remove(result);
 
-            if(_context.SaveChanges() > 0)
+            if (_context.SaveChanges() > 0)
             {
                 return new JsonResult("success");
             }
@@ -182,12 +182,12 @@ namespace translate.web.Controllers
         {
             var model = await _context.TranslationDictionarys.Where(x => x.Id == id).SingleOrDefaultAsync();
 
-            return ViewComponent("EditorPanel",model);
+            return ViewComponent("EditorPanel", model);
         }
 
         private void PopulateDocumentsDropDown(object selected = null)
         {
-            var query = from d in _context.ProjectDocuments.Where(x=>x.IsLoaded == true)
+            var query = from d in _context.ProjectDocuments.Where(x => x.IsLoaded == true)
                         orderby d.Name
                         select d;
             ViewBag.DocumentId = new SelectList(query.AsNoTracking(), "Id", "Name", selected);
@@ -245,9 +245,9 @@ namespace translate.web.Controllers
                     return RedirectToAction("NewDocument");
                 }
             }
-            
+
             Directory.CreateDirectory(folderPath);
-            
+
             using (var stream = new FileStream(itemPath, FileMode.Create))
             {
                 await model.File.CopyToAsync(stream);
@@ -344,7 +344,7 @@ namespace translate.web.Controllers
             _context.Update(translation);
 
             _context.SaveChanges();
-          
+
             return RedirectToAction("Index");
         }
 
@@ -352,6 +352,22 @@ namespace translate.web.Controllers
         public IActionResult DownloadTranslation(Guid ProjectId, Guid id)
         {
             return ExportXML(id);
+        }
+
+        [HttpPost]
+        [Route("DeleteTranslation")]
+        public async Task<IActionResult> DeleteTranslation([FromBody] Translation model)
+        {
+            var translation = await _context.Translations.Where(x => x.Id == model.Id).SingleOrDefaultAsync();
+            if (translation != null)
+            {
+                _context.Remove(translation);
+                if (_context.SaveChanges() > 0)
+                {
+                    return new JsonResult("success");
+                }
+            }
+            return BadRequest();
         }
 
 

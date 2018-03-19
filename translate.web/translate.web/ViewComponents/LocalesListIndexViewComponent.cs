@@ -20,7 +20,10 @@ namespace translate.web.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync(Guid ProjectId)
         {
-            var model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId).ToListAsync();
+            var model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId)
+                .Include(a => a.Document)
+                .Include(a=>a.TranslationDictionarys)
+                .ToListAsync();
 
             return View(model);
         }

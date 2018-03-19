@@ -1,5 +1,11 @@
 ﻿@model IEnumerable<Translation>
 
+@inject Microsoft.AspNetCore.Identity.UserManager<AppIdentityUser> UserManager
+@inject translate.web.Data.ApplContext context
+
+@{
+    var creator = context.ProjectMembers.Where(x => x.EmployeeId.ToString() == UserManager.GetUserId(User)).Single().IsCreator;
+}
 
 @if (!Model.Any())
 {
@@ -7,30 +13,111 @@
 }
 else
 {
-    <table class="table table-hover">
-        <thead>
-            <tr class="table-warning">
-                <th scope="col">Pavadinimas</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="table-warning">
-                    <td><a asp-controller="Project" asp-action="Editor" asp-route-id="@item.Id">@item.Title</a></td>
-                    <td>
-                        <div class="btn-group btn-group-sm" style="float:right" role="group" aria-label="Basic example">
-                            @if (item.IsCompleted == true)
-                            {                                
-                                <a asp-controller="Project" asp-action="DownloadTranslation" asp-route-id="@item.Id" class="btn btn-dark">Parsisiųsti</a>
-                            }
-                            <button type="button" class="btn btn-danger">Ištrinti</button>
-                        </div>
-                    </td>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr class="d-flex">
+                    <th class="col-3" scope="col">Pavadinimas</th>
+                    <th class="col-sm-5" scope="col"></th>
+                    <th class="col-sm-4" scope="col"></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="d-flex">
+                        <td class="col-3"><a asp-controller="Project" asp-action="Editor" asp-route-id="@item.Id">@item.Title</a></td>
+                        <td class="col-sm-5">
+                            <div class="progress">
+                                @{
+                                    double all = item.TranslationDictionarys.Count() != 0 ? item.TranslationDictionarys.Count() : 1;
+                                    double proc = item.TranslationDictionarys.Where(x => x.NewValue != null).Count();
+                                }
+                                <div class="progress-bar bg-success" role="progressbar" style="width: @((proc/all)*100)%" aria-valuenow="@((proc/all)*100)" aria-valuemin="0" aria-valuemax="100">@Math.Round(((proc / all) * 100))%</div>
+                            </div>
+                        </td>
+                        <td class="col-sm-4">
+                            <div class="btn-group btn-group-sm" style="float:right" role="group" aria-label="Basic example">
+                                @if (item.IsCompleted == true)
+                                {
+                                    <a asp-controller="Project" asp-action="DownloadTranslation" asp-route-id="@item.Id" class="btn btn-dark">Parsisiųsti</a>
+                                }
+                                @if (creator == true)
+                                {
+                                    <button type="button" data-toggle="modal" data-translate="@item.Id" data-name="@item.Title" data-target="#DeleteTranslationsModal" class="btn btn-danger btn-sm" style="float:right">Ištrinti</button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
 }
 
+@if (creator == true)
+{
+    <div class="modal fade" id="DeleteTranslationsModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
+                    <button id="deleteTranslation" type="button" class="btn btn-primary">Taip</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            jQuery('#DeleteTranslationsModal').on('show.bs.modal', function (event) {
+                var button = jQuery(event.relatedTarget);
+                var translationId = button.data('translate');
+                var name = button.data('name');
+
+                var modal = jQuery(this)
+                modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + name + ' iš projekto?')
+                modal.find('#deleteTranslation').data("translationId", translationId)
+            })
+
+            jQuery("#deleteTranslation").click(function (e) {
+                e.preventDefault();
+                var button = jQuery('#deleteTranslation');
+                var translationId = button.data('translationId');
+
+                @{
+                    var ur = Model.FirstOrDefault().Document.ProjectId == null ? Guid.NewGuid() : Model.First().Document.ProjectId;
+                }
+
+                jQuery.ajax({
+                    type: 'post',
+                    url: '/Project/@ur/DeleteTranslation',
+                    data: JSON.stringify({
+                        Id: translationId
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function(result) {}
+                });
+
+             });
+
+
+    };
+    </script>
+
+}

@@ -4,15 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using translate.web.Data;
 
 namespace translate.web.ViewComponents
 {
     [ViewComponent(Name ="ProjectLocales")]
     public class ProjectLocalesViewComponent : ViewComponent
     {
+        private readonly ApplContext _context;
+
+        public ProjectLocalesViewComponent(ApplContext context)
+        {
+            _context = context;
+        }
         public async Task<IViewComponentResult> InvokeAsync(Guid ProjectId)
         {
-            return View();
+            var model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId)
+                .Include(i => i.TranslationDictionarys)
+                .ToListAsync();
+
+            return View(model);
         }
     }
 }

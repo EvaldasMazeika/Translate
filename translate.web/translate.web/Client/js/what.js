@@ -1,10 +1,10 @@
 ﻿$(document).ready(function () {
 
     $('#DeletePostModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var recipient = button.data('whatever')
+        var button = $(event.relatedTarget);
+        var recipient = button.data('whatever');
 
-        var modal = $(this)
+        var modal = $(this);
 
         $("#deletePost").click(function (e) {
             e.preventDefault();
@@ -12,7 +12,7 @@
                 type: "POST",
                 url: "/Admin/DeletePost/" + recipient,
                 data: {
-                    id: recipient,
+                    id: recipient
                 },
                 success: function (result) {
                     location.reload();
@@ -21,7 +21,7 @@
                 }
             });
         });
-    })
+    });
 
     // accept project invitation
     $("#acceptInv").click(function (e) {
@@ -112,21 +112,21 @@
 
     //DELETE MEMBER FROM PROJECT AJAX CALL
     $('#DeleteMemberModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var memberName = button.data('name')
-        var memberId = button.data('whatever')
-        var projectId = button.data('project')
-        var modal = $(this)
-        modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + memberName + ' iš projekto?')
-        modal.find('#deleteMember').data("whatever", memberId)
-        modal.find('#deleteMember').data("project", projectId)
-    })
+        var button = $(event.relatedTarget);
+        var memberName = button.data('name');
+        var memberId = button.data('whatever');
+        var projectId = button.data('project');
+        var modal = $(this);
+        modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + memberName + ' iš projekto?');
+        modal.find('#deleteMember').data("whatever", memberId);
+        modal.find('#deleteMember').data("project", projectId);
+    });
 
     $("#deleteMember").click(function (e) {
         e.preventDefault();
-        var button = $('#deleteMember')
-        var memberId = button.data('whatever')
-        var projectId = button.data('project')
+        var button = $('#deleteMember');
+        var memberId = button.data('whatever');
+        var projectId = button.data('project');
 
         $.ajax({
             type: "POST",
