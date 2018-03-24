@@ -1,23 +1,20 @@
 ﻿@model AddToProjectViewModel
 
-@inject Microsoft.AspNetCore.Identity.UserManager<AppIdentityUser> UserManager
+
 @inject translate.web.Data.ApplContext context
 
-@{
-    var creator = context.ProjectMembers.Where(x => x.EmployeeId.ToString() == UserManager.GetUserId(User)).Single().IsCreator;
-}
 <div class="card">
     <div class="card-header">
         Projekto dalyviai
     </div>
     <div class="card-body">
         <div id="alerti"></div>
-        @if (creator == true)
+        @if (ViewBag.creator)
         {
             <ul class="list-group">
                 @foreach (var item in Model.Members)
                 {
-                    if (UserManager.GetUserId(User) == item.Id.ToString())
+                    if (ViewBag.userId == item.Id.ToString())
                     {
                         <li class="list-group-item list-group-item-secondary">@item.Name @item.Surname</li>
                     }
@@ -34,7 +31,7 @@
             <ul class="list-group">
                 @foreach (var item in Model.Members)
                 {
-                    if (UserManager.GetUserId(User) == item.Id.ToString())
+                    if (ViewBag.userId == item.Id.ToString())
                     {
                         <li class="list-group-item list-group-item-secondary">@item.Name @item.Surname</li>
                     }
@@ -48,7 +45,7 @@
     </div>
 </div>
 
-@if (creator == true)
+@if (ViewBag.creator)
 {
     <div class="modal fade" id="DeleteMemberModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using translate.web.Data;
+using translate.web.Models;
 using translate.web.ViewModels;
 
 namespace translate.web.ViewComponents
@@ -14,15 +16,21 @@ namespace translate.web.ViewComponents
     public class ProjectMembersViewComponent : ViewComponent
     {
         private readonly ApplContext _context;
+        private readonly UserManager<AppIdentityUser> _userManager;
 
-        public ProjectMembersViewComponent(ApplContext context)
+        public ProjectMembersViewComponent(ApplContext context, UserManager<AppIdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(Guid ProjectId)
         {
-           var members = await _context.ProjectMembers.Include(a => a.Employee).Where(x => x.ProjectId == ProjectId).ToListAsync();
+            var user = _userManager.GetUserId(HttpContext.User);
+            ViewBag.userId = user;
+            ViewBag.creator = _context.ProjectMembers.Where(x => x.ProjectId == ProjectId && x.EmployeeId.ToString() == user).Single().IsCreator;
+
+            var members = await _context.ProjectMembers.Include(a => a.Employee).Where(x => x.ProjectId == ProjectId).ToListAsync();
 
             var model = new AddToProjectViewModel
             {

@@ -28,5 +28,9 @@ namespace translate.web.ViewModels
         [MinLength(5)]
         [MaxLength(100)]
         public string Description { get; set; }
+
+        [Required]
+        [Display(Name = "Vertėjas")]
+        public Guid TranslatorId { get; set; }
     }
 }

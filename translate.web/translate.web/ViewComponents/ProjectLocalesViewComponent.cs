@@ -20,6 +20,16 @@ namespace translate.web.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync(Guid ProjectId)
         {
+            var s = await _context.ProjectDocuments.Where(x => x.ProjectId == ProjectId && x.IsLoaded == true).FirstOrDefaultAsync();
+            if (s == null)
+            {
+                ViewBag.exist = false;
+            }
+            else
+            {
+                ViewBag.exist = true;
+            }
+
             var model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId)
                 .Include(i => i.TranslationDictionarys)
                 .ToListAsync();

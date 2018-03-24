@@ -11,9 +11,10 @@ using translate.web.Data;
 namespace translate.web.Migrations
 {
     [DbContext(typeof(ApplContext))]
-    partial class ApplContextModelSnapshot : ModelSnapshot
+    [Migration("20180324173213_osmechanges")]
+    partial class osmechanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -330,15 +331,11 @@ namespace translate.web.Migrations
 
                     b.Property<string>("Title");
 
-                    b.Property<Guid>("TranslatorId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DocumentId");
 
                     b.HasIndex("LanguageId");
-
-                    b.HasIndex("TranslatorId");
 
                     b.ToTable("Translations");
                 });
@@ -469,11 +466,6 @@ namespace translate.web.Migrations
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("translate.web.Models.AppIdentityUser", "Translator")
-                        .WithMany()
-                        .HasForeignKey("TranslatorId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("translate.web.Models.TranslationDictionary", b =>

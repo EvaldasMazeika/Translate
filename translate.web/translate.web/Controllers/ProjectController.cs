@@ -126,11 +126,31 @@ namespace translate.web.Controllers
 
         [Route("NewLocale")]
         [HttpGet]
-        public IActionResult NewLocale(Guid projectId)
+        public async Task<IActionResult> NewLocale(Guid projectId)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var isCreator = _context.ProjectMembers.Where(x => x.ProjectId == projectId && x.EmployeeId == user.Id).Single().IsCreator;
+            if (isCreator == false)
+            {
+                ViewBag.creator = false;
+                ViewBag.id = user.Id;
+            }
+            else
+            {
+                ViewBag.creator = true;
+            }
+
             PopulateLanguagesDropDown();
-            PopulateDocumentsDropDown();
+            PopulateDocumentsDropDown(project: projectId);
+            PopulateTranslatorsDropDown(project: projectId);
             return View();
+        }
+
+        private void PopulateTranslatorsDropDown(Guid project, object selected = null)
+        {
+            IQueryable translators = _context.ProjectMembers.Include(a => a.Employee).Where(x => x.ProjectId == project).Select(s => new { Id = s.EmployeeId, Name = s.Employee.Name + " " + s.Employee.Surname });
+
+            ViewBag.TranslatorId = new SelectList(translators, "Id", "Name", selected);
         }
 
         [Route("NewLocale")]
@@ -141,6 +161,7 @@ namespace translate.web.Controllers
             {
                 var doc = await _context.ProjectDocuments.Where(x => x.Id == model.DocumentId).Include(a => a.ProjectDocumentDictionarys).SingleOrDefaultAsync();
                 var lang = await _context.Languages.Where(x => x.Id == model.LanguageId).SingleOrDefaultAsync();
+                var translator = await _userManager.FindByIdAsync(model.TranslatorId.ToString());
 
                 var result = new Translation
                 {
@@ -149,6 +170,7 @@ namespace translate.web.Controllers
                     Document = doc,
                     IsCompleted = false,
                     Language = lang,
+                    Translator = translator
                 };
                 _context.Add(result);
 
@@ -185,9 +207,9 @@ namespace translate.web.Controllers
             return ViewComponent("EditorPanel", model);
         }
 
-        private void PopulateDocumentsDropDown(object selected = null)
+        private void PopulateDocumentsDropDown(Guid project, object selected = null)
         {
-            var query = from d in _context.ProjectDocuments.Where(x => x.IsLoaded == true)
+            var query = from d in _context.ProjectDocuments.Where(x => x.ProjectId == project && x.IsLoaded == true)
                         orderby d.Name
                         select d;
             ViewBag.DocumentId = new SelectList(query.AsNoTracking(), "Id", "Name", selected);

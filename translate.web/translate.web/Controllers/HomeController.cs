@@ -79,7 +79,8 @@ namespace translate.web.Controllers
             {
                 Email = user.Email,
                 Surname = user.Surname,
-                MobileNumber = user.PhoneNumber
+                MobileNumber = user.PhoneNumber,
+                FirstName = user.Name
             };
             return View(model);
         }
@@ -94,6 +95,7 @@ namespace translate.web.Controllers
                 user.Surname = model.Surname;
                 user.Email = model.Email;
                 user.PhoneNumber = model.MobileNumber;
+                user.Name = model.FirstName;
 
                 IdentityResult result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)

@@ -11,6 +11,11 @@ namespace translate.web.ViewModels
     {
         [Required(ErrorMessage = "required")]
         [MaxLength(20, ErrorMessage = "tooLong")]
+        [Display(Name = "Vardas")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "required")]
+        [MaxLength(20, ErrorMessage = "tooLong")]
         [Display(Name = "registerSurname")]
         public string Surname { get; set; }
 

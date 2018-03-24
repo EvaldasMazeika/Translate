@@ -1,11 +1,8 @@
 ﻿@model IEnumerable<Translation>
 
-@inject Microsoft.AspNetCore.Identity.UserManager<AppIdentityUser> UserManager
 @inject translate.web.Data.ApplContext context
 
-@{
-    var creator = context.ProjectMembers.Where(x => x.EmployeeId.ToString() == UserManager.GetUserId(User)).Single().IsCreator;
-}
+
 
 @if (!Model.Any())
 {
@@ -42,9 +39,9 @@ else
                                 {
                                     <a asp-controller="Project" asp-action="DownloadTranslation" asp-route-id="@item.Id" class="btn btn-dark">Parsisiųsti</a>
                                 }
-                                @if (creator == true)
+                                @if (ViewBag.creator)
                                 {
-                                    <button type="button" data-toggle="modal" data-translate="@item.Id" data-name="@item.Title" data-target="#DeleteTranslationsModal" class="btn btn-danger btn-sm" style="float:right">Ištrinti</button>
+                                    <button type="button" data-toggle="modal" data-translate="@item.Id" data-project="@item.Document.ProjectId" data-name="@item.Title" data-target="#DeleteTranslationsModal" class="btn btn-danger btn-sm" style="float:right">Ištrinti</button>
                                 }
                             </div>
                         </td>
@@ -57,7 +54,7 @@ else
 
 }
 
-@if (creator == true)
+@if (ViewBag.creator)
 {
     <div class="modal fade" id="DeleteTranslationsModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -85,24 +82,24 @@ else
                 var button = jQuery(event.relatedTarget);
                 var translationId = button.data('translate');
                 var name = button.data('name');
+                var project = button.data('project');
 
-                var modal = jQuery(this)
-                modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + name + ' iš projekto?')
-                modal.find('#deleteTranslation').data("translationId", translationId)
+                var modal = jQuery(this);
+                modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + name + ' iš projekto?');
+                modal.find('#deleteTranslation').data("translationId", translationId);
+                modal.find('#deleteTranslation').data("project", project);
             })
 
             jQuery("#deleteTranslation").click(function (e) {
                 e.preventDefault();
                 var button = jQuery('#deleteTranslation');
                 var translationId = button.data('translationId');
+                var projectId = button.data("project");
 
-                @{
-                    var ur = Model.FirstOrDefault().Document.ProjectId == null ? Guid.NewGuid() : Model.First().Document.ProjectId;
-                }
 
                 jQuery.ajax({
                     type: 'post',
-                    url: '/Project/@ur/DeleteTranslation',
+                    url: '/Project/' + projectId + '/DeleteTranslation',
                     data: JSON.stringify({
                         Id: translationId
                     }),
@@ -111,13 +108,13 @@ else
                     success: function (result) {
                         location.reload();
                     },
-                    error: function(result) {}
+                    error: function (result) { }
                 });
 
-             });
+            });
 
 
-    };
+        };
     </script>
 
 }
