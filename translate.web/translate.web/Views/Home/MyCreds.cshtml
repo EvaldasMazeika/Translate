@@ -9,13 +9,27 @@
     </li>
 </ul>
 
+@if (TempData["message"] != null)
+{
+    <br />
+    <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+        Sėkmingai atnaujinta
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
 <div class="row">
     <div class="col-6">
         <form asp-controller="Home" asp-action="MyCreds" method="post">
-            <div class="form-group">
-                <label asp-for="CurrentPassword" class="control-label"></label>
-                <input asp-for="CurrentPassword" class="form-control" />
-            </div>
+            @if (Model.HasPassword)
+            {
+                <div class="form-group">
+                    <label asp-for="CurrentPassword" class="control-label"></label>
+                    <input asp-for="CurrentPassword" class="form-control" />
+                </div>
+            }
             <div class="form-group">
                 <label asp-for="NewPassword" class="control-label"></label>
                 <input asp-for="NewPassword" class="form-control" />

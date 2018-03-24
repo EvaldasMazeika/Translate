@@ -11,7 +11,6 @@ namespace translate.web.ViewModels
     {
         [DataType(DataType.Password)]
         [Display(Name = "currentPassword")]
-        [Required(ErrorMessage = "required")]
         public string CurrentPassword { get; set; }
 
         [Required(ErrorMessage = "required")]
@@ -27,5 +26,7 @@ namespace translate.web.ViewModels
         [DataType(DataType.Password)]
         [Display(Name = "repeatPassword")]
         public string RepeatPassword { get; set; }
+
+        public bool HasPassword { get; set; }
     }
 }

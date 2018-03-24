@@ -28,9 +28,21 @@ namespace translate.web
     {
         private readonly IConfiguration _configuration;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             _configuration = configuration;
+
+            var builder = new ConfigurationBuilder();
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }
+            else
+            {
+                builder.AddEnvironmentVariables();
+            }
+            _configuration = builder.Build();
+
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -67,11 +79,18 @@ namespace translate.web
                     options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
                 });
 
-            services.AddDbContext<ApplContext>(opt => opt.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplContext>(opt => opt.UseSqlServer(_configuration["ConnectionStrings:DefaultConnection"]));
 
             services.AddIdentity<AppIdentityUser, AppIdentityRole>()
                 .AddEntityFrameworkStores<ApplContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = _configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = _configuration["Authentication:Google:ClientSecret"];
+            });
+
 
             services.Configure<IdentityOptions>(opt => 
             {
@@ -112,16 +131,15 @@ namespace translate.web
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
+                app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            var optionss = new RewriteOptions()
-       .AddRedirectToHttps();
+            var optionss = new RewriteOptions().AddRedirectToHttps();
 
             app.UseRewriter(optionss);
 

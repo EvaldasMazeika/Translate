@@ -98,6 +98,7 @@ namespace translate.web.Controllers
                 IdentityResult result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
+                    TempData["message"] = "success";
                     return RedirectToAction("MyProfile");
                 }
 
@@ -106,9 +107,15 @@ namespace translate.web.Controllers
             return View(model);
         }
 
-        public IActionResult MyCreds()
+        [HttpGet]
+        public async Task<IActionResult> MyCreds()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var hasPass = await _userManager.HasPasswordAsync(user);
+
+            var model = new ChangePasswordViewModel { HasPassword = hasPass };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -116,20 +123,31 @@ namespace translate.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (model.NewPassword == model.RepeatPassword)
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                var hasPassword = await _userManager.HasPasswordAsync(user);
+                if (!hasPassword)
                 {
-                    var user = await _userManager.GetUserAsync(HttpContext.User);
-
-                    IdentityResult result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
-                    if (result.Succeeded)
+                    var newResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
+                    if (newResult.Succeeded)
                     {
+                        TempData["message"] = "success";
                         return RedirectToAction("MyCreds");
                     }
-
                 }
-                return View(model);
+                else
+                {
+                    var isCorrect = await _userManager.CheckPasswordAsync(user, model.CurrentPassword);
+                    if (isCorrect && model.NewPassword == model.RepeatPassword)
+                    {
+                        var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                        if (result.Succeeded)
+                        {
+                            TempData["message"] = "success";
+                            return RedirectToAction("MyCreds");
+                        }
+                    }
+                }
             }
-
             return View(model);
         }
 

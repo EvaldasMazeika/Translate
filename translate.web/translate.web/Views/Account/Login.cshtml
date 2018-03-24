@@ -1,8 +1,14 @@
 ﻿@model LoginViewModel
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Authentication
+
 @{
     Layout = "~/Views/Shared/_Account.cshtml";
 }
+
 @inject translate.web.Resources.LocService SharedLocalizer
+@inject SignInManager<AppIdentityUser> SignInManager
+
 <div class="row">
     <div class="col-md-4 offset-md-4">
         <div class="card">
@@ -39,6 +45,20 @@
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg btn-block">@SharedLocalizer.GetLocalizedHtmlString("loginButton")</button>
                 </form>
+                @{
+                    var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                }
+                <hr />
+                <div class="row">
+                    <div class="col-md-6">
+                        Prisijungti galite su:
+                    </div>
+                    <div class="col-md-6">
+                        <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                                <button type="submit" class="btn btn-danger" name="provider" style="float:right" value="@loginProviders.Where(x=>x.Name == "Google").Single().Name" title="Prisijunk naudodamas @loginProviders.Where(x=>x.Name == "Google").Single().DisplayName paskyrą"><i class="fa fa-google"></i> @loginProviders.Where(x => x.Name == "Google").Single().Name</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
         <a asp-action="Register">@SharedLocalizer.GetLocalizedHtmlString("newUserLink")</a>

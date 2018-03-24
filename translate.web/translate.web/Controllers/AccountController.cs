@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -128,6 +129,58 @@ namespace translate.web.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            if (remoteError != null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (result.Succeeded)
+            {
+                return RedirectToLocal(returnUrl);
+            }
+
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            var user = new AppIdentityUser { UserName = email, Email = email };
+            var createResult = await _userManager.CreateAsync(user);
+
+            if (createResult.Succeeded)
+            {
+                AppIdentityRole role = await _roleManager.FindByNameAsync("Translator");
+                IdentityResult roleResult = await _userManager.AddToRoleAsync(user, role.Name);
+                if (roleResult.Succeeded)
+                {
+                    createResult = await _userManager.AddLoginAsync(user, info);
+                    if (createResult.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        return RedirectToLocal(returnUrl);
+                    }
+                }
+
+            }
+
+            return RedirectToAction("Login");
         }
 
         [HttpPost]
