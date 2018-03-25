@@ -1,28 +1,93 @@
 ﻿@model IEnumerable<ProjectMember>
-<h2>Projects</h2>
 <a asp-action="NewProject" class="btn btn-info">Sukurti naują</a>
 <hr />
+<h2>Projektai</h2>
 @if (Model.Any())
 {
-    <table class="table table-hover">
-        <thead>
-            <tr class="table-warning">
-                <th scope="col">Title</th>
-                <th scope="col">Create date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="table-warning">
-                    <td><a asp-controller="Project" asp-action="Index" asp-route-projectId="@item.Project.Id">@item.Project.Name</a></td>
-                    <td>@item.Project.Description</td>
+    <div class="table table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col"></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><a asp-controller="Project" asp-action="Index" asp-route-projectId="@item.Project.Id">@item.Project.Name</a></td>
+                        <td>@item.Project.Description</td>
+                        @if (item.IsCreator == true)
+                        {
+                            <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#DeleteProjectModal" data-whatever="@item.Project.Id"><i class="fa fa-ban"></i></button></td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="DeleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Ar tikrai norite pašalinti projektą iš sistemos?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
+                    <button id="deleteProject" type="button" class="btn btn-primary">Taip</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 else
 {
-    <h1 class="display-4">Jus neturite projetu</h1>
+    <div class="alert alert-danger text-center" role="alert">Jūs neturite projektų</div>
+}
+
+
+@section scripts {
+    <script>
+        jQuery('#DeleteProjectModal').on('show.bs.modal', function (event) {
+            var button = jQuery(event.relatedTarget);
+            var projectId = button.data('whatever');
+
+            var modal = jQuery(this);
+            modal.find('#deleteProject').data("projectId", projectId);
+        });
+
+        jQuery("#deleteProject").click(function (e) {
+            e.preventDefault();
+            var button = jQuery('#deleteProject');
+            var projectId = button.data('projectId');
+ 
+            jQuery.ajax({
+                type: 'post',
+                url: '/Home/DeleteProject',
+                data: JSON.stringify({
+                    Id: projectId
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                location.reload();
+                },
+                error: function (result) { }
+            });
+
+        });
+
+    </script>
 }

@@ -1,19 +1,65 @@
-﻿<h1 class="display-4">Sveiki atvykę, @User.Identity.Name</h1>
+﻿<h1 class="display-4 text-center">Sveiki atvykę!</h1>
 <hr />
 <div class="row">
-    <div id="projects" class="col-6">
-        @await Component.InvokeAsync("ProjectsIndex", new { })
-    </div>
-    <div id="invits" class="col-6">
+    <div id="invits" class="col-md-6">
         @await Component.InvokeAsync("InvitationsIndex", new { })
     </div>
-</div>
-<hr />
-<div class="row">
-    <div class="col-md-8 offset-md-2">
-        @await  Component.InvokeAsync("PostsIndex", new { })
+    <div class="col-md-6">
+        @await Component.InvokeAsync("PostsIndex", new { })
     </div>
 </div>
+
+@section scripts {
+    <script>
+        jQuery('#invits').on('click', 'button', function (e) {
+            var button = e.currentTarget;
+            var type = button.id;
+            var project = button.getAttribute('data-projectid');
+            var employee = button.getAttribute('data-me');
+
+            if (type == 'acceptInv') {
+                    var button = jQuery(e.currentTarget);
+                    var project = button.data('projectid');
+                    var employee = button.data('me');
+                    jQuery.ajax({
+                        type: "POST",
+                        url: "/Home/AcceptInvAsync",
+                        data: JSON.stringify({
+                            Pr: project,
+                            Emp: employee
+                        }),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            jQuery("#invits").load("Home/Invitations");
+                            jQuery("#dropdownPlace").load("Home/ProjectsDropdown");
+                        },
+                        error: function (response) {
+
+                        }
+                    });
+            } else {
+                jQuery.ajax({
+                    type: "POST",
+                    url: "/Home/DeclineInvAsync",
+                    data: JSON.stringify({
+                        Pr: project,
+                        Emp: employee
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        jQuery("#invits").load("Home/Invitations");
+                    },
+                    error: function (response) {
+
+                    }
+                });
+            }
+        });
+    </script>
+}
+
 
 
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using translate.web.Data;
 using translate.web.Models;
 using translate.web.ViewModels;
@@ -28,9 +29,9 @@ namespace translate.web.Controllers
             return View();
         }
 
-        public IActionResult Posts()
+        public async Task<IActionResult> Posts()
         {
-            var model = _context.Posts.ToList();
+            var model = await _context.Posts.ToListAsync();
 
             return View(model);
         }
@@ -53,7 +54,8 @@ namespace translate.web.Controllers
                     Title = model.Title,
                     Message = model.Message,
                     CreatedTime = DateTime.Now,
-                    Employee = user
+                    Employee = user,
+                    IsImportant = model.IsImportant
                 };
                 _context.Add(post);
                 await _context.SaveChangesAsync();
@@ -72,11 +74,37 @@ namespace translate.web.Controllers
 
                 _context.Remove(result);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Posts");
+                return new JsonResult("success");
             }
-            return RedirectToAction("Posts");
+            return BadRequest();
         }
 
+        public IActionResult Languages()
+        {
+            var model = _context.Languages.ToList();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult NewLanguage()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewLanguage(NewLanguageViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = new Language { Name = model.Name };
+                _context.Add(result);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Languages");
+            }
+
+            return View(model);
+        }
 
     }
 }

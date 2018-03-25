@@ -30,7 +30,7 @@ namespace translate.web.ViewComponents
             ViewBag.userId = user;
             ViewBag.creator = _context.ProjectMembers.Where(x => x.ProjectId == ProjectId && x.EmployeeId.ToString() == user).Single().IsCreator;
 
-            var members = await _context.ProjectMembers.Include(a => a.Employee).Where(x => x.ProjectId == ProjectId).ToListAsync();
+            var members = await _context.ProjectMembers.Include(a => a.Employee).Where(x => x.ProjectId == ProjectId && x.AcceptedInvitation == true).ToListAsync();
 
             var model = new AddToProjectViewModel
             {

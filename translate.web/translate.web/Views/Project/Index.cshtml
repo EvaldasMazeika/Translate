@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col-sm-8">
-        @await Component.InvokeAsync("LocalesListIndex", new { ProjectId = Model.Id})
+        @await Component.InvokeAsync("LocalesListIndex", new { ProjectId = Model.Id })
     </div>
     <div class="col-sm-4">
         <div id="teamMembers">
@@ -11,8 +11,94 @@
         <br />
         @await Component.InvokeAsync("ProjectLocales", new { ProjectId = Model.Id })
         <br />
-        @await Component.InvokeAsync("ProjectDocuments", new { ProjectId = Model.Id})
+        @await Component.InvokeAsync("ProjectDocuments", new { ProjectId = Model.Id })
     </div>
 </div>
 
 
+@section scripts {
+    <script>
+        jQuery('#teamMembers').on('click', 'button', function (e) {
+            var button = e.currentTarget;
+            var type = button.id;
+
+            if (type == 'addToProject') {
+
+                var projectId = jQuery("#projectid").val();
+                var email = jQuery("#elpastas").val();
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "/Project/" + projectId + "/AddToProjectAsync",
+                    data: JSON.stringify({
+                        ProjectId: projectId,
+                        Email: email
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        jQuery('#AddmemberModal').modal('hide');
+                        jQuery("#alerti").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+      Pakvietimas sėkmingai išsiųstas
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+</div>`);
+                    },
+                    error: function (response) {
+                        jQuery('#AddmemberModal').modal('hide');
+                        jQuery("#alerti").append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+      Įvyko klaida
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+</div>`);
+                    }
+                });
+
+            } else if (type == 'deleteMemberFrom') {
+
+                var memberName = button.getAttribute('data-name');
+                var memberId = button.getAttribute('data-whatever');
+                var projectId = button.getAttribute('data-project');
+                var modal = jQuery('#DeleteMemberModal');
+                modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + memberName + ' iš projekto?');
+                modal.find('#deleteMember').data("whatever", memberId);
+                modal.find('#deleteMember').data("project", projectId);
+
+            } else if (type == 'deleteMember') {
+                var button = jQuery('#deleteMember');
+                var memberId = button.data('whatever');
+                var projectId = button.data('project');
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: "/Project/" + projectId + "/RemoveFromProjectAsync",
+                    data: JSON.stringify({
+                        ProjectId: projectId,
+                        MemberId: memberId
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        jQuery('#DeleteMemberModal').modal('hide');
+                        window.setTimeout(function () {
+                            jQuery("#teamMembers").load("TeamMembers");
+                        }, 1000);
+
+                    },
+                    error: function (result) {
+                        jQuery('#DeleteMemberModal').modal('hide');
+                        jQuery("#alerti").append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+          Įvyko klaida
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+</div>`);
+                    }
+                });
+            }
+
+        });
+    </script>
+}

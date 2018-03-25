@@ -22,5 +22,7 @@ namespace translate.web.Models
 
         public ICollection<Comment> Comments { get; set; }
 
+        public bool IsImportant { get; set; }
+
     }
 }

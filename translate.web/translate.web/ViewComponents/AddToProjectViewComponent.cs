@@ -12,7 +12,7 @@ namespace translate.web.ViewComponents
     public class AddToProjectViewComponent : ViewComponent
     {
 
-        public async Task<IViewComponentResult> InvokeAsync(Guid ProjectId)
+        public IViewComponentResult Invoke(Guid ProjectId)
         {
             var model = new AddToProjectViewModel
             {

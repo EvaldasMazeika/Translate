@@ -333,11 +333,18 @@ namespace translate.web.Controllers
         [Route("Editor/{id}")]
         public async Task<IActionResult> Editor(Guid ProjectId, Guid id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
             var model = await _context.Translations.Where(x => x.Id == id)
                 .Include(a => a.Document)
                 .ThenInclude(z => z.Project).SingleOrDefaultAsync();
 
-            return View(model);
+            if (model.TranslatorId == user.Id)
+            {
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
         }
 
         [Route("AddWordToDict")]

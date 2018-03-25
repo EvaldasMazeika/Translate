@@ -24,9 +24,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-
-            @await Html.PartialAsync("_ProjectsDropdownPartial")
-
+            <div id="dropdownPlace">
+                @await Html.PartialAsync("_ProjectsDropdownPartial")
+            </div>
             <ul class="nav navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

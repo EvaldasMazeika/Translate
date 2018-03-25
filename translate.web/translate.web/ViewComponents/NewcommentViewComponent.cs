@@ -12,7 +12,7 @@ namespace translate.web.ViewComponents
     [ViewComponent(Name = "Newcomment")]
     public class NewcommentViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(Guid topicId)
+        public IViewComponentResult Invoke(Guid topicId)
         {
             var model = new NewCommentViewModel { PostId = topicId };
 

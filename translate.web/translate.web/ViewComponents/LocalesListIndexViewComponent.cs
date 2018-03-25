@@ -25,11 +25,13 @@ namespace translate.web.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(Guid ProjectId)
         {
             var user = _userManager.GetUserId(HttpContext.User);
+            ViewBag.userId = user;
             ViewBag.creator = _context.ProjectMembers.Where(x => x.ProjectId == ProjectId && x.EmployeeId.ToString() == user).Single().IsCreator;
 
             var model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId)
                 .Include(a => a.Document)
                 .Include(a=>a.TranslationDictionarys)
+                .Include(i=> i.Translator)
                 .ToListAsync();
 
             return View(model);

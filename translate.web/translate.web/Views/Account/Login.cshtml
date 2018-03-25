@@ -40,7 +40,7 @@
                     <div class="col-auto my-1">
                         <div class="custom-control custom-checkbox mr-sm-2">
                             <input type="checkbox" asp-for="RememberMe" class="custom-control-input" id="customControlAutosizing">
-                            <label class="custom-control-label" for="customControlAutosizing">@SharedLocalizer.GetLocalizedHtmlString("loginRemember")</label>
+                            <label class="custom-control-label" asp-for="RememberMe" for="customControlAutosizing">@SharedLocalizer.GetLocalizedHtmlString("loginRemember")</label>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg btn-block">@SharedLocalizer.GetLocalizedHtmlString("loginButton")</button>

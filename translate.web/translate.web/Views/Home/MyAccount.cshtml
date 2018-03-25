@@ -1,0 +1,26 @@
+﻿
+@inject translate.web.Resources.LocService SharedLocalizer
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Home" asp-action="MyProfile">@SharedLocalizer.GetLocalizedHtmlString("personalInfoCaption")</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" asp-controller="Home" asp-action="MyCreds">@SharedLocalizer.GetLocalizedHtmlString("passwordCaption")</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" asp-controller="Home" asp-action="MyAccount">Anketa</a>
+    </li>
+</ul>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <p>Ištrindami anketą panaikinsite visą informaciją susijusią su jumis iš sistemos...</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form asp-controller="Account" asp-action="MyAccount" method="post">
+            <button class="btn btn-danger">Ištrinti paskyrą</button>
+        </form>
+    </div>
+</div>

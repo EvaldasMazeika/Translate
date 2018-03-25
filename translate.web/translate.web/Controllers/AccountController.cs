@@ -195,6 +195,17 @@ namespace translate.web.Controllers
             return LocalRedirect(returnUrl);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> MyAccount()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            await _signInManager.SignOutAsync();
+
+            await _userManager.DeleteAsync(user);
+
+            return RedirectToAction("Login");
+        }
 
         public IActionResult AccessDenied()
         {

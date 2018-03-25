@@ -20,11 +20,11 @@
                     }
                     else
                     {
-                        <li class="list-group-item">@item.Name @item.Surname <button type="button" data-toggle="modal" data-project="@Model.ProjectId" data-name="@item.Name" data-whatever="@item.Id" data-target="#DeleteMemberModal" class="btn btn-danger btn-sm" style="float:right"><i class="fa fa-trash"></i></button></li>
+                        <li class="list-group-item">@item.Name @item.Surname <button type="button" id="deleteMemberFrom" data-toggle="modal" data-project="@Model.ProjectId" data-name="@item.Name" data-whatever="@item.Id" data-target="#DeleteMemberModal" class="btn btn-danger btn-sm" style="float:right"><i class="fa fa-trash"></i></button></li>
                     }
                 }
             </ul>
-            <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#AddmemberModal" data-whatever="@Model.ProjectId">Pakviesti prie projekto</button>
+            <button type="button" id="addMember" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#AddmemberModal" data-whatever="@Model.ProjectId">Pakviesti prie projekto</button>
         }
         else
         {
@@ -94,6 +94,5 @@
             </div>
         </div>
     </div>
-
 }
 

@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Language>
+@{
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+
+<h1 class="display-4">Kalbos</h1>
+<a asp-action="NewLanguage" asp-controller="Admin" class="btn btn-info" role="button">Nauja kalba</a>
+<hr />
+@if (!Model.Any())
+{
+    <div class="alert alert-danger text-center" role="alert">Nėra pridėta kalbų</div>
+}
+else
+{
+    <div class="table table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Kalba</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+}

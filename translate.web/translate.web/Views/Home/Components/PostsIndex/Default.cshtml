@@ -4,23 +4,25 @@
 <hr />
 @if (Model.Any())
 {
-    <table class="table table-hover">
-        <thead>
-            <tr class="table-warning">
-                <th scope="col">Title</th>
-                <th scope="col">Create date</th>
-                <th scope="col">Author</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="table-warning">
-                    <th><a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a> <span class="badge badge-secondary">New</span></th>
-                    <td>@item.CreatedTime</td>
-                    <td>@item.Employee.Name @item.Employee.Surname</td>
+    <div class="table table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Create date</th>
+                    <th scope="col">Author</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th><a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a>@if (item.IsImportant) { <span class="badge badge-danger">Svarbu</span> }</th>
+                        <td>@item.CreatedTime</td>
+                        <td>@item.Employee.Name @item.Employee.Surname</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }

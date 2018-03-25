@@ -153,56 +153,6 @@ namespace translate.web.Controllers
             return View(model);
         }
 
-        public IActionResult Account()
-        {
-            //deprecaeted
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                if (model.NewPassword == model.RepeatPassword)
-                {
-                    var user = await _userManager.GetUserAsync(HttpContext.User);
-
-                    IdentityResult result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction("Account");
-                    }
-
-                }
-                return View(model);
-            }
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> EditSelf(EditMySelfViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
-
-                user.Surname = model.Surname;
-                user.Email = model.Email;
-                user.PhoneNumber = model.MobileNumber;
-
-                IdentityResult result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Account");
-                }
-
-            }
-
-            return View(model);
-        }
-
         public async Task<IActionResult> Projects()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -273,6 +223,25 @@ namespace translate.web.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> DeleteProject([FromBody] Project model)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var IsCreator = _context.ProjectMembers.Where(x => x.EmployeeId == user.Id && x.ProjectId == model.Id).Single().IsCreator;
+
+            if (IsCreator)
+            {
+                var project = await _context.Projects.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+                _context.Remove(project);
+                await _context.SaveChangesAsync();
+                return new JsonResult("success");
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddToProject(AddToProjectViewModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -330,15 +299,22 @@ namespace translate.web.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult MyAccount()
+        {
+            return View();
+        }
+
 
         public IActionResult Invitations()
         {
             return ViewComponent("InvitationsIndex");
         }
 
-        public IActionResult ProjectsAsync()
+        public IActionResult ProjectsDropdown()
         {
-            return ViewComponent("ProjectsIndex");
+            return PartialView("_ProjectsDropdownPartial");
         }
+
     }
 }

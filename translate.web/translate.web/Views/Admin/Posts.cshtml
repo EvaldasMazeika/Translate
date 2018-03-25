@@ -2,37 +2,46 @@
 @{
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
-
-<h1 class="display-4">Pranešimai</h1>
 <a asp-action="NewPost" asp-controller="Admin" class="btn btn-info" role="button">Naujas pranešimas</a>
-<br />
-<br />
+<hr />
+<h2>Pranešimai</h2>
 @if (!Model.Any())
 {
     <div class="alert alert-danger text-center" role="alert">Nėra sukurta pranešimų</div>
 }
 else
 {
-    <table class="table table-hover">
-        <thead>
-            <tr class="table-warning">
-                <th scope="col">Title</th>
-                <th scope="col">Create date</th>
-                <th scope="col">Options</th>
+    <div class="table table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Create date</th>
+                    <th scope="col">Svarbu</th>
+                    <th scope="col">Options</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr class="table-warning">
-                    <th><a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a></th>
-                    <td>@item.CreatedTime</td>
-                    <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#DeletePostModal" data-whatever="@item.Id"><i class="fa fa-ban"></i></button></td>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a></td>
+                        <td>@item.CreatedTime</td>
+                        @if (item.IsImportant)
+                        {
+                            <td><i class="fa fa-check text-success" style="font-size:25px"></i></td>
+                        }
+                        else
+                        {
+                            <td><i class="fa fa-times text-danger" style="font-size:25px"></i></td>
+                        }
+                        <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#DeletePostModal" data-whatever="@item.Id"><i class="fa fa-ban"></i></button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 <div class="modal fade" id="DeletePostModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -54,4 +63,37 @@ else
     </div>
 </div>
 
+
+@section scripts {
+    <script>
+        jQuery('#DeletePostModal').on('show.bs.modal', function (event) {
+            var button = jQuery(event.relatedTarget);
+            var recipient = button.data('whatever');
+
+            var modal = jQuery(this);
+            modal.find('#deletePost').data('recipient', recipient);
+        });
+
+        jQuery("#deletePost").click(function (e) {
+            e.preventDefault();
+            var button = jQuery('#deletePost');
+            var postId = button.data('recipient');
+
+            jQuery.ajax({
+                type: 'post',
+                url: "/Admin/DeletePost/" + postId,
+                data: JSON.stringify({
+                    id: postId
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (result) { }
+            });
+
+        });
+    </script>
+}
 

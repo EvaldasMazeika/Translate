@@ -1,6 +1,7 @@
 ﻿@model Translation
 <h2>@Model.Title</h2>
-
+<a class="btn btn-primary" asp-controller="Project" asp-action="Index"> < Grįžti atgal</a>
+<hr />
 <div class="row">
     <div id="editorList" class="col-md-4">
         @await Component.InvokeAsync("WordsList", new { TranslationId = Model.Id })
