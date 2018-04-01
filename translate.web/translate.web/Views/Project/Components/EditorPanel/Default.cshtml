@@ -6,7 +6,7 @@
     <div class="card-body">
         <form>
             <div class="form-group">
-                <textarea id="textarea" class="form-control" rows="3"></textarea>
+                <textarea id="textarea" class="form-control" rows="3">@Model.NewValue</textarea>
             </div>
             <button id="addWord" type="submit" class="btn btn-success" style="float:right">Išsaugoti</button>
         </form>
@@ -32,8 +32,14 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (result) {
+                    var backIndex = parseInt(jQuery('#goBack').attr("data-page"));
+                    var forwardIndex = parseInt(jQuery('#goForward').attr("data-page"));
+                    var index = forwardIndex - 1;
                     jQuery("#editor").empty();
-                    jQuery('#editorList').load("/Project/@Model.Translations.Document.ProjectId/GetEditorListAsync?id=" + '@Model.TranslationId');
+                    jQuery('#editorList').load("/Project/@Model.Translations.Document.ProjectId/GetEditorListAsync?id=" + '@Model.TranslationId' + '&PageIndex=' + index, function () {
+                        jQuery('#goBack').attr("data-page", backIndex);
+                        jQuery('#goForward').attr("data-page", forwardIndex);
+                    });
 
                 },
                 error: function (result) {

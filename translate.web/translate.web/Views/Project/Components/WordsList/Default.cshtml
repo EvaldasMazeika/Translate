@@ -1,26 +1,50 @@
 ﻿@model IEnumerable<TranslationDictionary>
 
-@if (Model.Any())
-{
-    <div id="buttons" class="list-group">
-        @foreach (var item in Model)
-        {
-            <button id="li" type="button" class="list-group-item list-group-item-action" data-pr="@item.Translations.Document.ProjectId" data-key="@item.Id">@item.GivenValue</button>
-        }
+
+@{
+    var prevDisabled = ViewBag.previous == false ? "disabled" : "";
+    var nextDisabled = ViewBag.next == false ? "disabled" : "";
+
+}
+
+<div class="card">
+    <div class="card-header" style="height: 57px;">
+        <div class="row">
+            <div class="col">
+                Liko išversti:  <strong>@ViewBag.toTranslate</strong>
+                @if (ViewBag.toTranslate == 0)
+                {
+                    <form asp-controller="Project" asp-action="CompleteTranslation" method="post" style="display:inline-flex">
+                        <input type="hidden" name="transId" value="@ViewBag.trans" />
+                        <button type="submit" class="btn btn-dark btn-sm">Baigti versti</button>
+                    </form>
+
+                }
+                <nav aria-label="Page navigation example" style="float: right; margin-bottom: 0px;">
+                    <ul class="pagination" id="buttonList">
+                        <li class="page-item   @prevDisabled"><a id="goBack" data-page="0" class="page-link" href="#">Previous</a></li>
+                        <li class="page-item @nextDisabled"><a id="goForward" data-page="2" class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
-}
-else
-{
-    <h3 class="text-success text-center">Viskas išversta!</h3>
-    <form asp-controller="Project" asp-action="CompleteTranslation" method="post">
-        <input type="hidden" name="transId" value="@ViewBag.trans" />
-        <button type="submit" class="btn btn-info">Užbaigti vertimą</button>
-    </form>
-}
+    <div class="card-body">
+        <div id="buttons" class="list-group">
+            @foreach (var item in Model)
+            {
+                var saved = item.NewValue != null ? "list-group-item-success" : "";
+                <button id="li" type="button" class="list-group-item list-group-item-action @saved" data-pr="@item.Translations.Document.ProjectId" data-key="@item.Id">@item.GivenValue</button>
+            }
+        </div>
+    </div>
+</div>
+
+
+
 
 <script>
     window.onload = function () {
-
 
     };
 </script>

@@ -30,8 +30,10 @@ namespace translate.web.ViewComponents
 
             var model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId)
                 .Include(a => a.Document)
+                    .ThenInclude(i=> i.Language)
                 .Include(a=>a.TranslationDictionarys)
                 .Include(i=> i.Translator)
+                .Include(i=> i.Language)
                 .ToListAsync();
 
             return View(model);

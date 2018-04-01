@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace translate.web.ViewModels
 {
-    public class DocumentsViewModel
+    public class DeclineTranslationViewModel
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public bool IsLoaded { get; set; }
-        public Guid ProjectId { get; set; }
+        public string Message { get; set; }
     }
 }

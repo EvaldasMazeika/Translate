@@ -305,6 +305,14 @@ namespace translate.web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult MySecurity()
+        {
+            return View();
+        }
+
+
+
 
         public IActionResult Invitations()
         {

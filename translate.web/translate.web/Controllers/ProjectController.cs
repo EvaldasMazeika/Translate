@@ -216,9 +216,11 @@ namespace translate.web.Controllers
         }
 
         [Route("GetEditorListAsync")]
-        public IActionResult GetEditorListAsync([FromQuery] Guid id)
+        public IActionResult GetEditorListAsync([FromQuery] Guid id, int PageIndex)
         {
-            return ViewComponent("WordsList", id);
+            var model = new EditorListViewModel() { Id = id, PageIndex = PageIndex };
+
+            return ViewComponent("WordsList", model);
         }
 
         [Route("NewDocument")]
@@ -363,18 +365,67 @@ namespace translate.web.Controllers
             return BadRequest();
         }
 
+        [Route("CheckTranslation")]
+        public async Task<IActionResult> CheckTranslation(Guid ProjectId, Guid id)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var access = _context.ProjectMembers.Where(w => w.ProjectId == ProjectId && w.EmployeeId == user.Id).SingleOrDefault().IsCreator;
+            var translation = _context.Translations.Where(w => w.Id == id).SingleOrDefault().IsWaiting;
+            if (access && translation)
+            {
+                var model = await _context.TranslationDictionarys.Where(w => w.TranslationId == id).ToListAsync();
+                ViewBag.projectid = ProjectId;
+
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         [Route("CompleteTranslation")]
         public async Task<IActionResult> CompleteTranslation(Guid transId)
         {
             var translation = await _context.Translations.Where(x => x.Id == transId).SingleOrDefaultAsync();
 
-            translation.IsCompleted = true;
+            translation.IsWaiting = true;
             _context.Update(translation);
 
             _context.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Route("VerifyTranslation")]
+        public async Task<IActionResult> VerifyTranslation(Guid transId)
+        {
+            var translation = await _context.Translations.Where(w => w.Id == transId).SingleOrDefaultAsync();
+
+            translation.IsWaiting = false;
+            translation.IsCompleted = true;
+            _context.Update(translation);
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Route("DeclineTranslation")]
+        public async Task<IActionResult> DeclineTranslation(Guid ProjectId, [FromBody] DeclineTranslationViewModel model)
+        {
+            var translation = await _context.Translations.Where(w => w.Id == model.Id).SingleOrDefaultAsync();
+
+            if (translation != null)
+            {
+                translation.IsWaiting = false;
+                translation.DeclineComment = model.Message;
+                _context.Update(translation);
+
+                await _context.SaveChangesAsync();
+                return new JsonResult("success");
+            }
+            return BadRequest();
         }
 
         [Route("DownloadTranslation")]
@@ -396,6 +447,25 @@ namespace translate.web.Controllers
                     return new JsonResult("success");
                 }
             }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("DeleteDocument")]
+        public async Task<IActionResult> DeleteDocument([FromBody] ProjectDocument document)
+        {
+            var doc = await _context.ProjectDocuments.SingleOrDefaultAsync(x => x.Id == document.Id);
+            if (doc != null)
+            {
+                _context.Remove(doc);
+                if (_context.SaveChanges() > 0)
+                {
+                    System.IO.File.Delete(doc.FullPath); // tries to delete the file
+
+                    return new JsonResult("success");
+                }
+            }
+
             return BadRequest();
         }
 

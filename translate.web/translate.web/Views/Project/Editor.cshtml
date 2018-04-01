@@ -1,10 +1,29 @@
 ﻿@model Translation
-<h2>@Model.Title</h2>
 <a class="btn btn-primary" asp-controller="Project" asp-action="Index"> < Grįžti atgal</a>
 <hr />
 <div class="row">
+    <div class="col-md-3">
+        <h2>@Model.Title</h2>
+
+    </div>
+    <div class="col-md-5">
+        <small>@Model.Description</small>
+    </div>
+    @if (Model.DeclineComment != null)
+    {
+        <div class="col-md-4">
+            <h5 class="text-danger">@Model.DeclineComment</h5>
+        </div>
+    }
+</div>
+
+<hr />
+<div class="row">
     <div id="editorList" class="col-md-4">
-        @await Component.InvokeAsync("WordsList", new { TranslationId = Model.Id })
+
+
+
+        @await Component.InvokeAsync("WordsList", new EditorListViewModel { Id = Model.Id, PageIndex = 1 })
     </div>
     <div id="editor" class="col-md-8">
 
@@ -13,12 +32,36 @@
 
 @section scripts {
     <script>
-
         jQuery('#editorList').on('click', 'button', function (e) {
             var button = e.currentTarget;
             var key = button.getAttribute("data-key");
             var pr = button.getAttribute("data-pr");
             jQuery("#editor").load("/Project/" + pr + "/GetEditorAsync?id=" + key);
         });
+
+        jQuery('#editorList').on('click', 'a', function (e) {
+            e.preventDefault();
+        var button = e.currentTarget;
+        var pageIndex = button.getAttribute("data-page");
+        var type = button.id;
+        var backIndex = parseInt(jQuery('#goBack').attr("data-page"));
+        var forwardIndex = parseInt(jQuery('#goForward').attr("data-page"));
+
+        if (type == 'goBack') {
+            jQuery('#editorList').load("/Project/@Model.Document.ProjectId/GetEditorListAsync?id=" + '@Model.Id' + '&PageIndex=' + backIndex, function () {
+                jQuery('#goBack').attr("data-page", backIndex - 1);
+                jQuery('#goForward').attr("data-page", forwardIndex - 1);
+             });
+
+        } else if (type == 'goForward') {
+            jQuery('#editorList').load("/Project/@Model.Document.ProjectId/GetEditorListAsync?id=" + '@Model.Id' + '&PageIndex=' + forwardIndex, function () {
+                jQuery('#goBack').attr("data-page", backIndex + 1);
+                jQuery('#goForward').attr("data-page", forwardIndex + 1);
+             });
+
+        }
+
+     });
+
     </script>
 }

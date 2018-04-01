@@ -24,6 +24,11 @@
                         {
                             <a class="btn btn-warning btn-sm" asp-controller="Project" asp-action="LoadDoc" asp-route-id="@item.Id" style="float:right" data-toggle="tooltip" data-placement="left" title="Paruošti dokumentą"><i class="fa fa-flask"></i></a>
                         }
+                        @if (ViewBag.IsCreator)
+                        {
+                            <button type="button" data-toggle="modal" data-whatever="@item.Id" data-project="@item.ProjectId" data-target="#DeleteDocumentModal" class="btn btn-danger btn-sm" style="float:right"><i class="fa fa-trash"></i></button>
+
+                        }
                         <a class="btn btn-info btn-sm" asp-controller="Project" asp-action="DownloadDoc" asp-route-id="@item.Id" style="float:right"><i class="fa fa-download"></i></a>
 
                     </li>
@@ -34,8 +39,66 @@
     </div>
 </div>
 
-@section scripts {
-    <script type="text/javascript">
+@if (ViewBag.IsCreator)
+{
+    <div class="modal fade" id="DeleteDocumentModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Ar tikrai norite pašalinti dokumentą iš projekto? Išsitrins visi su juo susiję duomenys visam laikui...</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
+                    <button id="deleteDocument" type="button" class="btn btn-primary">Taip</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        window.onload = function () {
+            jQuery('#DeleteDocumentModal').on('show.bs.modal', function (event) {
+                var button = jQuery(event.relatedTarget);
+                var documentId = button.data('whatever');
+                var projectId = button.data('project');
+
+                var modal = jQuery(this);
+                modal.find('#deleteDocument').data("documentId", documentId);
+                modal.find('#deleteDocument').data('projectId', projectId);
+            });
+
+            jQuery("#deleteDocument").click(function (e) {
+                e.preventDefault();
+                var button = jQuery('#deleteDocument');
+                var documentId = button.data('documentId');
+                var projectId = button.data('projectId');
+
+
+                jQuery.ajax({
+                    type: 'post',
+                    url: '/Project/' + projectId + '/DeleteDocument',
+                    data: JSON.stringify({
+                        Id: documentId
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (result) { }
+                });
+
+            });
+
+
+        };
     </script>
 }
+
+

@@ -15,6 +15,7 @@
                 <div class="col-md-6">
                     Išverta dokumentų: @Model.Where(x => x.IsCompleted == true).Count() / @Model.Count()
                 </div>
+
                 <div class="col-md-6">
                     @{
                         var total = 0;
@@ -24,6 +25,11 @@
                         }
                     }
                     Išversta žodžių iš viso: @total
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    Laukiama pativirtinimo: @Model.Where(x => x.IsWaiting == true).Count()
                 </div>
             </div>
             <br />
