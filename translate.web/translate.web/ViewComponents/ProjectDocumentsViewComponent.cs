@@ -31,7 +31,7 @@ namespace translate.web.ViewComponents
 
             var temp = await _context.ProjectDocuments.Where(x => x.ProjectId == ProjectId).ToListAsync();
 
-            var model = temp.Select(a => new DocumentsViewModel { Id = a.Id, Name = a.Name, IsLoaded = a.IsLoaded, ProjectId = a.ProjectId }).ToList();
+            var model = temp.Select(a => new DocumentsViewModel { Id = a.Id, Name = a.Name, ProjectId = a.ProjectId }).ToList();
 
             return View(model);
         }

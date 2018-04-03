@@ -11,9 +11,10 @@ using translate.web.Data;
 namespace translate.web.Migrations
 {
     [DbContext(typeof(ApplContext))]
-    partial class ApplContextModelSnapshot : ModelSnapshot
+    [Migration("20180403085011_MinorDocsChange")]
+    partial class MinorDocsChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -325,8 +326,6 @@ namespace translate.web.Migrations
                     b.Property<string>("Description");
 
                     b.Property<Guid>("DocumentId");
-
-                    b.Property<string>("FileName");
 
                     b.Property<bool>("IsCompleted");
 

@@ -13,6 +13,9 @@
       "launchBrowser": true,
       "launchUrl": "https://localhost:44331/",
       "environmentVariables": {
+        "Authentication:Google:ClientSecret": "1",
+        "DefaultConnection": "1",
+        "Authentication:Google:ClientId": "1",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

@@ -21,27 +21,21 @@ namespace translate.web.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync(EditorListViewModel model)
         {
-            var start = 0;
-            var end = 10;
-            for (int i = 0; i < model.PageIndex-1; i++)
-            {
-                start = start + 10;
-                end = end + 10;
-            }
+            var stat = 10;
 
             var totalCount = await _context.TranslationDictionarys.Where(x => x.TranslationId == model.Id).CountAsync();
             var toTranslate = await _context.TranslationDictionarys.Where(x => x.TranslationId == model.Id && x.NewValue == null).CountAsync();
 
             var result = await _context.TranslationDictionarys.Where(x => x.TranslationId == model.Id)
                 .Include(a=>a.Translations)
-                .ThenInclude(q=>q.Document).Skip(start).Take(end).ToListAsync();
+                .ThenInclude(q=>q.Document).Skip((model.PageIndex -1) * stat).Take(stat).ToListAsync();
 
             ViewBag.trans = model.Id;
 
             ViewBag.pageIndex = model.PageIndex;
 
             ViewBag.previous = model.PageIndex == 1 ? false : true;
-            ViewBag.next = totalCount > model.PageIndex*10 ? true : false;
+            ViewBag.next = totalCount > model.PageIndex * stat ? true : false;
             ViewBag.toTranslate = toTranslate;
 
             return View(result);

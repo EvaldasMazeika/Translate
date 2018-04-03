@@ -20,7 +20,7 @@ namespace translate.web.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync(Guid ProjectId)
         {
-            var s = await _context.ProjectDocuments.Where(x => x.ProjectId == ProjectId && x.IsLoaded == true).FirstOrDefaultAsync();
+            var s = await _context.ProjectDocuments.Where(x => x.ProjectId == ProjectId).FirstOrDefaultAsync();
             if (s == null)
             {
                 ViewBag.exist = false;

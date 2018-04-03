@@ -12,9 +12,7 @@ namespace translate.web.Models
 
         public string Name { get; set; }
 
-        public string FullPath { get; set; }
-
-        public bool IsLoaded { get; set; }
+        public string Header { get; set; }
 
         public Guid ProjectId { get; set; }
 

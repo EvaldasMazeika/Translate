@@ -13,7 +13,9 @@ namespace translate.web.Data
     public class ApplContext : IdentityDbContext<AppIdentityUser, AppIdentityRole, Guid>
     {
         public ApplContext(DbContextOptions<ApplContext> options) : base(options)
-        { }
+        {
+            Database.SetCommandTimeout(240);
+        }
 
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }

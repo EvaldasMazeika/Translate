@@ -17,6 +17,7 @@ namespace translate.web.Models
         public bool IsWaiting { get; set; }
         public string DeclineComment { get; set; }
         public Guid TranslatorId { get; set; }
+        public string FileName { get; set; }
 
         public ProjectDocument Document { get; set; }
         public Language Language { get; set; }

@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using translate.web.Data;
 using translate.web.Models;
@@ -28,7 +29,7 @@ namespace translate.web
     {
         private readonly IConfiguration _configuration;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             _configuration = configuration;
 
@@ -47,7 +48,13 @@ namespace translate.web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Uploads")));
+            services.AddDbContext<ApplContext>(opt => opt.UseSqlServer(_configuration["DefaultConnection"]));
+
+            services.AddIdentity<AppIdentityUser, AppIdentityRole>()
+                .AddEntityFrameworkStores<ApplContext>()
+                .AddDefaultTokenProviders();
+            //@"C:\Users\Evaldas\Desktop\uploads"
+            services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory())));
 
             services.AddSingleton<LocService>();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -79,11 +86,7 @@ namespace translate.web
                     options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
                 });
 
-            services.AddDbContext<ApplContext>(opt => opt.UseSqlServer(_configuration["ConnectionStrings:DefaultConnection"]));
 
-            services.AddIdentity<AppIdentityUser, AppIdentityRole>()
-                .AddEntityFrameworkStores<ApplContext>()
-                .AddDefaultTokenProviders();
 
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
@@ -118,30 +121,35 @@ namespace translate.web
                 };
             });
 
-            services.Configure<MvcOptions>(options =>
-            {
-                options.Filters.Add(new RequireHttpsAttribute());
-            });
+            //services.Configure<MvcOptions>(options =>
+            //{
+            //    options.Filters.Add(new RequireHttpsAttribute());
+            //});
 
 
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, ApplContext context, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddConsole();
+            loggerFactory.AddDebug();
+
+
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            var optionss = new RewriteOptions().AddRedirectToHttps();
+           // var optionss = new RewriteOptions().AddRedirectToHttps();
 
-            app.UseRewriter(optionss);
+           // app.UseRewriter(optionss);
 
             var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);
@@ -157,6 +165,9 @@ namespace translate.web
                      name: "default",
                      template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            DbInitializer.Initialize(context);
+
         }
     }
 }

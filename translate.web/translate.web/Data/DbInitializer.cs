@@ -12,7 +12,7 @@ namespace translate.web.Data
     {
         public static void Initialize(ApplContext context)
         {
-            context.Database.EnsureCreated();
+            //context.Database.EnsureCreated();
 
             //var a1 = new Language { Name = "English - en" };
             //context.Add(a1);

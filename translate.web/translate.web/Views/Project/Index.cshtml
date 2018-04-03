@@ -18,6 +18,42 @@
 
 @section scripts {
     <script>
+        jQuery('#DeleteTranslationsModal').on('show.bs.modal', function (event) {
+            var button = jQuery(event.relatedTarget);
+            var translationId = button.data('translate');
+            var name = button.data('name');
+            var project = button.data('project');
+
+            var modal = jQuery(this);
+            modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + name + ' iš projekto?');
+            modal.find('#deleteTranslation').data("translationId", translationId);
+            modal.find('#deleteTranslation').data("project", project);
+        });
+
+        jQuery("#deleteTranslation").click(function (e) {
+            e.preventDefault();
+            var button = jQuery('#deleteTranslation');
+            var translationId = button.data('translationId');
+            var projectId = button.data("project");
+
+
+            jQuery.ajax({
+                type: 'post',
+                url: '/Project/' + projectId + '/DeleteTranslation',
+                data: JSON.stringify({
+                    Id: translationId
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (result) { }
+            });
+
+        });
+
+
         jQuery('#teamMembers').on('click', 'button', function (e) {
             var button = e.currentTarget;
             var type = button.id;

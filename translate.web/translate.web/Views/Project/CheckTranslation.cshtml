@@ -2,15 +2,12 @@
 
 <a class="btn btn-primary" asp-controller="Project" asp-action="Index"> < Grįžti atgal</a>
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DeclineModal" data-whatever="@Model.First().TranslationId">Atmesti</button>
-<form asp-controller="Project" asp-action="VerifyTranslation" method="post" style="display:initial">
-    <input type="hidden" name="transId" value="@Model.First().TranslationId" />
-    <button type="submit" class="btn btn-success">Patvirtinti</button>
-</form>
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#VerifyModal" data-whatever="@Model.First().TranslationId">Patvirtinti</button>
 
 <hr />
 
 <div class="table table-responsive">
-    <table class="table table-striped">
+    <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
                 <th scope="col">ID</th>
@@ -18,16 +15,13 @@
                 <th scope="col">Vertimas</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.GivenValue</td>
-                    <td>@item.NewValue</td>
-                </tr>
-            }
-        </tbody>
+        <tfoot>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Duotas</th>
+                <th scope="col">Vertimas</th>
+            </tr>
+        </tfoot>
     </table>
 </div>
 <div class="modal fade" id="DeclineModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
@@ -56,8 +50,49 @@
     </div>
 </div>
 
+<div class="modal fade" id="VerifyModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">Patvirtinti vertimą</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Nurodykite dokumento būsimą pavadinimą.</p>
+                <div class="input-group mb-3">
+                    <input id="docName" type="text" class="form-control">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">.resx</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
+                <button id="VerifyTranslation" type="button" class="btn btn-primary">Tęsti</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section scripts {
     <script>
+        jQuery('#example').DataTable({
+            "ajax": {
+                "url": "/Project/@ViewBag.projectid/GetTranslationsAjax?tranId=@Model.First().TranslationId",
+                "dataSrc": ""
+            },
+            "columns": [
+                { "data": "name" },
+                { "data": "givenValue" },
+                { "data": "newValue" }
+            ]
+        });
+
+
+
         jQuery('#DeclineModal').on('show.bs.modal', function (event) {
             var button = jQuery(event.relatedTarget);
             var translationId = button.data('whatever');
@@ -88,5 +123,38 @@
             });
 
         });
+
+
+        jQuery('#VerifyModal').on('show.bs.modal', function (event) {
+            var button = jQuery(event.relatedTarget);
+            var translationId = button.data('whatever');
+
+            var modal = jQuery(this);
+            modal.find('#VerifyTranslation').data('translationId', translationId);
+        });
+
+        jQuery("#VerifyTranslation").click(function (e) {
+            e.preventDefault();
+            var button = jQuery('#VerifyTranslation');
+            var translationId = button.data('translationId');
+            var name = jQuery("#docName").val();
+
+            jQuery.ajax({
+                type: 'post',
+                url: "/Project/@ViewBag.projectid/VerifyTranslation",
+                data: JSON.stringify({
+                    Id: translationId,
+                    Name: name
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (result) { }
+            });
+
+        });
+
     </script>
 }

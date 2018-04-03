@@ -16,14 +16,6 @@
                 {
                     <li class="list-group-item">
                         @item.Name
-                        @if (item.IsLoaded)
-                        {
-                            <i class="fa fa-check text-success"></i>
-                        }
-                        else
-                        {
-                            <a class="btn btn-warning btn-sm" asp-controller="Project" asp-action="LoadDoc" asp-route-id="@item.Id" style="float:right" data-toggle="tooltip" data-placement="left" title="Paruošti dokumentą"><i class="fa fa-flask"></i></a>
-                        }
                         @if (ViewBag.IsCreator)
                         {
                             <button type="button" data-toggle="modal" data-whatever="@item.Id" data-project="@item.ProjectId" data-target="#DeleteDocumentModal" class="btn btn-danger btn-sm" style="float:right"><i class="fa fa-trash"></i></button>
@@ -89,6 +81,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
+                       // alert(result);
                         location.reload();
                     },
                     error: function (result) { }

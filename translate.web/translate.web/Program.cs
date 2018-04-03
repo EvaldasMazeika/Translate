@@ -16,24 +16,7 @@ namespace translate.web
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
-
-            // Seeds database with development data
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                try
-                {
-                    var context = services.GetRequiredService<ApplContext>();
-                    DbInitializer.Initialize(context);
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-
-            host.Run();
+            BuildWebHost(args).Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
