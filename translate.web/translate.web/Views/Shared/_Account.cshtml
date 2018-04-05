@@ -11,7 +11,7 @@
         <script src="~/dist/main.js" asp-append-version="true"></script>
     </environment>
 </head>
-<body style="display:flex;align-items:center">
+<body style="display:grid;align-items:center">
     <div class="container-fluid">
         @RenderBody()
     </div>
@@ -21,5 +21,6 @@
     <environment names="Staging,Production">
         <script src="~/dist/scripts.js" asp-append-version="true"></script>
     </environment>
+    @RenderSection("scripts", required: false)
 </body>
 </html>

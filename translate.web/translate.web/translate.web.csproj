@@ -4,17 +4,30 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>f00dea8e-3601-4e94-87a8-40af1bf780c2</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Account\LoginWith2fa.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Account\LoginWith2fa.cshtml" />
+  </ItemGroup>
     
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
+    <PackageReference Include="Sendgrid" Version="9.9.0" />
   </ItemGroup>
 
 <ItemGroup>
   <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" />
   <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.1" />
   <DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
+</ItemGroup>
+
+<ItemGroup>
+  <None Include="Views\Account\LoginWith2fa.cshtml" />
 </ItemGroup>
 
 <ItemGroup>

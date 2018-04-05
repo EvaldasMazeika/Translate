@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using translate.web.Data;
 using translate.web.Models;
+using translate.web.Services;
 using translate.web.ViewModels;
 
 namespace translate.web.Controllers
@@ -20,11 +21,13 @@ namespace translate.web.Controllers
     {
         private readonly UserManager<AppIdentityUser> _userManager;
         private readonly ApplContext _context;
+        private readonly IEmailSender _emailSender;
 
-        public HomeController(UserManager<AppIdentityUser> userManager, ApplContext context)
+        public HomeController(UserManager<AppIdentityUser> userManager, ApplContext context, IEmailSender emailSender)
         {
             _userManager = userManager;
             _context = context;
+            _emailSender = emailSender;
         }
 
         public IActionResult Index()
@@ -306,12 +309,72 @@ namespace translate.web.Controllers
         }
 
         [HttpGet]
-        public IActionResult MySecurity()
+        public async Task<IActionResult> MySecurity()
+        {
+            var model = await _userManager.GetUserAsync(HttpContext.User);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> VerifyEmail()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var message = $"Jūsų elektroninio pašto patvirtinimo kodas: {code}";
+            await _emailSender.SendEmailAsync(user.Email, "Patvirtinimas", message);
+
+            return RedirectToAction("EmailCode");
+
+        }
+
+        [HttpGet]
+        public IActionResult EmailCode()
         {
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EmailCode(EmailConfirmViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.GetUserAsync(HttpContext.User);
 
+            var result = await _userManager.ConfirmEmailAsync(user, model.Code);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("MySecurity");
+            }
+            ModelState.AddModelError(string.Empty, "Nepavyko..");
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EnableTwoFactorAuthentication()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                await _userManager.SetTwoFactorEnabledAsync(user, true);
+            }
+            return RedirectToAction("MySecurity");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DisableTwoFactorAuthentication()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user != null)
+            {
+                await _userManager.SetTwoFactorEnabledAsync(user, false);
+            }
+            return RedirectToAction("MySecurity");
+        }
 
 
         public IActionResult Invitations()

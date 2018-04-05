@@ -22,6 +22,7 @@ using Microsoft.Extensions.Options;
 using translate.web.Data;
 using translate.web.Models;
 using translate.web.Resources;
+using translate.web.Services;
 
 namespace translate.web
 {
@@ -56,8 +57,13 @@ namespace translate.web
             //@"C:\Users\Evaldas\Desktop\uploads"
             services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory())));
 
+
+            services.AddTransient<IEmailSender, EmailSender>();
+
             services.AddSingleton<LocService>();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.Configure<Emailoptions>(_configuration);
 
             services.AddMvc()
                 .AddViewLocalization()
@@ -97,6 +103,8 @@ namespace translate.web
 
             services.Configure<IdentityOptions>(opt => 
             {
+                opt.Lockout.MaxFailedAccessAttempts = 5;
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
                 opt.Password.RequireDigit = true;
                 opt.Password.RequireUppercase = true;
                 opt.Password.RequiredLength = 8;
@@ -109,7 +117,7 @@ namespace translate.web
                 options.LoginPath = "/Account/Login";
                 options.LogoutPath = "/Account/Logout";
                 options.AccessDeniedPath = "/Account/AccessDenied";
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
                 options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
                 options.Cookie = new CookieBuilder
                 {

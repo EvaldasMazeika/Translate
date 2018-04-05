@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +10,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json.Linq;
 using translate.web.Models;
 using translate.web.Resources;
+using translate.web.Services;
 using translate.web.ViewModels;
 
 namespace translate.web.Controllers
@@ -20,16 +26,22 @@ namespace translate.web.Controllers
         private readonly UserManager<AppIdentityUser> _userManager;
         private readonly RoleManager<AppIdentityRole> _roleManager;
         private readonly LocService _loc;
+        private readonly IEmailSender _emailSender;
+        private readonly IConfiguration _configuration;
 
         public AccountController(SignInManager<AppIdentityUser> signInManager,
             UserManager<AppIdentityUser> userManager,
             RoleManager<AppIdentityRole> roleManager,
-            LocService loc)
+            LocService loc,
+            IEmailSender emailSender,
+            IConfiguration configuration)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
             _loc = loc;
+            _emailSender = emailSender;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -48,19 +60,77 @@ namespace translate.web.Controllers
 
             if(ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, lockoutOnFailure: true);
                 if(result.Succeeded)
                 {
                     return RedirectToLocal(returnUrl);
                 }
+                if (result.RequiresTwoFactor)
+                {
+                    return RedirectToAction(nameof(LoginWith2fa), new { rememberMe = model.RememberMe, returnUrl = returnUrl });
+                }
+                if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError(string.Empty, "Paskyra trumpam užrakinta dėl klaidingų prisijungimų");
+                }
+
             }
 
             ModelState.AddModelError(string.Empty, _loc.GetLocalizedHtmlString("loginError"));
             return View(model); 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> LoginWith2fa(bool rememberMe, string returnUrl = null)
+        {
+            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
+            if (user == null)
+            {
+                throw new ApplicationException("Error.");
+            }
+            var code = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                return View("Error");
+            }
+            var message = $"Jūsų prisijungimo kodas: {code}";
+            await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Prisijungimas", message);
+
+            var model = new VerifyCodeViewModel { ReturnUrl = returnUrl, RememberMe = rememberMe, Provider = "Email" };
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LoginWith2fa(VerifyCodeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await _signInManager.TwoFactorSignInAsync(model.Provider, model.Code, model.RememberMe, model.RememberBrowser);
+            if (result.Succeeded)
+            {
+                return RedirectToLocal(model.ReturnUrl);
+            }
+            if (result.IsLockedOut)
+            {
+                ModelState.AddModelError(string.Empty, "užrakinta.");
+                return View(model);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Blogas kodas.");
+                return View(model);
+            }
+        }
+
         public IActionResult Register()
         {
+            ViewData["ReCaptchaKey"] = _configuration.GetSection("GoogleReCaptcha:key").Value;
             return View();
         }
 
@@ -68,8 +138,16 @@ namespace translate.web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if(ModelState.IsValid)
+            ViewData["ReCaptchaKey"] = _configuration.GetSection("GoogleReCaptcha:key").Value;
+
+            if (ModelState.IsValid)
             {
+                if (!ReCaptchaPassed(Request.Form["g-recaptcha-response"], _configuration.GetSection("GoogleReCaptcha:secret").Value))
+                {
+                    ModelState.AddModelError(string.Empty, "Būtina patvirtirtinti CAPTCHA");
+                    return View(model);
+                }
+
                 var user = new AppIdentityUser
                 {
                     UserName = model.UserName,
@@ -112,6 +190,24 @@ namespace translate.web.Controllers
             return View(model);
         }
 
+        public static bool ReCaptchaPassed(string gRecaptchaResponse, string secret)
+        {
+            HttpClient httpClient = new HttpClient();
+            var res = httpClient.GetAsync($"https://www.google.com/recaptcha/api/siteverify?secret={secret}&response={gRecaptchaResponse}").Result;
+            if (res.StatusCode != HttpStatusCode.OK)
+            {
+                return false;
+            }
+
+            string JSONres = res.Content.ReadAsStringAsync().Result;
+            dynamic JSONdata = JObject.Parse(JSONres);
+            if (JSONdata.success != "true")
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         private IActionResult RedirectToLocal(string returnUrl)
         {

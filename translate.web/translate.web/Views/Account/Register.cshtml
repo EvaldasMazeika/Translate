@@ -5,55 +5,80 @@
 }
 @inject translate.web.Resources.LocService SharedLocalizer
 <div class="row">
-    <div class="col-md-4 offset-md-4">
+    <div class="col-md-6 offset-md-3">
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-4">@SharedLocalizer.GetLocalizedHtmlString("registrationCaption")</div>
-                    <div class="col-8">@await Html.PartialAsync("_SelectLanguagePartial")</div>
+                    <div class="col-md-6">@SharedLocalizer.GetLocalizedHtmlString("registrationCaption")</div>
+                    <div class="col-md-6" style="float:right">@await Html.PartialAsync("_SelectLanguagePartial")</div>
                 </div>
             </div>
             <div class="card-body">
                 <form asp-action="Register">
-                    <div class="form-group">
-                        <label asp-for="Name"></label>
-                        <input type="text" asp-for="Name" class="form-control" placeholder="" required>
-                        <span asp-validation-for="Name"  class="text-danger"></span>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Surname"></label>
-                        <input type="text" asp-for="Surname" class="form-control" placeholder="" required>
-                        <span asp-validation-for="Surname"  class="text-danger"></span>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Name"></label>
+                                <input type="text" asp-for="Name" class="form-control" placeholder="" required>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Surname"></label>
+                                <input type="text" asp-for="Surname" class="form-control" placeholder="" required>
+                                <span asp-validation-for="Surname" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Email"></label>
+                                <input type="email" asp-for="Email" class="form-control" placeholder="" required>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <div class="g-recaptcha" data-sitekey="@ViewData["ReCaptchaKey"]"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="PhoneNumber"></label>
+                                <input type="text" asp-for="PhoneNumber" class="form-control" placeholder="" required>
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="BirthDate"></label>
+                                <input type="date" asp-for="BirthDate" class="form-control" placeholder="" required>
+                                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="UserName"></label>
+                                <input type="text" asp-for="UserName" class="form-control" placeholder="" required>
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Password"></label>
+                                <input type="password" class="form-control" asp-for="Password" aria-describedby="passwordHelp" placeholder="" required>
+                                <small id="passwordHelp" class="form-text text-muted">@SharedLocalizer.GetLocalizedHtmlString("registrationPassSMALL")</small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Email"></label>
-                        <input type="email" asp-for="Email" class="form-control" placeholder="" required>
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">@SharedLocalizer.GetLocalizedHtmlString("registrationButton")</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="PhoneNumber"></label>
-                        <input type="text" asp-for="PhoneNumber" class="form-control" placeholder="" required>
-                        <span asp-validation-for="PhoneNumber"  class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="BirthDate"></label>
-                        <input type="date" asp-for="BirthDate" class="form-control" placeholder="" required>
-                        <span asp-validation-for="BirthDate"  class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="UserName"></label>
-                        <input type="text" asp-for="UserName" class="form-control" placeholder="" required>
-                        <span asp-validation-for="UserName"  class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password"></label>
-                        <input type="password" class="form-control" asp-for="Password" aria-describedby="passwordHelp" placeholder="" required>
-                        <small id="passwordHelp" class="form-text text-muted">@SharedLocalizer.GetLocalizedHtmlString("registrationPassSMALL")</small>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">@SharedLocalizer.GetLocalizedHtmlString("registrationButton")</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+@section Scripts {
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+}
