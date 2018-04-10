@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Post>
 
-<h4>Pranešimai <span class="badge badge-secondary">@Model.Count()</span></h4>
+<h4><a asp-controller="Home" asp-action="Forum">Pranešimai</a> <span class="badge badge-secondary">@ViewBag.totalCount</span></h4>
 <hr />
 @if (Model.Any())
 {

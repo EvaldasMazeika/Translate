@@ -31,7 +31,10 @@ namespace translate.web.Controllers
         private readonly IHostingEnvironment _environment;
         private readonly IFileProvider _fileProvider;
 
-        public ProjectController(UserManager<AppIdentityUser> userManager, ApplContext context, ILogger<ProjectController> logger, IHostingEnvironment environment, IFileProvider fileProvider)
+        public ProjectController(UserManager<AppIdentityUser> userManager,
+            ApplContext context, ILogger<ProjectController> logger,
+            IHostingEnvironment environment,
+            IFileProvider fileProvider)
         {
             _userManager = userManager;
             _context = context;
@@ -187,7 +190,7 @@ namespace translate.web.Controllers
                 {
                     foreach (var item in doc.ProjectDocumentDictionarys)
                     {
-                        var it = new TranslationDictionary
+                        var word = new TranslationDictionary
                         {
                             Translations = result,
                             Name = item.Name,
@@ -195,7 +198,7 @@ namespace translate.web.Controllers
                             NewValue = null
                         };
 
-                        _context.Add(it);
+                        _context.Add(word);
                     }
 
                     if (_context.SaveChanges() > 0)
@@ -236,8 +239,32 @@ namespace translate.web.Controllers
         [HttpGet]
         public IActionResult NewDocument(Guid projectId)
         {
+            ViewBag.projectId = projectId;
             PopulateLanguagesDropDown();
+            PopulateDocumentsTypesDropDown();
             return View();
+        }
+
+        [HttpGet]
+        [Route("GetExampleAsync")]
+        public async Task<IActionResult> GetExampleAsync([FromQuery] Guid Id)
+        {
+            var docType = await _context.DocumentTypes.Where(w => w.Id == Id).SingleOrDefaultAsync();
+            if (docType != null)
+            {
+                return new JsonResult(docType.Example);
+            }
+
+            return BadRequest();
+        }
+
+        private void PopulateDocumentsTypesDropDown(object selected = null)
+        {
+            var query = from d in _context.DocumentTypes
+                        orderby d.Name
+                        select d;
+
+            ViewBag.DocumentTypeId = new SelectList(query.AsNoTracking(), "Id", "Name", selected);
         }
 
         private void PopulateLanguagesDropDown(object selected = null)
@@ -254,12 +281,25 @@ namespace translate.web.Controllers
         {
             if (model.File == null || model.File.Length == 0)
             {
-                TempData["message"] = "Nepridėtas dokumentas.";
+                TempData["message"] = "Nepridėtas dokumentas";
                 return RedirectToAction("NewDocument");
             }
-            if (model.File.Length > 30000000)
+            if (model.File.Length > 11000000)
             {
-                TempData["message"] = "Failas neturi viršyti 30MB.";
+                TempData["message"] = "Failas neturi viršyti 10MB";
+                return RedirectToAction("NewDocument");
+            }
+
+            var docType = await _context.DocumentTypes.Where(w => w.Id == model.DocumentTypeId).SingleOrDefaultAsync();
+
+            var type = model.File.FileName.Substring(model.File.FileName.Length - 5);
+
+            var extArray = model.File.FileName.Split(".");
+            var ext = $".{extArray.Last()}";
+
+            if (ext != docType.Name)
+            {
+                TempData["message"] = "Formatai nesutampa";
                 return RedirectToAction("NewDocument");
             }
 
@@ -279,18 +319,72 @@ namespace translate.web.Controllers
 
             if (exist != null)
             {
-                TempData["message"] = "Toks dokumentas jau egzistuoja.";
+                TempData["message"] = "Toks dokumentas jau egzistuoja";
                 return RedirectToAction("NewDocument");
             }
 
-            var type = model.File.FileName.Substring(model.File.FileName.Length - 5);
-
-            if (type != ".resx")
+            switch (docType.Name)
             {
-                TempData["message"] = "Netinkamas formatas.";
-                return RedirectToAction("NewDocument");
+                case ".resx":
+                    await LoadResxDocumentAsync(projectId, model, docName);
+                    return RedirectToAction("NewDocument");
+                case ".xml":
+                    await LoadXmlDocumentAsync(projectId, model, docName);
+                    return RedirectToAction("NewDocument");
+                default:
+                    TempData["message"] = "Formatas šiuo metu nepalaikomas";
+                    return RedirectToAction("NewDocument");
             }
+        }
 
+        private async Task LoadXmlDocumentAsync(Guid projectId, UploadFileViewModel model, string docName)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await model.File.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
+                XmlDocument docs = new XmlDocument();
+                docs.Load(memoryStream);
+                XmlNodeList dataNodes = docs.GetElementsByTagName("data");
+
+                var lang = await _context.Languages.Where(w => w.Id == model.LanguageId).SingleOrDefaultAsync();
+                var project = await _context.Projects.Where(x => x.Id == projectId).SingleOrDefaultAsync();
+                var doc = await _context.DocumentTypes.Where(w => w.Id == model.DocumentTypeId).SingleOrDefaultAsync();
+
+                var projectDocument = new ProjectDocument
+                {
+                    Name = docName,
+                    Language = lang,
+                    Project = project,
+                    DocumentType = doc
+                };
+
+                _context.Add(projectDocument);
+
+                if (_context.SaveChanges() > 0)
+                {
+                    foreach (XmlNode item in dataNodes)
+                    {
+                        var nodeId = item.Attributes["name"].Value;
+                        var nodeValue = item.SelectSingleNode("value").InnerText;
+                        var dictionary = new ProjectDocumentDictionary
+                        {
+                            Document = projectDocument,
+                            Name = nodeId,
+                            Value = nodeValue
+                        };
+                        _context.Add(dictionary);
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    TempData["messo"] = "Dokumentas sėkmingai įkeltas";
+                }
+            }
+        }
+
+        private async Task LoadResxDocumentAsync(Guid projectId, UploadFileViewModel model, string docName)
+        {
             using (var memoryStream = new MemoryStream())
             {
                 await model.File.CopyToAsync(memoryStream);
@@ -314,13 +408,15 @@ namespace translate.web.Controllers
 
                 var lang = await _context.Languages.Where(x => x.Id == model.LanguageId).SingleOrDefaultAsync();
                 var project = await _context.Projects.Where(x => x.Id == projectId).SingleOrDefaultAsync();
+                var doc = await _context.DocumentTypes.Where(w => w.Id == model.DocumentTypeId).SingleOrDefaultAsync();
 
                 var projectDocument = new ProjectDocument
                 {
                     Name = docName,
                     Language = lang,
                     Header = finalHeader,
-                    Project = project
+                    Project = project,
+                    DocumentType = doc
                 };
 
                 _context.Add(projectDocument);
@@ -342,11 +438,9 @@ namespace translate.web.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    TempData["messo"] = "Sėkmingai dokumentas įkeltas.";
-                    return RedirectToAction("NewDocument");
+                    TempData["messo"] = "Dokumentas sėkmingai įkeltas";
                 }
             }
-            return RedirectToAction("NewDocument");
         }
 
         [HttpGet]
@@ -361,6 +455,23 @@ namespace translate.web.Controllers
 
             if (model.TranslatorId == user.Id)
             {
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        [Route("ReviewTranslation")]
+        public async Task<IActionResult> ReviewTranslation(Guid ProjectId, Guid id)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var translation = _context.Translations.Where(w => w.Id == id).SingleOrDefault().IsCompleted;
+            if (translation)
+            {
+                var model = await _context.TranslationDictionarys.Where(w => w.TranslationId == id).ToListAsync();
+                ViewBag.projectid = ProjectId;
+
                 return View(model);
             }
 
@@ -389,10 +500,16 @@ namespace translate.web.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var access = _context.ProjectMembers.Where(w => w.ProjectId == ProjectId && w.EmployeeId == user.Id).SingleOrDefault().IsCreator;
             var translation = _context.Translations.Where(w => w.Id == id).SingleOrDefault().IsWaiting;
+            var docType = _context.Translations.Where(w => w.Id == id)
+                .Include(i => i.Document)
+                    .ThenInclude(t => t.DocumentType)
+                .SingleOrDefault().Document.DocumentType.Name;
+
             if (access && translation)
             {
                 var model = await _context.TranslationDictionarys.Where(w => w.TranslationId == id).ToListAsync();
                 ViewBag.projectid = ProjectId;
+                ViewBag.docType = docType;
 
                 return View(model);
             }
@@ -418,11 +535,15 @@ namespace translate.web.Controllers
         [Route("VerifyTranslation")]
         public async Task<IActionResult> VerifyTranslation(Guid ProjectId, [FromBody] VerifyTranslationViewModel model)
         {
-            var translation = await _context.Translations.Where(w => w.Id == model.Id).SingleOrDefaultAsync();
+            var translation = await _context.Translations.Where(w => w.Id == model.Id)
+                .Include(i=>i.Document)
+                    .ThenInclude(t=>t.DocumentType)
+                .SingleOrDefaultAsync();
+            
 
             translation.IsWaiting = false;
             translation.IsCompleted = true;
-            translation.FileName = $"{model.Name}.resx";
+            translation.FileName = $"{model.Name}{translation.Document.DocumentType.Name}";
             _context.Update(translation);
 
             await _context.SaveChangesAsync();
@@ -458,7 +579,63 @@ namespace translate.web.Controllers
         [Route("DownloadTranslation")]
         public IActionResult DownloadTranslation(Guid ProjectId, Guid id)
         {
-            return ExportXML(id);
+            var docType = _context.Translations.Where(w => w.Id == id)
+                .Include(i=>i.Document)
+                    .ThenInclude(t=>t.DocumentType)
+                .SingleOrDefault().Document.DocumentType.Name;
+
+            switch (docType)
+            {
+                case ".resx":
+                    return ExportResx(id);
+                case ".xml":
+                    return ExportXml(id);
+                default:
+                    return View("index");
+            }      
+        }
+
+        private FileStreamResult ExportXml(Guid mineId)
+        {
+            XmlDocument doc = new XmlDocument();
+
+            XmlDeclaration xmldecl;
+            xmldecl = doc.CreateXmlDeclaration("1.0", null, null);
+            xmldecl.Encoding = "utf-8";
+
+            doc.AppendChild(xmldecl);
+
+            XmlElement root = doc.CreateElement("root");
+            doc.AppendChild(root);
+
+            var translation = _context.Translations.Where(x => x.Id == mineId).SingleOrDefault();
+            var document = _context.ProjectDocuments.Where(x => x.Id == translation.DocumentId).SingleOrDefault();
+            
+            var translations = _context.TranslationDictionarys.Where(x => x.TranslationId == mineId).ToList();
+
+            foreach (var item in translations)
+            {
+                XmlElement trans = doc.CreateElement("data");
+                var atrName = doc.CreateAttribute("name");
+                atrName.Value = item.Name;
+                trans.Attributes.Append(atrName);
+                var word = doc.CreateElement("value");
+                word.InnerText = item.NewValue;
+                trans.AppendChild(word);
+                root.AppendChild(trans);
+            }
+
+            MemoryStream stream = new MemoryStream();
+            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
+            writer.Formatting = Formatting.Indented;
+            writer.Indentation = 2;
+
+            doc.WriteTo(writer);
+            writer.Flush();
+
+            stream.Position = 0;
+
+            return File(stream, "text/xml", translation.FileName);
         }
 
         [HttpPost]
@@ -497,9 +674,68 @@ namespace translate.web.Controllers
 
         [HttpGet]
         [Route("DownloadDoc")]
-        public async Task<IActionResult> DownloadDoc(Guid ProjectId, Guid id)
+        public IActionResult DownloadDoc(Guid ProjectId, Guid id)
         {
-            var projectDocument = await _context.ProjectDocuments.Where(x => x.Id == id).SingleOrDefaultAsync();
+            var docType = _context.ProjectDocuments.Where(w => w.Id == id)
+                .Include(i => i.DocumentType)
+                .SingleOrDefault().DocumentType.Name;
+
+            switch (docType)
+            {
+                case ".resx":
+                    return DownloadResx(ProjectId, id);
+                case ".xml":
+                    return DownloadXml(ProjectId, id);
+                default:
+                    return View("Index");
+            }
+        }
+
+        private FileStreamResult DownloadXml(Guid projectId, Guid id)
+        {
+            var projectDocument = _context.ProjectDocuments.Where(x => x.Id == id).SingleOrDefault();
+
+            XmlDocument doc = new XmlDocument();
+
+            XmlDeclaration xmldecl;
+            xmldecl = doc.CreateXmlDeclaration("1.0", null, null);
+            xmldecl.Encoding = "utf-8";
+
+            doc.AppendChild(xmldecl);
+
+            XmlElement root = doc.CreateElement("root");
+            doc.AppendChild(root);
+
+            var dictionary = _context.ProjectDocumentDictionarys.Where(w => w.DocumentId == id).ToList();
+
+            foreach (var item in dictionary)
+            {
+                XmlElement trans = doc.CreateElement("data");
+                var atrName = doc.CreateAttribute("name");
+                atrName.Value = item.Name;
+                trans.Attributes.Append(atrName);
+                var word = doc.CreateElement("value");
+                word.InnerText = item.Value;
+                trans.AppendChild(word);
+                root.AppendChild(trans);
+            }
+
+            MemoryStream stream = new MemoryStream();
+            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
+            writer.Formatting = Formatting.Indented;
+            writer.Indentation = 2;
+
+            doc.WriteTo(writer);
+            writer.Flush();
+
+            stream.Position = 0;
+
+            return File(stream, "text/xml", projectDocument.Name);
+        }
+
+        private FileStreamResult DownloadResx(Guid ProjectId, Guid id)
+        {
+            var projectDocument = _context.ProjectDocuments.Where(x => x.Id == id).SingleOrDefault();
 
             XmlDocument doc = new XmlDocument();
 
@@ -523,7 +759,7 @@ namespace translate.web.Controllers
                 doc.DocumentElement.AppendChild(doc.ImportNode(item, true));
             }
 
-            var dictionary = await _context.ProjectDocumentDictionarys.Where(w => w.DocumentId == id).ToListAsync();
+            var dictionary = _context.ProjectDocumentDictionarys.Where(w => w.DocumentId == id).ToList();
 
             foreach (var item in dictionary)
             {
@@ -540,8 +776,6 @@ namespace translate.web.Controllers
                 root.AppendChild(trans);
             }
 
-
-
             MemoryStream stream = new MemoryStream();
             XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
             writer.Formatting = Formatting.Indented;
@@ -554,8 +788,6 @@ namespace translate.web.Controllers
 
             return File(stream, "text/xml", projectDocument.Name);
         }
-
-
 
         private string GetContentType(string path)
         {
@@ -583,7 +815,7 @@ namespace translate.web.Controllers
             };
         }
 
-        private FileStreamResult ExportXML(Guid mineId)
+        private FileStreamResult ExportResx(Guid mineId)
         {
             XmlDocument doc = new XmlDocument();
 

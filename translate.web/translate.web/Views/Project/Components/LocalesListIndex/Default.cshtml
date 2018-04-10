@@ -29,6 +29,10 @@ else
                             <td class="col-2"><a asp-controller="Project" asp-action="Editor" asp-route-id="@item.Id">@item.Title</a></td>
 
                         }
+                        else if (item.IsCompleted == true)
+                        {
+                            <td class="col-2"><a asp-controller="Project" asp-action="ReviewTranslation" asp-route-id="@item.Id">@item.Title</a></td>
+                        }
                         else
                         {
                             <td class="col-2">@item.Title</td>
@@ -46,7 +50,7 @@ else
                             paskirtas: <strong>@item.Translator.Name @item.Translator.Surname</strong> @item.Document.Language.Name >  @item.Language.Name
                         </td>
                         <td class="col-sm-2">
-                            <div class="btn-group btn-group-sm" style="float:right" role="group" aria-label="Basic example">
+                            <div class="btn-group btn-group-sm d-flex flex-wrap" style="float:right" role="group">
                                 @if (item.IsCompleted == true)
                                 {
                                     <a asp-controller="Project" asp-action="DownloadTranslation" asp-route-id="@item.Id" class="btn btn-dark">Parsisiųsti</a>
@@ -94,10 +98,10 @@ else
         </div>
     </div>
 }
-    <script>
-        window.onload = function () {
+<script>
+    window.onload = function () {
 
 
 
-        };
-    </script>
+    };
+</script>

@@ -19,5 +19,9 @@ namespace translate.web.ViewModels
         [Display(Name ="Dokumento kalba")]
         public Guid LanguageId { get; set; }
 
+        [Required]
+        [Display(Name = "Dokumento tipas")]
+        public Guid DocumentTypeId { get; set; }
+
     }
 }

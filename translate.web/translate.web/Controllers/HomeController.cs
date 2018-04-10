@@ -32,10 +32,37 @@ namespace translate.web.Controllers
 
         public IActionResult Index()
         {
-            var model = _context.Posts.Include(x => x.Employee).ToList();
-
-            return View(model);
+            return View();
         }
+
+        public IActionResult Forum()
+        {
+            var model = _context.Posts.Include(x => x.Employee).Include(i=>i.Comments).ToList();
+            var result = new List<ForumPostsViewModel>();
+
+            foreach (var item in model)
+            {
+                var last = item.Comments.OrderBy(o => o.CommentDate).LastOrDefault();
+                var commentAuthor = last != null ? $"{last.FullName} {last.CommentDate}" : "";
+
+                var temp = new ForumPostsViewModel()
+                {
+                    Id = item.Id,
+                    CreatedTime = item.CreatedTime,
+                    Title = item.Title,
+                    IsImportant = item.IsImportant,
+                    CreatorName = $"{item.Employee.Name} {item.Employee.Surname}",
+                    CommentsCount = item.Comments.Count,
+                    LastCommentAuthor = $"{commentAuthor}"
+                };
+
+                result.Add(temp);
+            }
+            
+
+            return View(result.OrderByDescending(o=>o.CreatedTime));
+        }
+
 
         [HttpGet]
         public IActionResult Post(Guid id)
@@ -45,7 +72,10 @@ namespace translate.web.Controllers
                 return RedirectToAction("Index");
             }
 
-            var model = _context.Posts.Include(a => a.Comments).Where(x => x.Id == id).FirstOrDefault();
+            var model = _context.Posts.Where(x => x.Id == id)
+                .Include(a => a.Comments)
+                .Include(i=>i.Employee)
+                .FirstOrDefault();
 
             return View(model);
         }
@@ -95,10 +125,24 @@ namespace translate.web.Controllers
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
 
-                user.Surname = model.Surname;
-                user.Email = model.Email;
-                user.PhoneNumber = model.MobileNumber;
-                user.Name = model.FirstName;
+                if (model.Email != user.Email)
+                {
+                    await _userManager.SetTwoFactorEnabledAsync(user, false);
+                    user.EmailConfirmed = false;
+
+                    user.Surname = model.Surname;
+                    user.PhoneNumber = model.MobileNumber;
+                    user.Name = model.FirstName;
+                    user.Email = model.Email;
+                }
+                else
+                {
+                    user.Surname = model.Surname;
+                    user.PhoneNumber = model.MobileNumber;
+                    user.Name = model.FirstName;
+                }
+
+
 
                 IdentityResult result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)

@@ -45,7 +45,7 @@ namespace translate.web.Controllers
         [HttpPost]
         public async Task<IActionResult> NewPost(NewPostViewModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
 
@@ -97,13 +97,56 @@ namespace translate.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = new Language { Name = model.Name };
+                var result = new Language { Name = model.Name, Code = model.Code };
                 _context.Add(result);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Languages");
             }
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteLanguage([FromBody] Language language)
+        {
+            var lang = await _context.Languages.Where(w => w.Id == language.Id).SingleOrDefaultAsync();
+            if (lang != null)
+            {
+                _context.Remove(lang);
+                await _context.SaveChangesAsync();
+                return new JsonResult("success");
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Documents()
+        {
+            var model = await _context.DocumentTypes.ToListAsync();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult NewDocument()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewDocument(NewDocumentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = new DocumentType { Name = model.Name, Example = model.Example };
+            _context.Add(result);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Documents");
         }
 
     }

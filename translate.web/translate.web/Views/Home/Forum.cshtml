@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ForumPostsViewModel>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+<hr />
+<h5>Visi pranešimai</h5>
+@if (!Model.Any())
+{
+    <div class="alert alert-danger text-center" role="alert">Nėra sukurta pranešimų</div>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Pavadinimas</th>
+                            <th scope="col">Sukurimo data</th>
+                            <th scope="col">Autorius</th>
+                            <th scope="col">Komentarų skaičius</th>
+                            <th scope="col">Paskutinis komentaras</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title </a>@if (item.IsImportant)
+                                    {<span class="badge badge-danger">Svarbu</span>                    }
+                                </td>
+                                <td>@item.CreatedTime</td>
+                                <td>@item.CreatorName</td>
+                                <td>@item.CommentsCount</td>
+                                <td>@item.LastCommentAuthor</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+

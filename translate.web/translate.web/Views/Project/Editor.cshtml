@@ -1,10 +1,9 @@
 ﻿@model Translation
-<a class="btn btn-primary" asp-controller="Project" asp-action="Index"> < Grįžti atgal</a>
+<a class="btn btn-info" asp-controller="Project" asp-action="Index"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
 <hr />
 <div class="row">
     <div class="col-md-3">
         <h2>@Model.Title</h2>
-
     </div>
     <div class="col-md-5">
         <small>@Model.Description</small>
@@ -23,11 +22,22 @@
         @await Component.InvokeAsync("WordsList", new EditorListViewModel { Id = Model.Id, PageIndex = 1 })
     </div>
     <div id="editor" class="col-md-8">
+
     </div>
+    <div class="wait col-md-6 offset-md-3" style="display:none">
+    </div>
+
 </div>
 
 @section scripts {
     <script>
+        jQuery(document).ajaxStart(function () {
+            jQuery(".wait").css("display", "block");
+        });
+        jQuery(document).ajaxComplete(function () {
+            jQuery(".wait").css("display", "none");
+        });
+
         jQuery('#editorList').on('click', 'button', function (e) {
             var button = e.currentTarget;
             var key = button.getAttribute("data-key");

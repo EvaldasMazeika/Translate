@@ -31,7 +31,7 @@ module.exports = function (env) {
         module: {
             rules: [
                 { test: /\.css?$/, use: ['style-loader', 'css-loader'] },
-                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' },
+                { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?name=/[hash].[ext]?limit=25000' },
                 { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' },
                 {
                     test: /vendor\/.+\.(jsx|js)$/,

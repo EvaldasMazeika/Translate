@@ -1,0 +1,33 @@
+﻿@model IEnumerable<DocumentType>
+@{
+    Layout = "~/Views/Shared/_Admin.cshtml";
+}
+<a asp-action="NewDocument" asp-controller="Admin" class="btn btn-info" role="button">Naujas dokumentas</a>
+<hr />
+<h2>Dokumentai</h2>
+@if (!Model.Any())
+{
+    <div class="alert alert-danger text-center" role="alert">Nėra pridėta dokumentų</div>
+}
+else
+{
+    <div class="table table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Tipas</th>
+                    <th scope="col">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@*<button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#DeleteLanguageModal" data-whatever="@item.Id"><i class="fa fa-ban"></i></button>*@</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

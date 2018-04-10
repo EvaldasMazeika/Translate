@@ -1,5 +1,6 @@
 ﻿@model UploadFileViewModel
-<a class="btn btn-primary" asp-controller="Project" asp-action="Index"> < Grįžti atgal</a>
+
+<a asp-controller="Project" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
 <hr />
 @if (TempData["message"] != null)
 {
@@ -21,17 +22,100 @@
         </button>
     </div>
 }
-<h2>Naujo dokumento įkėlimas:</h2>
+<h2>Naujo dokumento įkėlimas: <strong class="text-danger">(Maksimalus dokumento dydis: 10MB)</strong></h2>
+<hr />
 <form asp-controller="Project" asp-action="NewDocument" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="File"></label>
-        <input type="file" asp-for="File" class="form-control-file">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label asp-for="File"></label>
+                <input type="file" asp-for="File" class="form-control-file">
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="LanguageId" class="control-label"></label>
-        <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.LanguageId"></select>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="LanguageId" class="control-label"></label>
+                <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.LanguageId"></select>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="DocumentTypeId" class="control-label"></label>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#exampleDoc">Pavyzdys</button>
+                    </div>
+                    <select id="docSelect" class="custom-select form-control" asp-for="DocumentTypeId" asp-items="ViewBag.DocumentTypeId"></select>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <button class="btn btn-success" style="float:right">Įkelti</button>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <button class="btn btn-success" style="float:right">Įkelti</button>
+            </div>
+        </div>
     </div>
 </form>
+
+<div class="modal fade bd-example-modal-lg" id="exampleDoc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleDocTitle">Pavyzdys</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <textarea readonly class="form-control-plaintext" id="docText" rows="20" style="border:none;"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+        jQuery(document).ready(function () {
+
+            jQuery.ajax({
+                type: 'GET',
+                url: '/Project/@ViewBag.projectId/GetExampleAsync?Id=' + jQuery('#docSelect').val(),
+                success: function (result) {
+                    jQuery('#docText').text(result);
+                },
+                error: function (result) {
+                }
+            });
+
+            jQuery('#docSelect').change(function () {
+                var itemId = jQuery('#docSelect').val();
+
+                            jQuery.ajax({
+                type: 'GET',
+                url: '/Project/@ViewBag.projectId/GetExampleAsync?Id=' + itemId,
+                success: function (result) {
+                    jQuery('#docText').text(result);
+                },
+                error: function (result) {
+                }
+            });
+
+            });
+
+
+
+        });
+    </script>
+}

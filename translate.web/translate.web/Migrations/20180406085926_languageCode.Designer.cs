@@ -11,9 +11,10 @@ using translate.web.Data;
 namespace translate.web.Migrations
 {
     [DbContext(typeof(ApplContext))]
-    partial class ApplContextModelSnapshot : ModelSnapshot
+    [Migration("20180406085926_languageCode")]
+    partial class languageCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,20 +207,6 @@ namespace translate.web.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("translate.web.Models.DocumentType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Example");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DocumentTypes");
-                });
-
             modelBuilder.Entity("translate.web.Models.Language", b =>
                 {
                     b.Property<Guid>("Id")
@@ -277,8 +264,6 @@ namespace translate.web.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("DocumentTypeId");
-
                     b.Property<string>("Header");
 
                     b.Property<Guid>("LanguageId");
@@ -288,8 +273,6 @@ namespace translate.web.Migrations
                     b.Property<Guid>("ProjectId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DocumentTypeId");
 
                     b.HasIndex("LanguageId");
 
@@ -452,11 +435,6 @@ namespace translate.web.Migrations
 
             modelBuilder.Entity("translate.web.Models.ProjectDocument", b =>
                 {
-                    b.HasOne("translate.web.Models.DocumentType", "DocumentType")
-                        .WithMany()
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("translate.web.Models.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")

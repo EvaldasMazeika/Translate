@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace translate.web.Models
 {
-    public class Language
+    public class DocumentType
     {
         public Guid Id { get; set; }
-
         public string Name { get; set; }
-
-        public string Code { get; set; }
+        public string Example { get; set; }
 
     }
 }

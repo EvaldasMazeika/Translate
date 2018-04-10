@@ -7,19 +7,17 @@ using System.Threading.Tasks;
 
 namespace translate.web.ViewModels
 {
-    public class NewLanguageViewModel
+    public class NewDocumentViewModel
     {
+
         [Required]
-        [MinLength(5)]
-        [MaxLength(100)]
-        [Display(Name = "Pavadinimas")]
+        [MinLength(2)]
+        [MaxLength(50)]
+        [Display(Name="Dokumento tipas")]
         public string Name { get; set; }
 
         [Required]
-        [MinLength(1)]
-        [MaxLength(5)]
-        [Display(Name= "Kalbos kodas")]
-        public string Code { get; set; }
-
+        [Display(Name ="Dokumento pavyzdys")]
+        public string Example { get; set; }
     }
 }

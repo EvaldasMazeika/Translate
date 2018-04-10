@@ -1,18 +1,35 @@
 ﻿@model Post
+<a asp-controller="Home" asp-action="Forum" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+<hr />
+<div class="row" style="background-color:ivory">
+    <div class="col-md-12">
+        <h1 class="display-4 text-center">@Model.Title</h1>
+        <hr />
+        <div><p class="lead">@Html.Raw("<pre>" + Html.Encode(Model.Message) + "</pre>")</p></div>
+        <div style="float:right"><h5>@Model.Employee.Name @Model.Employee.Surname</h5> <small class="text-muted">@Model.CreatedTime</small></div>
+    </div>
+</div>
 
-<h2>@Model.Title <small>@Model.CreatedTime</small></h2>
 <hr />
-<div><p>@Html.Raw("<pre>" + Html.Encode(Model.Message) + "</pre>")</p></div>
-<hr />
-<h3>Komentarai:</h3>
+<h3 class="font-italic text-center text-info">Komentarai</h3>
 <hr />
 @foreach (var item in Model.Comments)
 {
-    <section>
-        <h4><em><strong>@item.FullName</strong></em> <small> @item.CommentDate</small></h4>
-        <p>@Html.Raw("<pre>" + Html.Encode(item.CommentText) + "</pre>")</p>
-    </section>
+    <div class="row">
+        <div class="col-md-12">
+            <div style="float:left">
+                <h5>@item.FullName</h5> <small class="text-muted">@item.CommentDate</small>
+                <div>
+                    <p class="lead">@Html.Raw("<pre>" + Html.Encode(item.CommentText) + "</pre>")</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <hr />
 }
-<h3>Rašyti komentarą:</h3>
-@await Component.InvokeAsync("Newcomment", new { topicId = Model.Id })
+<h3 class="font-italic text-center text-info">Rašyti komentarą</h3>
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        @await Component.InvokeAsync("Newcomment", new { topicId = Model.Id })
+    </div>
+</div>

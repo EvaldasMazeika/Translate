@@ -18,11 +18,14 @@ namespace translate.web.Models
 
         public Guid LanguageId { get; set; }
 
+        public Guid DocumentTypeId { get; set; }
+
         public Project Project { get; set; }
 
         public Language Language { get; set; }
 
         public ICollection<ProjectDocumentDictionary> ProjectDocumentDictionarys { get; set; }
         public ICollection<Translation> Translations { get; set; }
+        public DocumentType DocumentType { get; set; }
     }
 }

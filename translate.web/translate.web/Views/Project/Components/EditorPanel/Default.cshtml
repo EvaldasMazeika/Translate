@@ -8,12 +8,34 @@
             <div class="form-group">
                 <textarea id="textarea" class="form-control" rows="3">@Model.NewValue</textarea>
             </div>
+            <button id="getTranslation" class="btn btn-danger">Yandex</button>
             <button id="addWord" type="submit" class="btn btn-success" style="float:right">Išsaugoti</button>
         </form>
     </div>
 </div>
 
 <script>
+    jQuery('#getTranslation').click(function (e) {
+        e.preventDefault();
+        var to = "@Model.Translations.Language.Code";
+        var from = "@Model.Translations.Document.Language.Code";
+        var lang = from + "-" + to;
+        var imput = "@Model.GivenValue";
+
+        jQuery.ajax({
+            type: 'POST',
+            url: 'https://translate.yandex.net/api/v1.5/tr.json/translate?lang=' + lang + '&key=@ViewBag.yandexKey&text=' + imput,
+            contentType: 'application/x-www-form-urlencoded',
+            success: function (result) {
+                jQuery('#textarea').val(result.text);
+            },
+            error: function (result) {
+            }
+        });
+
+
+    });
+
     jQuery('#addWord').click(function (e) {
         e.preventDefault();
         var imput = jQuery('#textarea').val();

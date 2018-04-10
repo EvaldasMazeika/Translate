@@ -26,6 +26,7 @@ namespace translate.web.Data
         public DbSet<ProjectDocumentDictionary> ProjectDocumentDictionarys { get; set; }
         public DbSet<Translation> Translations { get; set; }
         public DbSet<TranslationDictionary> TranslationDictionarys { get; set; }
+        public DbSet<DocumentType> DocumentTypes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

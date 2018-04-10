@@ -1,12 +1,9 @@
 ﻿@model NewCommentViewModel
-<div>
-    <form asp-action="Post" method="post">
+    <form asp-controller="Home" asp-action="Post" method="post">
         <input type="hidden" asp-for="PostId"/>
         <div class="form-group">
-            <label asp-for="WrittenText" class="control-label"></label>
             <textarea asp-for="WrittenText" class="form-control" rows="3"></textarea>
             <span asp-validation-for="WrittenText" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-default">Išsaugoti</button>
+        <button type="submit" class="btn btn-primary btn-block">Paskelbti</button>
     </form>
-</div>

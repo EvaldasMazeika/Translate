@@ -21,7 +21,10 @@ namespace translate.web.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var model = await _context.Posts.Include(x => x.Employee).ToListAsync();
+            ViewBag.totalCount = _context.Posts.Count();
+
+            var model = await _context.Posts.OrderByDescending(o=>o.CreatedTime).Skip(0).Take(5).Include(x => x.Employee).ToListAsync();
+
             return View(model);
         }
     }

@@ -3,9 +3,9 @@
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
 
-<h1 class="display-4">Kalbos</h1>
 <a asp-action="NewLanguage" asp-controller="Admin" class="btn btn-info" role="button">Nauja kalba</a>
 <hr />
+<h2>Kalbos</h2>
 @if (!Model.Any())
 {
     <div class="alert alert-danger text-center" role="alert">Nėra pridėta kalbų</div>
@@ -17,6 +17,7 @@ else
             <thead>
                 <tr>
                     <th scope="col">Kalba</th>
+                    <th scope="col">Options</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,10 +25,66 @@ else
                 {
                     <tr>
                         <td>@item.Name</td>
+                        <td>@*<button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#DeleteLanguageModal" data-whatever="@item.Id"><i class="fa fa-ban"></i></button>*@</td>
                     </tr>
-
                 }
             </tbody>
         </table>
     </div>
+}
+
+<div class="modal fade" id="DeleteLanguageModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Ar tikrai norite pašalinti kalbą iš sistemos?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
+                <button id="deleteLanguage" type="button" class="btn btn-primary">Taip</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+
+        //TODO: FIX SCHEME, CANT DELETE LANGUAGE :/
+
+        jQuery('#DeleteLanguageModal').on('show.bs.modal', function (event) {
+            var button = jQuery(event.relatedTarget);
+            var recipient = button.data('whatever');
+
+            var modal = jQuery(this);
+            modal.find('#deleteLanguage').data('recipient', recipient);
+        });
+
+        jQuery("#deleteLanguage").click(function (e) {
+            e.preventDefault();
+            var button = jQuery('#deleteLanguage');
+            var languageId = button.data('recipient');
+
+            jQuery.ajax({
+                type: 'post',
+                url: "/Admin/DeleteLanguage",
+                data: JSON.stringify({
+                    Id: languageId
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (result) { }
+            });
+
+        });
+    </script>
 }

@@ -1,23 +1,26 @@
-﻿@model NewLanguageViewModel
+﻿@model NewDocumentViewModel
 @{
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
-<h1 class="display-4">Nauja kalba</h1>
-<form asp-controller="Admin" asp-action="NewLanguage">
+<h1 class="display-4">Naujas dokumentas</h1>
+<hr />
+<form asp-controller="Admin" asp-action="NewDocument">
     <div class="row">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-6">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <div class="form-group">
-                <label asp-for="Code" class="control-label"></label>
-                <input asp-for="Code" class="form-control" />
-                <span asp-validation-for="Code" class="text-danger"></span>
+                <label asp-for="Example" class="control-label"></label>
+                <textarea asp-for="Example" class="form-control" rows="10"></textarea>
+                <span asp-validation-for="Example" class="text-danger"></span>
             </div>
         </div>
     </div>

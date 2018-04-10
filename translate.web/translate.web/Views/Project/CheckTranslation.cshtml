@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<TranslationDictionary>
 
-<a class="btn btn-primary" asp-controller="Project" asp-action="Index"> < Grįžti atgal</a>
+<a class="btn btn-info" asp-controller="Project" asp-action="Index"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#DeclineModal" data-whatever="@Model.First().TranslationId">Atmesti</button>
 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#VerifyModal" data-whatever="@Model.First().TranslationId">Patvirtinti</button>
 
@@ -64,7 +64,7 @@
                 <div class="input-group mb-3">
                     <input id="docName" type="text" class="form-control">
                     <div class="input-group-append">
-                        <span class="input-group-text" id="basic-addon2">.resx</span>
+                        <span class="input-group-text" id="basic-addon2">@ViewBag.docType</span>
                     </div>
                 </div>
             </div>
