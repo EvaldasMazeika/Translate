@@ -1,5 +1,8 @@
 ﻿@model Post
-<a asp-controller="Home" asp-action="Forum" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<a asp-controller="Home" asp-action="Forum" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 <hr />
 <div class="row" style="background-color:ivory">
     <div class="col-md-12">
@@ -11,7 +14,7 @@
 </div>
 
 <hr />
-<h3 class="font-italic text-center text-info">Komentarai</h3>
+<h3 class="font-italic text-center text-info">@SharedLocalizer.GetLocalizedHtmlString("commentsTitle")</h3>
 <hr />
 @foreach (var item in Model.Comments)
 {
@@ -27,7 +30,7 @@
     </div>
     <hr />
 }
-<h3 class="font-italic text-center text-info">Rašyti komentarą</h3>
+<h3 class="font-italic text-center text-info">@SharedLocalizer.GetLocalizedHtmlString("writeCommentTitle")</h3>
 <div class="row">
     <div class="col-md-6 offset-md-3">
         @await Component.InvokeAsync("Newcomment", new { topicId = Model.Id })

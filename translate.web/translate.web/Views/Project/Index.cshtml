@@ -1,7 +1,7 @@
 ﻿@model Project
 
 <div class="row">
-    <div class="col-sm-8">
+    <div id="localesList" class="col-sm-8">
         @await Component.InvokeAsync("LocalesListIndex", new { ProjectId = Model.Id })
     </div>
     <div class="col-sm-4">
@@ -18,28 +18,21 @@
 
 @section scripts {
     <script>
-        jQuery('#DeleteTranslationsModal').on('show.bs.modal', function (event) {
-            var button = jQuery(event.relatedTarget);
-            var translationId = button.data('translate');
-            var name = button.data('name');
-            var project = button.data('project');
+        jQuery('#localesList').on('click', 'button', function (event) {
+            var button = event.currentTarget;
+            var rr = event.relatedTarget;
+            var type = button.id;
 
-            var modal = jQuery(this);
-            modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + name + ' iš projekto?');
-            modal.find('#deleteTranslation').data("translationId", translationId);
-            modal.find('#deleteTranslation').data("project", project);
-        });
+            if (type == "deleteButton") {
+                jQuery('#localesList').find('#deleteTranslation').attr("translate", button.getAttribute("data-translate"));
+            }
 
-        jQuery("#deleteTranslation").click(function (e) {
-            e.preventDefault();
-            var button = jQuery('#deleteTranslation');
-            var translationId = button.data('translationId');
-            var projectId = button.data("project");
+            if (type == "deleteTranslation") {
+                var translationId = button.getAttribute("translate");
 
-
-            jQuery.ajax({
+                            jQuery.ajax({
                 type: 'post',
-                url: '/Project/' + projectId + '/DeleteTranslation',
+                url: '/Project/@ViewBag.projectId/DeleteTranslation',
                 data: JSON.stringify({
                     Id: translationId
                 }),
@@ -51,8 +44,34 @@
                 error: function (result) { }
             });
 
-        });
+            }
 
+            var showMine = false;
+            if (type == "mineFilter") {
+                showMine = true;
+            }
+
+            if (type == "mineFilter" || type == "allFilter") {
+                jQuery.ajax({
+                    type: "POST",
+                    url: "/Project/@ViewBag.projectId/ChangeFilterState",
+                    data: JSON.stringify({
+                        FilterState: showMine
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        jQuery("#localesList").load("/Project/@ViewBag.projectId/ReloadLocalesListAsync");
+                    },
+                    error: function (result) {
+
+
+                    }
+                });
+
+            }
+
+         });
 
         jQuery('#teamMembers').on('click', 'button', function (e) {
             var button = e.currentTarget;

@@ -6,7 +6,7 @@
 
 @if (!Model.Any())
 {
-    <h2 class="text-warning text-center">Pridėkite pirmąjį vertimą</h2>
+    <h2 class="text-warning text-center">Pridėkite vertimą</h2>
 }
 else
 {
@@ -15,7 +15,27 @@ else
             <thead>
                 <tr class="d-flex">
                     <th class="col" scope="col">Vertimai</th>
-                    <th class="col" scope="col"></th>
+                    <th class="col" scope="col">
+                        <div id="filterButton" class="btn-group">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Vertimų filtras
+                            </button>
+                            <div class="dropdown-menu">
+
+                                @if (ViewBag.showAll == false)
+                                {
+                                    <button id="mineFilter" class="dropdown-item">Mano vertimai</button>
+                                    <button id="allFilter" class="dropdown-item active">Visi vertimai</button>
+                                }
+                                else
+                                {
+                                    <button id="mineFilter" class="dropdown-item active">Mano vertimai</button>
+                                    <button id="allFilter" class="dropdown-item">Visi vertimai</button>
+                                }
+
+                            </div>
+                        </div>
+                    </th>
                     <th class="col" scope="col"></th>
                     <th class="col" scope="col"></th>
                 </tr>
@@ -63,7 +83,7 @@ else
                                         <a asp-controller="Project" asp-action="CheckTranslation" asp-route-id="@item.Id" class="btn btn-info">Patikrinti</a>
 
                                     }
-                                    <button type="button" data-toggle="modal" data-translate="@item.Id" data-project="@item.Document.ProjectId" data-name="@item.Title" data-target="#DeleteTranslationsModal" class="btn btn-danger btn-sm" style="float:right">Ištrinti</button>
+                                    <button type="button" id="deleteButton" data-toggle="modal" data-translate="@item.Id" data-project="@item.Document.ProjectId" data-name="@item.Title" data-target="#DeleteTranslationsModal" class="btn btn-danger btn-sm" style="float:right">Ištrinti</button>
                                 }
                             </div>
                         </td>
@@ -88,7 +108,7 @@ else
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p></p>
+                    <p>Tikrai norite pašalinti vertimą iš sistemos?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
@@ -98,10 +118,3 @@ else
         </div>
     </div>
 }
-<script>
-    window.onload = function () {
-
-
-
-    };
-</script>

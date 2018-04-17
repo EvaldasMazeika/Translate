@@ -29,8 +29,14 @@ namespace translate.web.ViewComponents
             var user = _userManager.GetUserId(HttpContext.User);
             ViewBag.userId = user;
             ViewBag.creator = _context.ProjectMembers.Where(x => x.ProjectId == ProjectId && x.EmployeeId.ToString() == user).Single().IsCreator;
+            ViewBag.project = ProjectId;
 
-            var members = await _context.ProjectMembers.Include(a => a.Employee).Where(x => x.ProjectId == ProjectId && x.AcceptedInvitation == true).ToListAsync();
+            var members = await _context.ProjectMembers
+                .Include(a => a.Employee)
+                .Where(x => x.ProjectId == ProjectId && x.AcceptedInvitation == true)
+                .OrderByDescending(o=> o.JoinDate)
+                .Skip(0).Take(5)
+                .ToListAsync();
 
             var model = new AddToProjectViewModel
             {

@@ -1,0 +1,185 @@
+﻿@model IEnumerable<ProjectMember>
+
+<a asp-controller="Project" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+
+@if (ViewBag.creator)
+{
+    <button type="button" id="addMember" class="btn btn-primary" data-toggle="modal" data-target="#AddmemberModal" data-whatever="@ViewBag.project">Pakviesti</button>
+}
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <div id="alerti"></div>
+        <h2>Visi projekto dalyviai</h2>
+        <div class="table table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Vardas pavardė</th>
+                        <th scope="col">Prisijungė</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Employee.Name @item.Employee.Surname</td>
+                            <td>@item.JoinDate</td>
+                            <td>
+                                @if (ViewBag.creator && ViewBag.userId != item.EmployeeId.ToString())
+                                {
+                                    <button type="button" id="deleteMemberFrom" data-toggle="modal" data-project="@item.ProjectId" data-whatever="@item.EmployeeId" data-target="#DeleteMemberModal" class="btn btn-danger btn-sm" style="float:right"><i class="fa fa-trash"></i></button>
+
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+@if (ViewBag.creator)
+{
+    <div class="modal fade" id="DeleteMemberModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Ar tikrai norite pašalinti žmogų iš projekto?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
+                    <button id="deleteMember" type="button" class="btn btn-primary">Taip</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="AddmemberModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel">Pakviesti į projektą</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Naudokite el. pašto adresą, jei toks vartotojas egzistuoja, jis gaus pakvietimą.</p>
+                    <form>
+                        <input type="hidden" id="projectid" name="projectid" value="@ViewBag.project">
+                        <div class="form-group">
+                            <label for="Email" class="col-form-label">El. paštas</label>
+                            <input type="email" name="Email" class="form-control" id="elpastas">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
+                    <button id="addToProject" type="button" class="btn btn-primary">Siųsti</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+    <script>
+        jQuery('#DeleteMemberModal').on('show.bs.modal', function (event) {
+            var button = jQuery(event.relatedTarget);
+            var projectId = button.data('project');
+            var memberId = button.data('whatever');
+
+            var modal = jQuery(this);
+            modal.find('#deleteMember').data('projectId', projectId);
+            modal.find('#deleteMember').data('memberId', memberId);
+        });
+
+        jQuery("#deleteMember").click(function (e) {
+            e.preventDefault();
+            var button = jQuery('#deleteMember');
+            var projectId = button.data('projectId');
+            var memberId = button.data('memberId');
+
+            jQuery.ajax({
+                type: "POST",
+                url: "/Project/" + projectId + "/RemoveFromProjectAsync",
+                data: JSON.stringify({
+                    ProjectId: projectId,
+                    MemberId: memberId
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    location.reload();
+                },
+                error: function (result) {
+
+                }
+            });
+
+        });
+
+        jQuery('#AddmemberModal').on('show.bs.modal', function (event) {
+            var button = jQuery(event.relatedTarget);
+            var projectId = button.data('whatever');
+
+            var modal = jQuery(this);
+            modal.find('#addToProject').data('projectId', projectId);
+        });
+        jQuery("#addToProject").click(function (e) {
+            e.preventDefault();
+            var button = jQuery('#addToProject');
+            var projectId = button.data('projectId');
+
+            var email = jQuery("#elpastas").val();
+
+            jQuery.ajax({
+                type: "POST",
+                url: "/Project/@ViewBag.project/AddToProjectAsync",
+                data: JSON.stringify({
+                    ProjectId: "@ViewBag.project",
+                    Email: email
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    jQuery('#AddmemberModal').modal('hide');
+                    jQuery("#alerti").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
+              Pakvietimas sėkmingai išsiųstas
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+</div>`);
+
+                },
+                error: function (result) {
+
+                    jQuery('#AddmemberModal').modal('hide');
+                    jQuery("#alerti").append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+          Įvyko klaida
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+</div>`);
+
+                }
+            });
+
+        });
+
+
+
+    </script>
+}

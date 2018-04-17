@@ -71,7 +71,7 @@ namespace translate.web.Controllers
                 }
                 if (result.IsLockedOut)
                 {
-                    ModelState.AddModelError(string.Empty, "Paskyra trumpam užrakinta dėl klaidingų prisijungimų");
+                    ModelState.AddModelError(string.Empty, $"{_loc.GetLocalizedHtmlString("ProfileLocedMessage")}");
                 }
 
             }
@@ -93,8 +93,8 @@ namespace translate.web.Controllers
             {
                 return View("Error");
             }
-            var message = $"Jūsų prisijungimo kodas: {code}";
-            await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), "Prisijungimas", message);
+            var message = $"{_loc.GetLocalizedHtmlString("loginCodeMessage")}: {code}";
+            await _emailSender.SendEmailAsync(await _userManager.GetEmailAsync(user), $"{_loc.GetLocalizedHtmlString("loginCaption")}", message);
 
             var model = new VerifyCodeViewModel { ReturnUrl = returnUrl, RememberMe = rememberMe, Provider = "Email" };
 
@@ -118,12 +118,12 @@ namespace translate.web.Controllers
             }
             if (result.IsLockedOut)
             {
-                ModelState.AddModelError(string.Empty, "užrakinta.");
+                ModelState.AddModelError(string.Empty, $"{_loc.GetLocalizedHtmlString("accLocked")}");
                 return View(model);
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Blogas kodas.");
+                ModelState.AddModelError(string.Empty, $"{_loc.GetLocalizedHtmlString("wrongCode")}");
                 return View(model);
             }
         }
@@ -144,7 +144,7 @@ namespace translate.web.Controllers
             {
                 if (!ReCaptchaPassed(Request.Form["g-recaptcha-response"], _configuration.GetSection("GoogleReCaptcha:secret").Value))
                 {
-                    ModelState.AddModelError(string.Empty, "Būtina patvirtirtinti CAPTCHA");
+                    ModelState.AddModelError(string.Empty, $"{_loc.GetLocalizedHtmlString("mustValidCaptcha")}");
                     return View(model);
                 }
 
@@ -324,8 +324,8 @@ namespace translate.web.Controllers
 
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                var message = $"Atstatykite savo slaptažodį paspaudę: <a href='{callbackUrl}'>Nuoroda</a>";
-                await _emailSender.SendEmailAsync(model.Email, "Dėl slaptažodžio", message);
+                var message = $"{_loc.GetLocalizedHtmlString("recoverEmailText")}: <a href='{callbackUrl}'>{_loc.GetLocalizedHtmlString("emailReference")}</a>";
+                await _emailSender.SendEmailAsync(model.Email, $"{_loc.GetLocalizedHtmlString("recoverySubject")}", message);
 
                 TempData["message"] = "success";
                 return View("ForgotPassword");
@@ -339,7 +339,7 @@ namespace translate.web.Controllers
         {
             if (code == null)
             {
-                throw new ApplicationException("Nėra kodo...");
+                throw new ApplicationException($"{_loc.GetLocalizedHtmlString("noCode")}");
             }
             var model = new ResetPasswordViewModel { Code = code };
             return View(model);
@@ -359,7 +359,7 @@ namespace translate.web.Controllers
             }
             if (model.Password != model.ConfirmPassword)
             {
-                ModelState.AddModelError(string.Empty, "Slaptažodžiai nesutampa");
+                ModelState.AddModelError(string.Empty, $"{_loc.GetLocalizedHtmlString("passwordsNotEquals")}");
                 return View(model);
             }
 

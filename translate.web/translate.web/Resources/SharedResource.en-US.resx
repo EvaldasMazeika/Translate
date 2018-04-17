@@ -117,23 +117,146 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="accessDenied" xml:space="preserve">
+    <value>Access denied</value>
+  </data>
+  <data name="accLocked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
   <data name="AccountButton" xml:space="preserve">
     <value>Account</value>
   </data>
   <data name="AdministrationCaption" xml:space="preserve">
     <value>Administration</value>
   </data>
+  <data name="allPosts" xml:space="preserve">
+    <value>All Posts</value>
+  </data>
+  <data name="canLoginWith" xml:space="preserve">
+    <value>You can login with</value>
+  </data>
+  <data name="changeButton" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="checkEmail" xml:space="preserve">
+    <value>Check your E-mail</value>
+  </data>
+  <data name="commentsTitle" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="confirmButton" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="createButton" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="createNewProjectButton" xml:space="preserve">
+    <value>Create new project</value>
+  </data>
   <data name="currentPassword" xml:space="preserve">
     <value>Current password</value>
   </data>
+  <data name="deleteAccButton" xml:space="preserve">
+    <value>Delete Profile</value>
+  </data>
+  <data name="deleteAccText" xml:space="preserve">
+    <value>By deleting profile everything related will be deleted too...</value>
+  </data>
+  <data name="deletionTitle" xml:space="preserve">
+    <value>Removal</value>
+  </data>
+  <data name="docsLink" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="docsOptions" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="docsType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="documentExample" xml:space="preserve">
+    <value>Document example</value>
+  </data>
+  <data name="documentsTitle" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="documentType" xml:space="preserve">
+    <value>Document type</value>
+  </data>
+  <data name="emailCodeTextToSend" xml:space="preserve">
+    <value>Your E-mail confirmation code</value>
+  </data>
+  <data name="emailCodeTitle" xml:space="preserve">
+    <value>Enter given code</value>
+  </data>
+  <data name="emailReference" xml:space="preserve">
+    <value>Reference</value>
+  </data>
+  <data name="emailSubjectConfirmation" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="Enter2faCodeTitle" xml:space="preserve">
+    <value>Enter code to login</value>
+  </data>
+  <data name="enterEmail" xml:space="preserve">
+    <value>Enter your E-mail address</value>
+  </data>
+  <data name="enterNeededData" xml:space="preserve">
+    <value>Enter needed data</value>
+  </data>
+  <data name="forgotPassword" xml:space="preserve">
+    <value>Forgot password?</value>
+  </data>
+  <data name="genericError" xml:space="preserve">
+    <value>Something went wrong...</value>
+  </data>
+  <data name="goBackButton" xml:space="preserve">
+    <value>Go back</value>
+  </data>
+  <data name="importantBadge" xml:space="preserve">
+    <value>HOT!</value>
+  </data>
+  <data name="information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="invitation" xml:space="preserve">
+    <value>Invitation</value>
+  </data>
+  <data name="invitations" xml:space="preserve">
+    <value>Invitations</value>
+  </data>
+  <data name="invitationText" xml:space="preserve">
+    <value>You have been invited to project</value>
+  </data>
+  <data name="langDeleteBody" xml:space="preserve">
+    <value>Are you sure want to delete this language?</value>
+  </data>
+  <data name="langOpts" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="langTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
   <data name="language" xml:space="preserve">
     <value>Language</value>
+  </data>
+  <data name="languageCode" xml:space="preserve">
+    <value>Language code</value>
+  </data>
+  <data name="languagesLink" xml:space="preserve">
+    <value>Languages</value>
+  </data>
+  <data name="languagesTitle" xml:space="preserve">
+    <value>Languages</value>
   </data>
   <data name="loginButton" xml:space="preserve">
     <value>Log me in</value>
   </data>
   <data name="loginCaption" xml:space="preserve">
     <value>Login</value>
+  </data>
+  <data name="loginCodeMessage" xml:space="preserve">
+    <value>Yours login code</value>
   </data>
   <data name="loginError" xml:space="preserve">
     <value>Cannot login</value>
@@ -156,11 +279,50 @@
   <data name="mainWebsiteLink" xml:space="preserve">
     <value>Main website</value>
   </data>
+  <data name="mustValidCaptcha" xml:space="preserve">
+    <value>Required to validate CAPTCHA</value>
+  </data>
+  <data name="newDocument" xml:space="preserve">
+    <value>New document</value>
+  </data>
+  <data name="newLanguage" xml:space="preserve">
+    <value>New Language</value>
+  </data>
   <data name="newPassword" xml:space="preserve">
     <value>New password</value>
   </data>
+  <data name="newPostButton" xml:space="preserve">
+    <value>New Post</value>
+  </data>
+  <data name="newProjectDescription" xml:space="preserve">
+    <value>Project description</value>
+  </data>
+  <data name="newProjectTitle" xml:space="preserve">
+    <value>New project creation</value>
+  </data>
   <data name="newUserLink" xml:space="preserve">
     <value>New user?</value>
+  </data>
+  <data name="noButton" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="noCode" xml:space="preserve">
+    <value>There is no code</value>
+  </data>
+  <data name="noDocsAdded" xml:space="preserve">
+    <value>No Documents added</value>
+  </data>
+  <data name="noInvitations" xml:space="preserve">
+    <value>You don't have any invitations</value>
+  </data>
+  <data name="noLanguagesAdded" xml:space="preserve">
+    <value>No languages added</value>
+  </data>
+  <data name="noNewPosts" xml:space="preserve">
+    <value>No posts created</value>
+  </data>
+  <data name="noProjects" xml:space="preserve">
+    <value>You don't have any projects</value>
   </data>
   <data name="optionsCaption" xml:space="preserve">
     <value>Options</value>
@@ -171,11 +333,74 @@
   <data name="passwordInfo" xml:space="preserve">
     <value>There you can change your password</value>
   </data>
+  <data name="passwordsNotEquals" xml:space="preserve">
+    <value>Passwords are not equal</value>
+  </data>
   <data name="personalInfoCaption" xml:space="preserve">
     <value>Personal information</value>
   </data>
+  <data name="postAuthor" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="postCommentsCount" xml:space="preserve">
+    <value>Comments count</value>
+  </data>
+  <data name="postCreateDate" xml:space="preserve">
+    <value>Create date</value>
+  </data>
+  <data name="PostDeletionBody" xml:space="preserve">
+    <value>Are you sure want to delete this post?</value>
+  </data>
+  <data name="postIsImportant" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="postIsImportantBoolean" xml:space="preserve">
+    <value>Important message?</value>
+  </data>
+  <data name="postLastComment" xml:space="preserve">
+    <value>Last comment</value>
+  </data>
+  <data name="postMessage" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="postOptions" xml:space="preserve">
+    <value>Options</value>
+  </data>
   <data name="postsLink" xml:space="preserve">
     <value>Posts</value>
+  </data>
+  <data name="postsTitle" xml:space="preserve">
+    <value>Posts</value>
+  </data>
+  <data name="postTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="profileCaption" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="ProfileLocedMessage" xml:space="preserve">
+    <value>Proflie temporary locked due wrong attempts</value>
+  </data>
+  <data name="projectDeletionBody" xml:space="preserve">
+    <value>Are you REALLY sure want to delete this project?</value>
+  </data>
+  <data name="projectDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="projectsList" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="publishButton" xml:space="preserve">
+    <value>Publish</value>
+  </data>
+  <data name="recoverEmailText" xml:space="preserve">
+    <value>Recover your password by clicking</value>
+  </data>
+  <data name="recoverySubject" xml:space="preserve">
+    <value>Password recovery</value>
+  </data>
+  <data name="recoveryTitle" xml:space="preserve">
+    <value>Recovery</value>
   </data>
   <data name="registerBirthDate" xml:space="preserve">
     <value>Date of birth</value>
@@ -213,8 +438,17 @@
   <data name="required" xml:space="preserve">
     <value>Required to fill</value>
   </data>
+  <data name="securityCaption" xml:space="preserve">
+    <value>Security</value>
+  </data>
+  <data name="sendButton" xml:space="preserve">
+    <value>Send</value>
+  </data>
   <data name="subMenuProjects" xml:space="preserve">
     <value>Projects</value>
+  </data>
+  <data name="successUpdated" xml:space="preserve">
+    <value>Successfully updated</value>
   </data>
   <data name="tooLong" xml:space="preserve">
     <value>Too long</value>
@@ -222,10 +456,46 @@
   <data name="tooShort" xml:space="preserve">
     <value>Too short</value>
   </data>
+  <data name="tooYoung" xml:space="preserve">
+    <value>Cannot be younger than 18</value>
+  </data>
+  <data name="twoFactoBadState" xml:space="preserve">
+    <value>OFF</value>
+  </data>
+  <data name="twoFactoGoodState" xml:space="preserve">
+    <value>ON</value>
+  </data>
+  <data name="twoFactorConfirmText" xml:space="preserve">
+    <value>Two step authentification requires to confirm E-mail first.</value>
+  </data>
+  <data name="twoFactorOffButton" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="twoFactorOnButton" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="twostepState" xml:space="preserve">
+    <value>Two step authentification</value>
+  </data>
+  <data name="twostepTitle" xml:space="preserve">
+    <value>You can turn on/off two step authentification here.</value>
+  </data>
   <data name="updateButton" xml:space="preserve">
     <value>Update</value>
   </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Welcome!</value>
+  </data>
+  <data name="writeCommentTitle" xml:space="preserve">
+    <value>Write comment</value>
+  </data>
+  <data name="wrongCode" xml:space="preserve">
+    <value>Wrong code</value>
+  </data>
   <data name="wrongFormat" xml:space="preserve">
     <value>Wrong format</value>
+  </data>
+  <data name="yesButton" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

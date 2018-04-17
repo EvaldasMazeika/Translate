@@ -51,22 +51,22 @@
                 <hr />
                 <div class="row">
                     <div class="col-md-6">
-                        Prisijungti galite su:
+                        @SharedLocalizer.GetLocalizedHtmlString("canLoginWith"):
                     </div>
                     <div class="col-md-6">
                         <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
-                                <button type="submit" class="btn btn-danger" name="provider" style="float:right" value="@loginProviders.Where(x=>x.Name == "Google").Single().Name" title="Prisijunk naudodamas @loginProviders.Where(x=>x.Name == "Google").Single().DisplayName paskyrą"><i class="fa fa-google"></i> @loginProviders.Where(x => x.Name == "Google").Single().Name</button>
+                            <button type="submit" class="btn btn-danger" name="provider" style="float:right" value="@loginProviders.Where(x=>x.Name == "Google").Single().Name" title="Prisijunk naudodamas @loginProviders.Where(x=>x.Name == "Google").Single().DisplayName paskyrą"><i class="fa fa-google"></i> @loginProviders.Where(x => x.Name == "Google").Single().Name</button>
                         </form>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <a asp-controller="Account" asp-action="ForgotPassword">Pamiršote slaptažodį?</a><br />
+                        <a asp-controller="Account" asp-action="ForgotPassword">@SharedLocalizer.GetLocalizedHtmlString("forgotPassword")</a><br />
                         <a asp-action="Register">@SharedLocalizer.GetLocalizedHtmlString("newUserLink")</a>
                     </div>
                 </div>
             </div>
         </div>
-        
+
     </div>
 </div>

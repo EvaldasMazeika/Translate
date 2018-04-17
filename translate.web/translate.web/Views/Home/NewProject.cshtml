@@ -1,18 +1,21 @@
 ﻿@model NewProjectViewModel
-<a class="btn btn-primary" asp-controller="Home" asp-action="Projects"> < Grįžti atgal</a>
+
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<a asp-controller="Home" asp-action="Projects" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 <hr />
-<h2>Naujo vertimo sukūrimas:</h2>
-    <form asp-action="NewProject">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="Name" class="control-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Description" class="control-label"></label>
-            <input asp-for="Description" class="form-control" />
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-        <input type="submit" value="Sukurti" class="btn btn-success" />
-    </form>
+<h2>@SharedLocalizer.GetLocalizedHtmlString("newProjectTitle"):</h2>
+<form asp-action="NewProject">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("createButton")</button>
+</form>

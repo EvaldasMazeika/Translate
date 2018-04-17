@@ -13,11 +13,11 @@ namespace translate.web.ViewModels
         [Required]
         [MinLength(2)]
         [MaxLength(50)]
-        [Display(Name="Dokumento tipas")]
+        [Display(Name="documentType")]
         public string Name { get; set; }
 
         [Required]
-        [Display(Name ="Dokumento pavyzdys")]
+        [Display(Name ="documentExample")]
         public string Example { get; set; }
     }
 }

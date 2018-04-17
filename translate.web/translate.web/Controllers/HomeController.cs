@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using translate.web.Data;
 using translate.web.Models;
+using translate.web.Resources;
 using translate.web.Services;
 using translate.web.ViewModels;
 
@@ -22,12 +23,14 @@ namespace translate.web.Controllers
         private readonly UserManager<AppIdentityUser> _userManager;
         private readonly ApplContext _context;
         private readonly IEmailSender _emailSender;
+        private readonly LocService _locService;
 
-        public HomeController(UserManager<AppIdentityUser> userManager, ApplContext context, IEmailSender emailSender)
+        public HomeController(UserManager<AppIdentityUser> userManager, ApplContext context, IEmailSender emailSender, LocService locService)
         {
             _userManager = userManager;
             _context = context;
             _emailSender = emailSender;
+            _locService = locService;
         }
 
         public IActionResult Index()
@@ -249,26 +252,6 @@ namespace translate.web.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Project(Guid? id)
-        {
-            if(String.IsNullOrEmpty(id.ToString()))
-            {
-                return RedirectToAction("Projects");
-            }
-            var user = await _userManager.GetUserAsync(HttpContext.User);
-
-            var exist = await _context.ProjectMembers.Where(x => x.Employee == user && x.ProjectId == id && x.AcceptedInvitation == true).SingleOrDefaultAsync();
-
-            if(exist == null)
-            {
-                return RedirectToAction("Projects");
-            }
-
-            var model = await _context.Projects.Where(a => a.Id == id).SingleOrDefaultAsync();
-            return View(model);
-        }
-
         [HttpPost]
         public async Task<IActionResult> DeleteProject([FromBody] Project model)
         {
@@ -366,8 +349,8 @@ namespace translate.web.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var message = $"Jūsų elektroninio pašto patvirtinimo kodas: {code}";
-            await _emailSender.SendEmailAsync(user.Email, "Patvirtinimas", message);
+            var message = $"{_locService.GetLocalizedHtmlString("emailCodeTextToSend")}: {code}";
+            await _emailSender.SendEmailAsync(user.Email, $"{_locService.GetLocalizedHtmlString("emailSubjectConfirmation")}", message);
 
             return RedirectToAction("EmailCode");
 
@@ -394,7 +377,7 @@ namespace translate.web.Controllers
             {
                 return RedirectToAction("MySecurity");
             }
-            ModelState.AddModelError(string.Empty, "Nepavyko..");
+            ModelState.AddModelError(string.Empty, $"{_locService.GetLocalizedHtmlString("genericError")}");
             return View(model);
         }
 

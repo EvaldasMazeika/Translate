@@ -26,15 +26,35 @@ namespace translate.web.ViewComponents
         {
             var user = _userManager.GetUserId(HttpContext.User);
             ViewBag.userId = user;
-            ViewBag.creator = _context.ProjectMembers.Where(x => x.ProjectId == ProjectId && x.EmployeeId.ToString() == user).Single().IsCreator;
 
-            var model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId)
-                .Include(a => a.Document)
-                    .ThenInclude(i=> i.Language)
-                .Include(a=>a.TranslationDictionarys)
-                .Include(i=> i.Translator)
-                .Include(i=> i.Language)
-                .ToListAsync();
+            var projectMember = await _context.ProjectMembers.Where(w => w.ProjectId == ProjectId && w.EmployeeId.ToString() == user).FirstOrDefaultAsync();
+            ViewBag.creator = projectMember.IsCreator;
+            ViewBag.showAll = projectMember.ShowOnlyMine;
+
+            List<Translation> model = null;
+
+            if (projectMember.ShowOnlyMine == false)
+            {
+                 model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId)
+                    .Include(a => a.Document)
+                        .ThenInclude(i => i.Language)
+                    .Include(a => a.TranslationDictionarys)
+                    .Include(i => i.Translator)
+                    .Include(i => i.Language)
+                    .OrderByDescending(o => o.AddedDate)
+                    .ToListAsync();
+            }
+            else
+            {
+                 model = await _context.Translations.Where(w => w.Document.ProjectId == ProjectId && w.TranslatorId.ToString() == user)
+                    .Include(a => a.Document)
+                        .ThenInclude(i => i.Language)
+                    .Include(a => a.TranslationDictionarys)
+                    .Include(i => i.Translator)
+                    .Include(i => i.Language)
+                    .OrderByDescending(o => o.AddedDate)
+                    .ToListAsync();
+            }
 
             return View(model);
         }

@@ -2,7 +2,9 @@
 @{
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
-<h1 class="display-4">Naujas dokumentas</h1>
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<h1 class="display-4">@SharedLocalizer.GetLocalizedHtmlString("newDocument")</h1>
 <hr />
 <form asp-controller="Admin" asp-action="NewDocument">
     <div class="row">
@@ -26,7 +28,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <input type="submit" value="Įtraukti" class="btn btn-primary" />
+            <button type="submit" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("createButton")</button>
         </div>
     </div>
 </form>

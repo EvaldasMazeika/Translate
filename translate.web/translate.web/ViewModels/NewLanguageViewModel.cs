@@ -12,13 +12,13 @@ namespace translate.web.ViewModels
         [Required]
         [MinLength(5)]
         [MaxLength(100)]
-        [Display(Name = "Pavadinimas")]
+        [Display(Name = "postTitle")]
         public string Name { get; set; }
 
         [Required]
         [MinLength(1)]
         [MaxLength(5)]
-        [Display(Name= "Kalbos kodas")]
+        [Display(Name= "languageCode")]
         public string Code { get; set; }
 
     }

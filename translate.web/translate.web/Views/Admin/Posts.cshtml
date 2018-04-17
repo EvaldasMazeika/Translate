@@ -2,12 +2,14 @@
 @{
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
-<a asp-action="NewPost" asp-controller="Admin" class="btn btn-info" role="button">Naujas pranešimas</a>
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<a asp-action="NewPost" asp-controller="Admin" class="btn btn-info" role="button">@SharedLocalizer.GetLocalizedHtmlString("newPostButton")</a>
 <hr />
-<h2>Pranešimai</h2>
+<h2>@SharedLocalizer.GetLocalizedHtmlString("postsTitle")</h2>
 @if (!Model.Any())
 {
-    <div class="alert alert-danger text-center" role="alert">Nėra sukurta pranešimų</div>
+    <div class="alert alert-danger text-center" role="alert">@SharedLocalizer.GetLocalizedHtmlString("noNewPosts")</div>
 }
 else
 {
@@ -15,10 +17,10 @@ else
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Create date</th>
-                    <th scope="col">Svarbu</th>
-                    <th scope="col">Options</th>
+                    <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postTitle")</th>
+                    <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postCreateDate")</th>
+                    <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postIsImportant")</th>
+                    <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postOptions")</th>
 
                 </tr>
             </thead>
@@ -47,17 +49,17 @@ else
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                <h5 class="modal-title" id="ModalLabel">@SharedLocalizer.GetLocalizedHtmlString("deletionTitle")</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Ar tikrai norite pašalinti darbuotoją iš sistemos?</p>
+                <p>@SharedLocalizer.GetLocalizedHtmlString("PostDeletionBody")</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
-                <button id="deletePost" type="button" class="btn btn-primary">Taip</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("noButton")</button>
+                <button id="deletePost" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("yesButton")</button>
             </div>
         </div>
     </div>

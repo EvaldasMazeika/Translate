@@ -14,6 +14,8 @@ namespace translate.web.Models
 
         public string Header { get; set; }
 
+        public DateTime AddedDate { get; set; }
+
         public Guid ProjectId { get; set; }
 
         public Guid LanguageId { get; set; }

@@ -1,4 +1,6 @@
-﻿<h1 class="display-4 text-center">Sveiki atvykę! &#x1F44B;</h1>
+﻿@inject translate.web.Resources.LocService SharedLocalizer
+
+<h1 class="display-4 text-center">@SharedLocalizer.GetLocalizedHtmlString("WelcomeText") &#x1F44B;</h1>
 <hr />
 <div class="row">
     <div id="invits" class="col-md-6">
@@ -18,26 +20,26 @@
             var employee = button.getAttribute('data-me');
 
             if (type == 'acceptInv') {
-                    var button = jQuery(e.currentTarget);
-                    var project = button.data('projectid');
-                    var employee = button.data('me');
-                    jQuery.ajax({
-                        type: "POST",
-                        url: "/Home/AcceptInvAsync",
-                        data: JSON.stringify({
-                            Pr: project,
-                            Emp: employee
-                        }),
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        success: function (response) {
-                            jQuery("#invits").load("Home/Invitations");
-                            jQuery("#dropdownPlace").load("Home/ProjectsDropdown");
-                        },
-                        error: function (response) {
+                var button = jQuery(e.currentTarget);
+                var project = button.data('projectid');
+                var employee = button.data('me');
+                jQuery.ajax({
+                    type: "POST",
+                    url: "/Home/AcceptInvAsync",
+                    data: JSON.stringify({
+                        Pr: project,
+                        Emp: employee
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        jQuery("#invits").load("Home/Invitations");
+                        jQuery("#dropdownPlace").load("Home/ProjectsDropdown");
+                    },
+                    error: function (response) {
 
-                        }
-                    });
+                    }
+                });
             } else {
                 jQuery.ajax({
                     type: "POST",

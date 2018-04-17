@@ -62,6 +62,7 @@ namespace translate.web.Controllers
             }
 
             var model = await _context.Projects.Where(a => a.Id == projectId).SingleOrDefaultAsync();
+            ViewBag.projectId = projectId;
 
             return View(model);
         }
@@ -86,7 +87,8 @@ namespace translate.web.Controllers
                     Employee = user,
                     IsCreator = false,
                     AcceptedInvitation = false,
-                    ProjectId = model.ProjectId
+                    ProjectId = model.ProjectId,
+                    ShowOnlyMine = false
                 };
 
                 _context.Add(result);
@@ -173,6 +175,22 @@ namespace translate.web.Controllers
             {
                 var doc = await _context.ProjectDocuments.Where(x => x.Id == model.DocumentId).Include(a => a.ProjectDocumentDictionarys).SingleOrDefaultAsync();
                 var lang = await _context.Languages.Where(x => x.Id == model.LanguageId).SingleOrDefaultAsync();
+
+                if (doc.LanguageId == lang.Id)
+                {
+                    TempData["message"] = "Negalima versti į tą pačią kalbą";
+                    return RedirectToAction("NewLocale");
+                }
+
+                // negalima sukurti identisko iraso, tikrinti kalba, dokumenta, zmogus.
+                var exist = await _context.Translations.Where(w => w.DocumentId == doc.Id && w.LanguageId == model.LanguageId && w.TranslatorId == model.TranslatorId).FirstOrDefaultAsync();
+
+                if (exist != null)
+                {
+                    TempData["message"] = "Toks vertimas jau egzistuoja";
+                    return RedirectToAction("NewLocale");
+                }
+
                 var translator = await _userManager.FindByIdAsync(model.TranslatorId.ToString());
 
                 var result = new Translation
@@ -182,7 +200,8 @@ namespace translate.web.Controllers
                     Document = doc,
                     IsCompleted = false,
                     Language = lang,
-                    Translator = translator
+                    Translator = translator,
+                    AddedDate = DateTime.Now
                 };
                 _context.Add(result);
 
@@ -356,7 +375,8 @@ namespace translate.web.Controllers
                     Name = docName,
                     Language = lang,
                     Project = project,
-                    DocumentType = doc
+                    DocumentType = doc,
+                    AddedDate = DateTime.Now
                 };
 
                 _context.Add(projectDocument);
@@ -416,7 +436,8 @@ namespace translate.web.Controllers
                     Language = lang,
                     Header = finalHeader,
                     Project = project,
-                    DocumentType = doc
+                    DocumentType = doc,
+                    AddedDate = DateTime.Now
                 };
 
                 _context.Add(projectDocument);
@@ -450,8 +471,11 @@ namespace translate.web.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
             var model = await _context.Translations.Where(x => x.Id == id)
+                .Include(i=>i.Language)
                 .Include(a => a.Document)
-                .ThenInclude(z => z.Project).SingleOrDefaultAsync();
+                    .ThenInclude(t=>t.Language)
+                .Include(a => a.Document)
+                    .ThenInclude(z => z.Project).SingleOrDefaultAsync();
 
             if (model.TranslatorId == user.Id)
             {
@@ -576,6 +600,37 @@ namespace translate.web.Controllers
             return new JsonResult(model);
         }
 
+        [HttpGet]
+        [Route("ProjectMembers")]
+        public async  Task<IActionResult> ProjectMembers(Guid ProjectId)
+        {
+            var user = _userManager.GetUserId(HttpContext.User);
+            ViewBag.creator = _context.ProjectMembers.Where(x => x.ProjectId == ProjectId && x.EmployeeId.ToString() == user).Single().IsCreator;
+            ViewBag.userId = user;
+            ViewBag.project = ProjectId;
+
+            var model = await _context.ProjectMembers.Where(w => w.ProjectId == ProjectId && w.AcceptedInvitation == true)
+                .Include(i=>i.Employee)
+                .OrderByDescending(o=>o.JoinDate)
+                .ToListAsync();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [Route("ProjectDocuments")]
+        public async Task<IActionResult> ProjectDocuments(Guid ProjectId)
+        {
+            var user = _userManager.GetUserId(HttpContext.User);
+            ViewBag.IsCreator = _context.ProjectMembers.Where(x => x.ProjectId == ProjectId && x.EmployeeId.ToString() == user).Single().IsCreator;
+
+            var model = await _context.ProjectDocuments.Where(w => w.ProjectId == ProjectId)
+                .OrderByDescending(o=>o.AddedDate)
+                .ToListAsync();
+
+            return View(model);
+        }
+
         [Route("DownloadTranslation")]
         public IActionResult DownloadTranslation(Guid ProjectId, Guid id)
         {
@@ -669,6 +724,31 @@ namespace translate.web.Controllers
                 }
             }
             return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("ChangeFilterState")]
+        public async Task<IActionResult> ChangeFilterState(Guid projectId, [FromBody] FilterStateViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var projectMember = await _context.ProjectMembers.Where(w => w.ProjectId == projectId && w.EmployeeId == user.Id).FirstOrDefaultAsync();
+
+            if (projectMember != null)
+            {
+                projectMember.ShowOnlyMine = model.FilterState;
+                _context.Update(projectMember);
+                await _context.SaveChangesAsync();
+
+                return new JsonResult("success");
+            }
+
+            return BadRequest();
+        }
+
+        [Route("ReloadLocalesListAsync")]
+        public IActionResult ReloadLocalesListAsync(Guid projectId)
+        {
+            return ViewComponent("LocalesListIndex", new { ProjectId = projectId });
         }
 
 

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using translate.web.Resources;
 
 namespace translate.web.ViewModels
 {
@@ -39,19 +40,22 @@ namespace translate.web.ViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "registerBirthDate")]
-        [AgeCheck]
+        [AgeCheck(ErrorMessage = "tooYoung")]
         public DateTime BirthDate { get; set; }
 
         [DataType(DataType.PhoneNumber)]
         [RegularExpression("^([+])([0-9]{11})$", ErrorMessage = "wrongFormat")]
         [Display(Name = "registerPhoneNumber")]
         public string PhoneNumber { get; set; }
-
-
     }
 
     public class AgeCheck : ValidationAttribute
     {
+        public AgeCheck()
+        {
+
+        }
+
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             var model = validationContext.ObjectInstance as RegisterViewModel;
@@ -63,19 +67,22 @@ namespace translate.web.ViewModels
 
             if (model.BirthDate > DateTime.Now.AddYears(-18))
             {
-                return new ValidationResult(GetErrorMessage(validationContext));
+                var service = (LocService)validationContext
+                         .GetService(typeof(LocService));
+
+                return new ValidationResult(GetErrorMessage(service,validationContext));
             }
 
 
             return ValidationResult.Success;
         }
 
-        private string GetErrorMessage(ValidationContext validationContext)
+        private string GetErrorMessage(LocService service, ValidationContext validationContext)
         {
             if (!string.IsNullOrEmpty(this.ErrorMessage))
-                return this.ErrorMessage;
+                return service.GetLocalizedHtmlString(ErrorMessage);
 
-            return "Negali būti jaunesnis negu 18 metų";
+            return $"error";
         }
     }
 

@@ -11,9 +11,10 @@ using translate.web.Data;
 namespace translate.web.Migrations
 {
     [DbContext(typeof(ApplContext))]
-    partial class ApplContextModelSnapshot : ModelSnapshot
+    [Migration("20180413080831_translationdate")]
+    partial class translationdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -329,8 +330,6 @@ namespace translate.web.Migrations
                     b.Property<bool>("IsCreator");
 
                     b.Property<DateTime?>("JoinDate");
-
-                    b.Property<bool>("ShowOnlyMine");
 
                     b.HasKey("ProjectId", "EmployeeId");
 

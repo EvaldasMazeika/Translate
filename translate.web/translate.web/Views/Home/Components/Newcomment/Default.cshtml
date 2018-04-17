@@ -1,9 +1,12 @@
 ﻿@model NewCommentViewModel
-    <form asp-controller="Home" asp-action="Post" method="post">
-        <input type="hidden" asp-for="PostId"/>
-        <div class="form-group">
-            <textarea asp-for="WrittenText" class="form-control" rows="3"></textarea>
-            <span asp-validation-for="WrittenText" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Paskelbti</button>
-    </form>
+
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<form asp-controller="Home" asp-action="Post" method="post">
+    <input type="hidden" asp-for="PostId" />
+    <div class="form-group">
+        <textarea asp-for="WrittenText" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="WrittenText" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">@SharedLocalizer.GetLocalizedHtmlString("publishButton")</button>
+</form>

@@ -12,15 +12,16 @@ namespace translate.web.ViewModels
         [Required]
         [MinLength(5)]
         [MaxLength(50)]
-        [Display(Name ="Pavadinimas")]
+        [Display(Name = "postTitle")]
         public string Title { get; set; }
 
         [Required]
         [MinLength(5)]
-        [Display(Name = "Pranešimas")]
+        [MaxLength(500)]
+        [Display(Name = "postMessage")]
         public string Message { get; set; }
 
-        [Display(Name = "Svarbus pranešimas")]
+        [Display(Name = "postIsImportantBoolean")]
         public bool IsImportant { get; set; }
     }
 }

@@ -1,11 +1,13 @@
 ﻿@model IEnumerable<ForumPostsViewModel>
 
-<a asp-controller="Home" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 <hr />
-<h5>Visi pranešimai</h5>
+<h5>@SharedLocalizer.GetLocalizedHtmlString("allPosts")</h5>
 @if (!Model.Any())
 {
-    <div class="alert alert-danger text-center" role="alert">Nėra sukurta pranešimų</div>
+    <div class="alert alert-danger text-center" role="alert">@SharedLocalizer.GetLocalizedHtmlString("noNewPosts")</div>
 }
 else
 {
@@ -15,11 +17,11 @@ else
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th scope="col">Pavadinimas</th>
-                            <th scope="col">Sukurimo data</th>
-                            <th scope="col">Autorius</th>
-                            <th scope="col">Komentarų skaičius</th>
-                            <th scope="col">Paskutinis komentaras</th>
+                            <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postTitle")</th>
+                            <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postCreateDate")</th>
+                            <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postAuthor")</th>
+                            <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postCommentsCount")</th>
+                            <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postLastComment")</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,7 +30,7 @@ else
                             <tr>
                                 <td>
                                     <a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title </a>@if (item.IsImportant)
-                                    {<span class="badge badge-danger">Svarbu</span>                    }
+                                    {<span class="badge badge-danger">@SharedLocalizer.GetLocalizedHtmlString("importantBadge")</span>}
                                 </td>
                                 <td>@item.CreatedTime</td>
                                 <td>@item.CreatorName</td>

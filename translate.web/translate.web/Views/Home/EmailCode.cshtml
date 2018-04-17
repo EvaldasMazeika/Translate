@@ -1,5 +1,8 @@
 ﻿@model EmailConfirmViewModel
-<h2>Įveskite el. pašte gautą kodą</h2>
+
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<h2>@SharedLocalizer.GetLocalizedHtmlString("emailCodeTitle")</h2>
 <hr />
 <form asp-controller="Home" asp-action="EmailCode" method="post">
     <div class="row">
@@ -11,7 +14,7 @@
                 <span asp-validation-for="Code" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-success">Patvirtinti</button>
+                <button type="submit" class="btn btn-success">@SharedLocalizer.GetLocalizedHtmlString("confirmButton")</button>
             </div>
         </div>
     </div>

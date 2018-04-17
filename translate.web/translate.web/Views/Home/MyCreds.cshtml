@@ -8,10 +8,10 @@
         <a class="nav-link active" asp-controller="Home" asp-action="MyCreds">@SharedLocalizer.GetLocalizedHtmlString("passwordCaption")</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Home" asp-action="MyAccount">Anketa</a>
+        <a class="nav-link" asp-controller="Home" asp-action="MyAccount">@SharedLocalizer.GetLocalizedHtmlString("profileCaption")</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Home" asp-action="MySecurity">Saugumas</a>
+        <a class="nav-link" asp-controller="Home" asp-action="MySecurity">@SharedLocalizer.GetLocalizedHtmlString("securityCaption")</a>
     </li>
 </ul>
 
@@ -19,7 +19,7 @@
 {
     <br />
     <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-        Sėkmingai atnaujinta
+        @SharedLocalizer.GetLocalizedHtmlString("successUpdated")
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>

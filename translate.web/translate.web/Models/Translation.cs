@@ -18,6 +18,7 @@ namespace translate.web.Models
         public string DeclineComment { get; set; }
         public Guid TranslatorId { get; set; }
         public string FileName { get; set; }
+        public DateTime AddedDate { get; set; }
 
         public ProjectDocument Document { get; set; }
         public Language Language { get; set; }

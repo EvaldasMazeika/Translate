@@ -29,7 +29,10 @@ namespace translate.web.ViewComponents
             var user = _userManager.GetUserId(HttpContext.User);
             ViewBag.IsCreator = _context.ProjectMembers.Where(x => x.ProjectId == ProjectId && x.EmployeeId.ToString() == user).Single().IsCreator;
 
-            var temp = await _context.ProjectDocuments.Where(x => x.ProjectId == ProjectId).ToListAsync();
+            var temp = await _context.ProjectDocuments.Where(x => x.ProjectId == ProjectId)
+                .OrderByDescending(o=>o.AddedDate)
+                .Skip(0).Take(5)
+                .ToListAsync();
 
             var model = temp.Select(a => new DocumentsViewModel { Id = a.Id, Name = a.Name, ProjectId = a.ProjectId }).ToList();
 

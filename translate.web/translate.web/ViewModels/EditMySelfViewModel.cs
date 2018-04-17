@@ -11,7 +11,7 @@ namespace translate.web.ViewModels
     {
         [Required(ErrorMessage = "required")]
         [MaxLength(20, ErrorMessage = "tooLong")]
-        [Display(Name = "Vardas")]
+        [Display(Name = "registerName")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "required")]

@@ -11,6 +11,7 @@ namespace translate.web.Models
 
         public bool AcceptedInvitation { get; set; }
         public bool IsCreator { get; set; }
+        public bool ShowOnlyMine { get; set; }
 
         public DateTime? JoinDate { get; set; }
 

@@ -2,10 +2,11 @@
 @{
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
+@inject translate.web.Resources.LocService SharedLocalizer
 
-<h1 class="display-4">Naujas pranešimas</h1>
+<h1 class="display-4">@SharedLocalizer.GetLocalizedHtmlString("newPostButton")</h1>
 
-<form asp-action="NewPost">
+<form asp-controller="Admin" asp-action="NewPost">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="row">
         <div class="col-md-12">
@@ -32,8 +33,7 @@
                 <label class="custom-control-label" asp-for="IsImportant" for="customControlAutosizing"></label>
             </div>
         </div>
-
     </div>
-    <input type="submit" value="Sukurti" class="btn btn-primary" />
+    <button type="submit" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("createButton")</button>
 </form>
 

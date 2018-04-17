@@ -1,6 +1,9 @@
 ﻿@model IEnumerable<Post>
 
-<h4><a asp-controller="Home" asp-action="Forum">Pranešimai</a> <span class="badge badge-secondary">@ViewBag.totalCount</span></h4>
+@inject translate.web.Resources.LocService SharedLocalizer
+
+
+<h4><a asp-controller="Home" asp-action="Forum">@SharedLocalizer.GetLocalizedHtmlString("postsTitle")</a> <span class="badge badge-secondary">@ViewBag.totalCount</span></h4>
 <hr />
 @if (Model.Any())
 {
@@ -8,16 +11,19 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">Title</th>
-                    <th scope="col">Create date</th>
-                    <th scope="col">Author</th>
+                    <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postTitle")</th>
+                    <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postCreateDate")</th>
+                    <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postAuthor")</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <th><a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a>@if (item.IsImportant) { <span class="badge badge-danger">Svarbu</span> }</th>
+                        <th>
+                            <a asp-action="Post" asp-controller="Home" asp-route-id="@item.Id">@item.Title</a>@if (item.IsImportant)
+                            {<span class="badge badge-danger">@SharedLocalizer.GetLocalizedHtmlString("importantBadge")</span>}
+                        </th>
                         <td>@item.CreatedTime</td>
                         <td>@item.Employee.Name @item.Employee.Surname</td>
                     </tr>

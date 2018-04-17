@@ -11,13 +11,13 @@
 @{
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
     var cultureItems = LocOptions.Value.SupportedUICultures
-        .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
+        .Select(c => new SelectListItem { Value = c.Name, Text = c.NativeName })
         .ToList();
 }
 
 <form class="form-inline" id="selectLanguage" asp-controller="Account"
-          asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path"
-          method="post" role="form">
+      asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path"
+      method="post" role="form">
     <div class="input-group">
         <div class="input-group-prepend">
             <span class="input-group-text" id="basic-addon1">@SharedLocalizer.GetLocalizedHtmlString("language")</span>

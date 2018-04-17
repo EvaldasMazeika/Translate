@@ -9,19 +9,19 @@
         <a class="nav-link" asp-controller="Home" asp-action="MyCreds">@SharedLocalizer.GetLocalizedHtmlString("passwordCaption")</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" asp-controller="Home" asp-action="MyAccount">Anketa</a>
+        <a class="nav-link" asp-controller="Home" asp-action="MyAccount">@SharedLocalizer.GetLocalizedHtmlString("profileCaption")</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link active" asp-controller="Home" asp-action="MySecurity">Saugumas</a>
+        <a class="nav-link active" asp-controller="Home" asp-action="MySecurity">@SharedLocalizer.GetLocalizedHtmlString("securityCaption")</a>
     </li>
 </ul>
 @if (!Model.EmailConfirmed)
 {
     <div class="row">
         <div class="col-md-12">
-            <h4>Norėdami įgalinti dviejų žingsnių autentifikaciją, pirmiausia reikia patvirtinti el. paštą.</h4>
+            <h4>@SharedLocalizer.GetLocalizedHtmlString("twoFactorConfirmText")</h4>
             <form asp-controller="Home" asp-action="VerifyEmail" method="post">
-                <button type="submit" class="btn btn-info">Patvirtinti</button>
+                <button type="submit" class="btn btn-info">@SharedLocalizer.GetLocalizedHtmlString("confirmButton")</button>
             </form>
         </div>
     </div>
@@ -31,16 +31,16 @@ else
 {
     <div class="row">
         <div class="col-md-12">
-            <h4>Čia galite įjungti/išjungti dviejų žingsnių autentifikaciją.</h4>
+            <h4>@SharedLocalizer.GetLocalizedHtmlString("twostepTitle")</h4>
             <h5>
-                Dviejų žingsnių autentifikacija:
+                @SharedLocalizer.GetLocalizedHtmlString("twostepState"):
                 @if (Model.TwoFactorEnabled)
                 {
-                    <strong class="text-success">ĮJUNGTA</strong>
+                    <strong class="text-success">@SharedLocalizer.GetLocalizedHtmlString("twoFactoGoodState")</strong>
                 }
                 else
                 {
-                    <strong class="text-danger">IŠJUNGTA</strong>
+                    <strong class="text-danger">@SharedLocalizer.GetLocalizedHtmlString("twoFactoBadState")</strong>
                 }
             </h5>
             @if (Model.TwoFactorEnabled)
@@ -48,7 +48,7 @@ else
 
                 <div class="btn-group" role="group">
                     <form asp-controller="Home" asp-action="DisableTwoFactorAuthentication" method="post">
-                        <button type="submit" class="btn btn-success">Išjungti</button>
+                        <button type="submit" class="btn btn-success">@SharedLocalizer.GetLocalizedHtmlString("twoFactorOffButton")</button>
                     </form>
                 </div>
             }
@@ -56,7 +56,7 @@ else
             {
                 <div class="btn-group" role="group">
                     <form asp-controller="Home" asp-action="EnableTwoFactorAuthentication" method="post">
-                        <button type="submit" class="btn btn-success">Įgalinti</button>
+                        <button type="submit" class="btn btn-success">@SharedLocalizer.GetLocalizedHtmlString("twoFactorOnButton")</button>
                     </form>
                 </div>
             }

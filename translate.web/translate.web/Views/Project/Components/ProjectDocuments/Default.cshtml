@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<DocumentsViewModel>
 <div class="card">
     <div class="card-header">
-        Dokumentai
+        <a asp-controller="Project" asp-action="ProjectDocuments">Dokumentai</a>
     </div>
     <div class="card-body">
         @if (!Model.Any())
