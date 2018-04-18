@@ -4,12 +4,18 @@
 
 <a asp-controller="Home" asp-action="Forum" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 <hr />
-<div class="row" style="background-color:ivory">
+<div class="row">
     <div class="col-md-12">
         <h1 class="display-4 text-center">@Model.Title</h1>
         <hr />
-        <div><p class="lead">@Html.Raw("<pre>" + Html.Encode(Model.Message) + "</pre>")</p></div>
-        <div style="float:right"><h5>@Model.Employee.Name @Model.Employee.Surname</h5> <small class="text-muted">@Model.CreatedTime</small></div>
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <p class="lead">@Html.Raw("<pre style='color:white;'>" + Html.Encode(Model.Message) + "</pre>")</p>
+            </div>
+            <div class="card-footer">
+                <div style="float:right"><h5>@Model.Employee.Name @Model.Employee.Surname</h5> <small class="text-muted">@Model.CreatedTime</small></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -20,15 +26,17 @@
 {
     <div class="row">
         <div class="col-md-12">
-            <div style="float:left">
-                <h5>@item.FullName</h5> <small class="text-muted">@item.CommentDate</small>
-                <div>
+            <div class="card">
+                <div class="card-header">
+                    <h5>@item.FullName</h5> <small class="text-muted">@item.CommentDate</small>
+                </div>
+                <div class="card-body">
                     <p class="lead">@Html.Raw("<pre>" + Html.Encode(item.CommentText) + "</pre>")</p>
                 </div>
             </div>
         </div>
     </div>
-    <hr />
+    <br />
 }
 <h3 class="font-italic text-center text-info">@SharedLocalizer.GetLocalizedHtmlString("writeCommentTitle")</h3>
 <div class="row">

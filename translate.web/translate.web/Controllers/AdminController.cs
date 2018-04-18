@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using translate.web.Data;
 using translate.web.Models;
 using translate.web.ViewModels;
@@ -147,6 +148,26 @@ namespace translate.web.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Documents");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProjectsCountAsync()
+        {
+            var year = DateTime.Now.Year;
+            var items = await _context.Projects.Where(w => w.CreateDate.Year == year).ToListAsync();
+
+            var list = new List<ProjectsCountViewModel>();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                var tempCount = items.Where(w => w.CreateDate.Month == i).Count();
+                var temp = new ProjectsCountViewModel { Month = i, MonthCount = tempCount };
+                list.Add(temp);
+            }
+
+            string json = JsonConvert.SerializeObject(list);
+
+            return new JsonResult(json);
         }
 
     }

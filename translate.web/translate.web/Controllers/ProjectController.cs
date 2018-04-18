@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using translate.web.Data;
 using translate.web.Models;
 using translate.web.ViewModels;
@@ -631,6 +632,42 @@ namespace translate.web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Route("Translations")]
+        public IActionResult Translations(Guid ProjectId)
+        {
+            ViewBag.projectId = ProjectId;
+
+            return View();
+        }
+
+        [HttpGet]
+        [Route("GetDocsCountAsync")]
+        public IActionResult GetDocsCountAsync(Guid ProjectId)
+        {
+            var closed = _context.Translations.Where(w => w.IsCompleted == true && w.Document.ProjectId == ProjectId).Count();
+            var open = _context.Translations.Where(w => w.Document.ProjectId == ProjectId && w.IsCompleted == false).Count();
+
+            var result = new TranslationsDocsViewModel { ClosedTtranslations = closed, OpenTranslations = open };
+
+            string json = JsonConvert.SerializeObject(result);
+            return new JsonResult(json);
+        }
+
+        [HttpGet]
+        [Route("GetWordsCountAsync")]
+        public IActionResult GetWordsCountAsync(Guid ProjectId)
+        {
+            var translated = _context.TranslationDictionarys.Where(w => w.Translations.Document.ProjectId == ProjectId && w.NewValue != null).Count();
+            var leftTranslate = _context.TranslationDictionarys.Where(w => w.Translations.Document.ProjectId == ProjectId && w.NewValue == null).Count();
+
+            var result = new TranslationsWordsViewModel { TranslatedCount = translated, LeftToTranslateCount = leftTranslate };
+
+            string json = JsonConvert.SerializeObject(result);
+            return new JsonResult(json);
+        }
+
+
         [Route("DownloadTranslation")]
         public IActionResult DownloadTranslation(Guid ProjectId, Guid id)
         {
@@ -682,7 +719,7 @@ namespace translate.web.Controllers
 
             MemoryStream stream = new MemoryStream();
             XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
-            writer.Formatting = Formatting.Indented;
+            writer.Formatting = System.Xml.Formatting.Indented;
             writer.Indentation = 2;
 
             doc.WriteTo(writer);
@@ -802,7 +839,7 @@ namespace translate.web.Controllers
 
             MemoryStream stream = new MemoryStream();
             XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
-            writer.Formatting = Formatting.Indented;
+            writer.Formatting = System.Xml.Formatting.Indented;
             writer.Indentation = 2;
 
             doc.WriteTo(writer);
@@ -858,7 +895,7 @@ namespace translate.web.Controllers
 
             MemoryStream stream = new MemoryStream();
             XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
-            writer.Formatting = Formatting.Indented;
+            writer.Formatting = System.Xml.Formatting.Indented;
             writer.Indentation = 2;
 
             doc.WriteTo(writer);
@@ -942,7 +979,7 @@ namespace translate.web.Controllers
 
             MemoryStream stream = new MemoryStream();
             XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
-            writer.Formatting = Formatting.Indented;
+            writer.Formatting = System.Xml.Formatting.Indented;
             writer.Indentation = 2;
 
             doc.WriteTo(writer);

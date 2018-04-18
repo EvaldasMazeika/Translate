@@ -1,7 +1,91 @@
 ﻿
 @{
     Layout = "~/Views/Shared/_Admin.cshtml";
+
 }
+@inject translate.web.Resources.LocService SharedLocalizer
 
-<h2>Admin panel</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header text-center">
+                @SharedLocalizer.GetLocalizedHtmlString("ProjectCountTitle")
+            </div>
+            <div class="card-body">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 
+@section scripts {
+<script>
+        var color = Chart.helpers.color;
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(231,233,237)'
+        };
+
+        window.onload = function () {
+            jQuery.ajax({
+                type: "GET",
+                url: "/Admin/GetProjectsCountAsync",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    drawProjectsCount(JSON.parse(result));
+                },
+                error: function (result) {
+                }
+            });
+
+            function drawProjectsCount(result) {
+
+                var barChartData = {
+                    labels: ['@SharedLocalizer.GetLocalizedHtmlString("January")', '@SharedLocalizer.GetLocalizedHtmlString("February")', '@SharedLocalizer.GetLocalizedHtmlString("March")', '@SharedLocalizer.GetLocalizedHtmlString("April")', '@SharedLocalizer.GetLocalizedHtmlString("May")', '@SharedLocalizer.GetLocalizedHtmlString("June")', '@SharedLocalizer.GetLocalizedHtmlString("July")', '@SharedLocalizer.GetLocalizedHtmlString("August")', '@SharedLocalizer.GetLocalizedHtmlString("September")', '@SharedLocalizer.GetLocalizedHtmlString("October")', '@SharedLocalizer.GetLocalizedHtmlString("November")', '@SharedLocalizer.GetLocalizedHtmlString("December")'],
+                    datasets: [{
+                        label: '@SharedLocalizer.GetLocalizedHtmlString("RegistertedProjects")',
+                        backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                        borderColor: window.chartColors.blue,
+                        borderWidth: 1,
+                        data: [
+                            result["0"].MonthCount,
+                            result["1"].MonthCount,
+                            result["2"].MonthCount,
+                            result["3"].MonthCount,
+                            result["4"].MonthCount,
+                            result["5"].MonthCount,
+                            result["6"].MonthCount,
+                            result["7"].MonthCount,
+                            result["8"].MonthCount,
+                            result["9"].MonthCount,
+                            result["10"].MonthCount,
+                            result["11"].MonthCount
+                        ]
+                    }]
+                };
+
+                var ctx = document.getElementById('canvas').getContext('2d');
+                window.myBar = new Chart(ctx, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: '@SharedLocalizer.GetLocalizedHtmlString("ProjectsCountdistribution")'
+                        }
+                    }
+                });
+            };
+        }
+</script>
+}

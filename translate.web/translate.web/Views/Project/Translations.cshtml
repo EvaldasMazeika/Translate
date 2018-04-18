@@ -1,0 +1,143 @@
+﻿
+<a asp-controller="Project" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header text-center">
+                Išversta dokumentų
+            </div>
+            <div class="card-body">
+                <div id="canvas-holder">
+                    <canvas id="chart-area"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header text-center">
+                Išversta žodžių
+            </div>
+            <div class="card-body">
+                <div id="canvas-holder">
+                    <canvas id="chart-area2"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wait col-md-6 offset-md-3" style="display:none">
+    </div>
+</div>
+
+
+@section scripts {
+<script>
+    jQuery(document).ajaxStart(function () {
+        jQuery(".wait").css("display", "block");
+    });
+    jQuery(document).ajaxComplete(function () {
+        jQuery(".wait").css("display", "none");
+    });
+
+
+    window.chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(231,233,237)'
+    };
+
+    window.onload = function () {
+        jQuery.ajax({
+            type: "GET",
+            url: "/Project/@ViewBag.projectId/GetDocsCountAsync",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                drawDocsCount(JSON.parse(result));
+            },
+            error: function (result) {
+            }
+        });
+
+                jQuery.ajax({
+            type: "GET",
+            url: "/Project/@ViewBag.projectId/GetWordsCountAsync",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                drawWordsCount(JSON.parse(result));
+            },
+            error: function (result) {
+            }
+        });
+    };
+
+
+    function drawDocsCount(result) {
+
+        var config = {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [
+                        Number(result.OpenTranslations),
+                        Number(result.ClosedTtranslations)
+                    ],
+                    backgroundColor: [
+                        window.chartColors.green,
+                        window.chartColors.blue,
+                    ],
+                    label: 'Dataset 1'
+                }],
+                labels: [
+                    'Atviri',
+                    'Uždaryti'
+                ]
+            },
+            options: {
+                responsive: true
+            }
+        };
+
+        var ctx = document.getElementById('chart-area').getContext('2d');
+        window.myPie = new Chart(ctx, config);
+
+    };
+
+    function drawWordsCount(result) {
+        var config = {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [
+                        Number(result.TranslatedCount),
+                        Number(result.LeftToTranslateCount)
+                    ],
+                    backgroundColor: [
+                        window.chartColors.purple,
+                        window.chartColors.red,
+                    ],
+                    label: 'Dataset 2'
+                }],
+                labels: [
+                    'Išversta',
+                    'Neišversta'
+                ]
+            },
+            options: {
+                responsive: true
+            }
+        };
+
+        var ctx = document.getElementById('chart-area2').getContext('2d');
+        window.myPie = new Chart(ctx, config);
+
+    };
+
+</script>
+}
