@@ -1,11 +1,13 @@
 ﻿
-<a asp-controller="Project" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<a asp-controller="Project" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 <hr />
 <div class="row">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header text-center">
-                Išversta dokumentų
+                @SharedLocalizer.GetLocalizedHtmlString("translatedDocs")
             </div>
             <div class="card-body">
                 <div id="canvas-holder">
@@ -17,7 +19,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header text-center">
-                Išversta žodžių
+                @SharedLocalizer.GetLocalizedHtmlString("wordsTranslated")
             </div>
             <div class="card-body">
                 <div id="canvas-holder">
@@ -32,7 +34,7 @@
 
 
 @section scripts {
-<script>
+    <script>
     jQuery(document).ajaxStart(function () {
         jQuery(".wait").css("display", "block");
     });
@@ -86,17 +88,20 @@
                 datasets: [{
                     data: [
                         Number(result.OpenTranslations),
-                        Number(result.ClosedTtranslations)
+                        Number(result.ClosedTtranslations),
+                        Number(result.WaitingTranslations)
                     ],
                     backgroundColor: [
                         window.chartColors.green,
                         window.chartColors.blue,
+                        window.chartColors.purple
                     ],
                     label: 'Dataset 1'
                 }],
                 labels: [
-                    'Atviri',
-                    'Uždaryti'
+                    '@SharedLocalizer.GetLocalizedHtmlString("open")',
+                    '@SharedLocalizer.GetLocalizedHtmlString("closed")',
+                    '@SharedLocalizer.GetLocalizedHtmlString("waiting")'
                 ]
             },
             options: {
@@ -125,8 +130,8 @@
                     label: 'Dataset 2'
                 }],
                 labels: [
-                    'Išversta',
-                    'Neišversta'
+                    '@SharedLocalizer.GetLocalizedHtmlString("translated")',
+                    '@SharedLocalizer.GetLocalizedHtmlString("notTranslated")'
                 ]
             },
             options: {
@@ -139,5 +144,5 @@
 
     };
 
-</script>
+    </script>
 }

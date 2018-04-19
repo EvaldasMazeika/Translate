@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<Translation>
 
 @inject translate.web.Data.ApplContext context
-
+@inject translate.web.Resources.LocService SharedLocalizer
 
 
 @if (!Model.Any())
 {
-    <h2 class="text-warning text-center">Pridėkite vertimą</h2>
+    <h2 class="text-warning text-center">@SharedLocalizer.GetLocalizedHtmlString("addTranslationTitle")</h2>
 }
 else
 {
@@ -14,23 +14,23 @@ else
         <table class="table table-hover">
             <thead>
                 <tr class="d-flex">
-                    <th class="col" scope="col">Vertimai</th>
+                    <th class="col" scope="col">@SharedLocalizer.GetLocalizedHtmlString("translationsLink")</th>
                     <th class="col" scope="col">
                         <div id="filterButton" class="btn-group">
                             <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Vertimų filtras
+                                <i id="cogSpin" class="fa fa-cog fa-spin" style="display:none"></i> @SharedLocalizer.GetLocalizedHtmlString("translationsFilter")
                             </button>
                             <div class="dropdown-menu">
 
                                 @if (ViewBag.showAll == false)
                                 {
-                                    <button id="mineFilter" class="dropdown-item">Mano vertimai</button>
-                                    <button id="allFilter" class="dropdown-item active">Visi vertimai</button>
+                                    <button id="mineFilter" class="dropdown-item">@SharedLocalizer.GetLocalizedHtmlString("myTranslations")</button>
+                                    <button id="allFilter" class="dropdown-item active">@SharedLocalizer.GetLocalizedHtmlString("allTranslations")</button>
                                 }
                                 else
                                 {
-                                    <button id="mineFilter" class="dropdown-item active">Mano vertimai</button>
-                                    <button id="allFilter" class="dropdown-item">Visi vertimai</button>
+                                    <button id="mineFilter" class="dropdown-item active">@SharedLocalizer.GetLocalizedHtmlString("myTranslations")</button>
+                                    <button id="allFilter" class="dropdown-item">@SharedLocalizer.GetLocalizedHtmlString("allTranslations")</button>
                                 }
 
                             </div>
@@ -67,23 +67,23 @@ else
                             </div>
                         </td>
                         <td class="col-sm-4">
-                            paskirtas: <strong>@item.Translator.Name @item.Translator.Surname</strong> @item.Document.Language.Name >  @item.Language.Name
+                            @SharedLocalizer.GetLocalizedHtmlString("appointed"): <strong>@item.Translator.Name @item.Translator.Surname</strong> @item.Document.Language.Name >  @item.Language.Name
                         </td>
                         <td class="col-sm-2">
                             <div class="btn-group btn-group-sm d-flex flex-wrap" style="float:right" role="group">
                                 @if (item.IsCompleted == true)
                                 {
-                                    <a asp-controller="Project" asp-action="DownloadTranslation" asp-route-id="@item.Id" class="btn btn-dark">Parsisiųsti</a>
+                                    <a asp-controller="Project" asp-action="DownloadTranslation" asp-route-id="@item.Id" class="btn btn-dark">@SharedLocalizer.GetLocalizedHtmlString("download")</a>
                                 }
 
                                 @if (ViewBag.creator)
                                 {
                                     if (item.IsWaiting == true)
                                     {
-                                        <a asp-controller="Project" asp-action="CheckTranslation" asp-route-id="@item.Id" class="btn btn-info">Patikrinti</a>
+                                        <a asp-controller="Project" asp-action="CheckTranslation" asp-route-id="@item.Id" class="btn btn-info">@SharedLocalizer.GetLocalizedHtmlString("verify")</a>
 
                                     }
-                                    <button type="button" id="deleteButton" data-toggle="modal" data-translate="@item.Id" data-project="@item.Document.ProjectId" data-name="@item.Title" data-target="#DeleteTranslationsModal" class="btn btn-danger btn-sm" style="float:right">Ištrinti</button>
+                                    <button type="button" id="deleteButton" data-toggle="modal" data-translate="@item.Id" data-project="@item.Document.ProjectId" data-name="@item.Title" data-target="#DeleteTranslationsModal" class="btn btn-danger btn-sm" style="float:right">@SharedLocalizer.GetLocalizedHtmlString("deleteButton")</button>
                                 }
                             </div>
                         </td>
@@ -102,17 +102,17 @@ else
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                    <h5 class="modal-title" id="ModalLabel">@SharedLocalizer.GetLocalizedHtmlString("deletionTitle")</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Tikrai norite pašalinti vertimą iš sistemos?</p>
+                    <p>@SharedLocalizer.GetLocalizedHtmlString("deleteTranslateBody")</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
-                    <button id="deleteTranslation" type="button" class="btn btn-primary">Taip</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("noButton")</button>
+                    <button id="deleteTranslation" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("yesButton")</button>
                 </div>
             </div>
         </div>

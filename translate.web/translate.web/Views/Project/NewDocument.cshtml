@@ -1,6 +1,8 @@
 ﻿@model UploadFileViewModel
 
-<a asp-controller="Project" asp-action="ProjectDocuments" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<a asp-controller="Project" asp-action="ProjectDocuments" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 <hr />
 @if (TempData["message"] != null)
 {
@@ -22,7 +24,7 @@
         </button>
     </div>
 }
-<h2>Naujo dokumento įkėlimas: <strong class="text-danger">(Maksimalus dokumento dydis: 10MB)</strong></h2>
+<h2>@SharedLocalizer.GetLocalizedHtmlString("newDocAddition"): <strong class="text-danger">(@SharedLocalizer.GetLocalizedHtmlString("maxDocSize"))</strong></h2>
 <hr />
 <form asp-controller="Project" asp-action="NewDocument" method="post" enctype="multipart/form-data">
     <div class="row">
@@ -46,7 +48,7 @@
 
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#exampleDoc">Pavyzdys</button>
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#exampleDoc">@SharedLocalizer.GetLocalizedHtmlString("example")</button>
                     </div>
                     <select id="docSelect" class="custom-select form-control" asp-for="DocumentTypeId" asp-items="ViewBag.DocumentTypeId"></select>
                 </div>
@@ -56,7 +58,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <button class="btn btn-success" style="float:right">Įkelti</button>
+                <button class="btn btn-success" style="float:right">@SharedLocalizer.GetLocalizedHtmlString("uploadButton")</button>
             </div>
         </div>
     </div>
@@ -66,7 +68,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleDocTitle">Pavyzdys</h5>
+                <h5 class="modal-title" id="exampleDocTitle">@SharedLocalizer.GetLocalizedHtmlString("example")</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

@@ -1,20 +1,23 @@
 ﻿@model IEnumerable<TranslationDictionary>
-<a class="btn btn-info" asp-controller="Project" asp-action="Index"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+@inject translate.web.Resources.LocService SharedLocalizer
+
+
+<a class="btn btn-info" asp-controller="Project" asp-action="Index"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 <hr />
 <div class="table table-responsive">
     <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Duotas</th>
-                <th scope="col">Vertimas</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("givenTranslation")</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("newTranslationWord")</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Duotas</th>
-                <th scope="col">Vertimas</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("givenTranslation")</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("newTranslationWord")</th>
             </tr>
         </tfoot>
     </table>

@@ -10,5 +10,6 @@ namespace translate.web.ViewModels
     {
         public int OpenTranslations { get; set; }
         public int ClosedTtranslations { get; set; }
+        public int WaitingTranslations { get; set; }
     }
 }

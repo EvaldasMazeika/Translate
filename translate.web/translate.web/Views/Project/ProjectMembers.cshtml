@@ -1,23 +1,25 @@
 ﻿@model IEnumerable<ProjectMember>
 
-<a asp-controller="Project" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<a asp-controller="Project" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 
 @if (ViewBag.creator)
 {
-    <button type="button" id="addMember" class="btn btn-primary" data-toggle="modal" data-target="#AddmemberModal" data-whatever="@ViewBag.project">Pakviesti</button>
+    <button type="button" id="addMember" class="btn btn-primary" data-toggle="modal" data-target="#AddmemberModal" data-whatever="@ViewBag.project">@SharedLocalizer.GetLocalizedHtmlString("inviteToProject")</button>
 }
 
 <hr />
 <div class="row">
     <div class="col-md-12">
         <div id="alerti"></div>
-        <h2>Visi projekto dalyviai</h2>
+        <h2>@SharedLocalizer.GetLocalizedHtmlString("allProjectMembers")</h2>
         <div class="table table-responsive">
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th scope="col">Vardas pavardė</th>
-                        <th scope="col">Prisijungė</th>
+                        <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("nameSurname")</th>
+                        <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("joinDate")</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -50,17 +52,17 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                    <h5 class="modal-title" id="ModalLabel">@SharedLocalizer.GetLocalizedHtmlString("deletionTitle")</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Ar tikrai norite pašalinti žmogų iš projekto?</p>
+                    <p>@SharedLocalizer.GetLocalizedHtmlString("memberDeletionBody")</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
-                    <button id="deleteMember" type="button" class="btn btn-primary">Taip</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("noButton")</button>
+                    <button id="deleteMember" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("yesButton")</button>
                 </div>
             </div>
         </div>
@@ -70,24 +72,24 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">Pakviesti į projektą</h5>
+                    <h5 class="modal-title" id="ModalLabel">@SharedLocalizer.GetLocalizedHtmlString("inviteToProject")</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Naudokite el. pašto adresą, jei toks vartotojas egzistuoja, jis gaus pakvietimą.</p>
+                    <p>@SharedLocalizer.GetLocalizedHtmlString("inviteToProjectBody")</p>
                     <form>
                         <input type="hidden" id="projectid" name="projectid" value="@ViewBag.project">
                         <div class="form-group">
-                            <label for="Email" class="col-form-label">El. paštas</label>
+                            <label for="Email" class="col-form-label">@SharedLocalizer.GetLocalizedHtmlString("emailAddress")</label>
                             <input type="email" name="Email" class="form-control" id="elpastas">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
-                    <button id="addToProject" type="button" class="btn btn-primary">Siųsti</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("cancelButton")</button>
+                    <button id="addToProject" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("sendButton")</button>
                 </div>
             </div>
         </div>
@@ -157,7 +159,7 @@
                 success: function (result) {
                     jQuery('#AddmemberModal').modal('hide');
                     jQuery("#alerti").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
-              Pakvietimas sėkmingai išsiųstas
+              @SharedLocalizer.GetLocalizedHtmlString("successSend")
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -168,7 +170,7 @@
 
                     jQuery('#AddmemberModal').modal('hide');
                     jQuery("#alerti").append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
-          Įvyko klaida
+          @SharedLocalizer.GetLocalizedHtmlString("errorOcurred")
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

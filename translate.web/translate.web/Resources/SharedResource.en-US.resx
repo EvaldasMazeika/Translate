@@ -543,4 +543,220 @@
   <data name="september" xml:space="preserve">
     <value>September</value>
   </data>
+  <data name="addDocumentButton" xml:space="preserve">
+    <value>Add new document</value>
+  </data>
+  <data name="addedDate" xml:space="preserve">
+    <value>Date added</value>
+  </data>
+  <data name="addTranslationTitle" xml:space="preserve">
+    <value>Add translation</value>
+  </data>
+  <data name="allProjectDocuments" xml:space="preserve">
+    <value>All project documents</value>
+  </data>
+  <data name="allProjectMembers" xml:space="preserve">
+    <value>All project members</value>
+  </data>
+  <data name="allTranslations" xml:space="preserve">
+    <value>All translations</value>
+  </data>
+  <data name="appointed" xml:space="preserve">
+    <value>Appointed</value>
+  </data>
+  <data name="approve" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="approveTranslation" xml:space="preserve">
+    <value>Approve translation</value>
+  </data>
+  <data name="cancelButton" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="closed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="continueButton" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="deleteButton" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="deleteTranslateBody" xml:space="preserve">
+    <value>Are you sure want to delete translation from project?</value>
+  </data>
+  <data name="documentLanguage" xml:space="preserve">
+    <value>Document language</value>
+  </data>
+  <data name="documentRemovalBody" xml:space="preserve">
+    <value>Are you sure want to delete this document? Everything related will be deleted too...</value>
+  </data>
+  <data name="documentTitle" xml:space="preserve">
+    <value>Document</value>
+  </data>
+  <data name="download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="emailAddress" xml:space="preserve">
+    <value>E-mail address</value>
+  </data>
+  <data name="errorOcurred" xml:space="preserve">
+    <value>Error occurred</value>
+  </data>
+  <data name="example" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="finishTranslation" xml:space="preserve">
+    <value>Finish Translation</value>
+  </data>
+  <data name="givenTranslation" xml:space="preserve">
+    <value>Given meaning</value>
+  </data>
+  <data name="inviteToProject" xml:space="preserve">
+    <value>Invite to project</value>
+  </data>
+  <data name="inviteToProjectBody" xml:space="preserve">
+    <value>Enter existing E-mail address</value>
+  </data>
+  <data name="joinDate" xml:space="preserve">
+    <value>Join date</value>
+  </data>
+  <data name="key" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="leftToTranslate" xml:space="preserve">
+    <value>Left to translate</value>
+  </data>
+  <data name="maxDocSize" xml:space="preserve">
+    <value>Document max size: 10MB</value>
+  </data>
+  <data name="memberDeletionBody" xml:space="preserve">
+    <value>Are you sure want to remove member from project?</value>
+  </data>
+  <data name="myTranslations" xml:space="preserve">
+    <value>My translations</value>
+  </data>
+  <data name="nameSurname" xml:space="preserve">
+    <value>First name last name</value>
+  </data>
+  <data name="newDocAddition" xml:space="preserve">
+    <value>New Document upload</value>
+  </data>
+  <data name="newFileName" xml:space="preserve">
+    <value>Give new file name</value>
+  </data>
+  <data name="newTranslation" xml:space="preserve">
+    <value>Add new translation</value>
+  </data>
+  <data name="newTranslationTitle" xml:space="preserve">
+    <value>New translation</value>
+  </data>
+  <data name="newTranslationWord" xml:space="preserve">
+    <value>New meaning</value>
+  </data>
+  <data name="next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="noDucumentsTitle" xml:space="preserve">
+    <value>Project doesn't have any documents</value>
+  </data>
+  <data name="notEmpty" xml:space="preserve">
+    <value>Cannot be empty</value>
+  </data>
+  <data name="notranslationsTitle" xml:space="preserve">
+    <value>Project doesn't have any translations</value>
+  </data>
+  <data name="notTranslated" xml:space="preserve">
+    <value>Not translated</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="projectMembers" xml:space="preserve">
+    <value>Project members</value>
+  </data>
+  <data name="reject" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="rejectTranslation" xml:space="preserve">
+    <value>Reject translation</value>
+  </data>
+  <data name="saveButton" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="successSend" xml:space="preserve">
+    <value>Invitation succesfully sent</value>
+  </data>
+  <data name="totalwordsTranslated" xml:space="preserve">
+    <value>Total words translated</value>
+  </data>
+  <data name="translated" xml:space="preserve">
+    <value>Translated</value>
+  </data>
+  <data name="translatedDocs" xml:space="preserve">
+    <value>Translated documents</value>
+  </data>
+  <data name="translatingFrom" xml:space="preserve">
+    <value>Translating from</value>
+  </data>
+  <data name="translatingTo" xml:space="preserve">
+    <value>Translating to</value>
+  </data>
+  <data name="translationsFilter" xml:space="preserve">
+    <value>Translations filter</value>
+  </data>
+  <data name="translationsLink" xml:space="preserve">
+    <value>Translations</value>
+  </data>
+  <data name="translator" xml:space="preserve">
+    <value>Translator</value>
+  </data>
+  <data name="uploadButton" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="verify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="waitingForApproval" xml:space="preserve">
+    <value>Waiting for approval</value>
+  </data>
+  <data name="wordsTranslated" xml:space="preserve">
+    <value>Words translated</value>
+  </data>
+  <data name="writeReason" xml:space="preserve">
+    <value>Write a reason why</value>
+  </data>
+  <data name="waiting" xml:space="preserve">
+    <value>Waiting</value>
+  </data>
+  <data name="cantTranslateToSameLang" xml:space="preserve">
+    <value>Cannot be translated to the same language</value>
+  </data>
+  <data name="docexists" xml:space="preserve">
+    <value>This document already exists</value>
+  </data>
+  <data name="documentUpload" xml:space="preserve">
+    <value>Document successfully uploaded</value>
+  </data>
+  <data name="existTranslation" xml:space="preserve">
+    <value>Same translation already exists</value>
+  </data>
+  <data name="falseFormat" xml:space="preserve">
+    <value>This format is not compatible for now</value>
+  </data>
+  <data name="formatsValidation" xml:space="preserve">
+    <value>Formats are incompatible</value>
+  </data>
+  <data name="maxSizeValidation" xml:space="preserve">
+    <value>File can't exceed 10MB size</value>
+  </data>
+  <data name="noDocAttached" xml:space="preserve">
+    <value>No document is attached</value>
+  </data>
 </root>

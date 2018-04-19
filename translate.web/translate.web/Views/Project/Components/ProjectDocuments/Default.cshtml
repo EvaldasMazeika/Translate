@@ -1,12 +1,15 @@
 ﻿@model IEnumerable<DocumentsViewModel>
+
+@inject translate.web.Resources.LocService SharedLocalizer
+
 <div class="card">
     <div class="card-header">
-        <a asp-controller="Project" asp-action="ProjectDocuments">Dokumentai</a>
+        <a asp-controller="Project" asp-action="ProjectDocuments">@SharedLocalizer.GetLocalizedHtmlString("documentsTitle")</a>
     </div>
     <div class="card-body">
         @if (!Model.Any())
         {
-            <p class="text-warning text-center">Nėra įkelta dokumentų</p>
+            <p class="text-warning text-center">@SharedLocalizer.GetLocalizedHtmlString("noDucumentsTitle")</p>
         }
         else
         {
@@ -27,7 +30,7 @@
                 }
             </ul>
         }
-        <a class="btn btn-primary btn-sm btn-block" asp-controller="Project" asp-action="NewDocument">Pridėti dokumentą</a>
+        <a class="btn btn-primary btn-sm btn-block" asp-controller="Project" asp-action="NewDocument">@SharedLocalizer.GetLocalizedHtmlString("addDocumentButton")</a>
     </div>
 </div>
 
@@ -43,11 +46,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Ar tikrai norite pašalinti dokumentą iš projekto? Išsitrins visi su juo susiję duomenys visam laikui...</p>
+                    <p>@SharedLocalizer.GetLocalizedHtmlString("documentRemovalBody")</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
-                    <button id="deleteDocument" type="button" class="btn btn-primary">Taip</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("noButton")</button>
+                    <button id="deleteDocument" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("yesButton")</button>
                 </div>
             </div>
         </div>
@@ -81,7 +84,6 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
-                       // alert(result);
                         location.reload();
                     },
                     error: function (result) { }

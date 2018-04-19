@@ -2,10 +2,11 @@
 
 
 @inject translate.web.Data.ApplContext context
+@inject translate.web.Resources.LocService SharedLocalizer
 
 <div class="card">
     <div class="card-header">
-        <a asp-controller="Project" asp-action="ProjectMembers">Projekto dalyviai</a>
+        <a asp-controller="Project" asp-action="ProjectMembers">@SharedLocalizer.GetLocalizedHtmlString("projectMembers")</a>
     </div>
     <div class="card-body">
         <div id="alerti"></div>
@@ -24,7 +25,7 @@
                     }
                 }
             </ul>
-            <button type="button" id="addMember" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#AddmemberModal" data-whatever="@Model.ProjectId">Pakviesti prie projekto</button>
+            <button type="button" id="addMember" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#AddmemberModal" data-whatever="@Model.ProjectId">@SharedLocalizer.GetLocalizedHtmlString("inviteToProject")</button>
         }
         else
         {
@@ -51,17 +52,17 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                    <h5 class="modal-title" id="ModalLabel">@SharedLocalizer.GetLocalizedHtmlString("deletionTitle")</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Ar tikrai norite pašalinti žmogų iš projekto?</p>
+                    <p>@SharedLocalizer.GetLocalizedHtmlString("memberDeletionBody")</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
-                    <button id="deleteMember" type="button" class="btn btn-primary">Taip</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("noButton")</button>
+                    <button id="deleteMember" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("yesButton")</button>
                 </div>
             </div>
         </div>
@@ -72,27 +73,26 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">Pakviesti į projektą</h5>
+                    <h5 class="modal-title" id="ModalLabel">@SharedLocalizer.GetLocalizedHtmlString("inviteToProject")</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Naudokite el. pašto adresą, jei toks vartotojas egzistuoja, jis gaus pakvietimą.</p>
+                    <p>@SharedLocalizer.GetLocalizedHtmlString("inviteToProjectBody")</p>
                     <form>
                         <input type="hidden" id="projectid" name="projectid" value="@Model.ProjectId">
                         <div class="form-group">
-                            <label asp-for="Email" class="col-form-label">El. paštas</label>
+                            <label asp-for="Email" class="col-form-label"></label>
                             <input type="text" asp-for="Email" class="form-control" id="elpastas">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
-                    <button id="addToProject" type="button" class="btn btn-primary">Siųsti</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("cancelButton")</button>
+                    <button id="addToProject" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("sendButton")</button>
                 </div>
             </div>
         </div>
     </div>
 }
-

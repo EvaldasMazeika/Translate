@@ -12,6 +12,7 @@ namespace translate.web.ViewModels
     {
         public Guid ProjectId { get; set; }
 
+        [Display(Name ="emailAddress")]
         public string Email { get; set; }
 
         public IEnumerable<AppIdentityUser> Members { get; set; }

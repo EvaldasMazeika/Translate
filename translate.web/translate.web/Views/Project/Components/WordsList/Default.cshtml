@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<TranslationDictionary>
-
+@inject translate.web.Resources.LocService SharedLocalizer
 
 @{
     var prevDisabled = ViewBag.previous == false ? "disabled" : "";
@@ -11,19 +11,19 @@
     <div class="card-header" style="height: 57px;">
         <div class="row">
             <div class="col">
-                Liko išversti:  <strong>@ViewBag.toTranslate</strong>
+                @SharedLocalizer.GetLocalizedHtmlString("leftToTranslate"):  <strong>@ViewBag.toTranslate</strong>
                 @if (ViewBag.toTranslate == 0)
                 {
                     <form asp-controller="Project" asp-action="CompleteTranslation" method="post" style="display:inline-flex">
                         <input type="hidden" name="transId" value="@ViewBag.trans" />
-                        <button type="submit" class="btn btn-dark btn-sm">Baigti versti</button>
+                        <button type="submit" class="btn btn-dark btn-sm">@SharedLocalizer.GetLocalizedHtmlString("finishTranslation")</button>
                     </form>
 
                 }
                 <nav aria-label="Page navigation example" style="float: right; margin-bottom: 0px;">
                     <ul class="pagination" id="buttonList">
-                        <li class="page-item   @prevDisabled"><a id="goBack" data-page="0" class="page-link" href="#">Previous</a></li>
-                        <li class="page-item @nextDisabled"><a id="goForward" data-page="2" class="page-link" href="#">Next</a></li>
+                        <li class="page-item   @prevDisabled"><a id="goBack" data-page="0" class="page-link" href="#">@SharedLocalizer.GetLocalizedHtmlString("previous")</a></li>
+                        <li class="page-item @nextDisabled"><a id="goForward" data-page="2" class="page-link" href="#">@SharedLocalizer.GetLocalizedHtmlString("next")</a></li>
                     </ul>
                 </nav>
             </div>

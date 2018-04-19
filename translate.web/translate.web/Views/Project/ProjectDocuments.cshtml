@@ -1,12 +1,14 @@
 ﻿@model IEnumerable<ProjectDocument>
 
-<a asp-controller="Project" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
-<a asp-controller="Project" asp-action="NewDocument" class="btn btn-primary">Pridėti dokumentą</a>
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<a asp-controller="Project" asp-action="Index" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
+<a asp-controller="Project" asp-action="NewDocument" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("addDocumentButton")</a>
 <hr />
-<h2>Visi projekto dokumentai</h2>
+<h2>@SharedLocalizer.GetLocalizedHtmlString("allProjectDocuments")</h2>
 @if (!Model.Any())
 {
-    <h2 class="text-warning text-center">Nėra pridėta dokumentų</h2>
+    <h2 class="text-warning text-center">@SharedLocalizer.GetLocalizedHtmlString("noDucumentsTitle")</h2>
 }
 else
 {
@@ -14,8 +16,8 @@ else
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">Pavadinimas</th>
-                    <th scope="col">Pridėta</th>
+                    <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("postTitle")</th>
+                    <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("addedDate")</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -46,17 +48,17 @@ else
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel">Pašalinimas</h5>
+                    <h5 class="modal-title" id="ModalLabel">@SharedLocalizer.GetLocalizedHtmlString("deletionTitle")</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Ar tikrai norite pašalinti dokumentą iš projekto? Išsitrins visi su juo susiję duomenys visam laikui...</p>
+                    <p>@SharedLocalizer.GetLocalizedHtmlString("documentRemovalBody")</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
-                    <button id="deleteDocument" type="button" class="btn btn-primary">Taip</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("noButton")</button>
+                    <button id="deleteDocument" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("yesButton")</button>
                 </div>
             </div>
         </div>

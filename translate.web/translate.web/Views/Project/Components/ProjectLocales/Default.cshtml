@@ -1,19 +1,21 @@
 ﻿@model IEnumerable<Translation>
 
+@inject translate.web.Resources.LocService SharedLocalizer
+
 <div class="card">
     <div class="card-header">
-        <a asp-controller="Project" asp-action="Translations">Vertimai</a>
+        <a asp-controller="Project" asp-action="Translations">@SharedLocalizer.GetLocalizedHtmlString("translationsLink")</a>
     </div>
     <div class="card-body">
         @if (!Model.Any())
         {
-            <p class="text-warning text-center">Neturite vertimų</p>
+            <p class="text-warning text-center">@SharedLocalizer.GetLocalizedHtmlString("notranslationsTitle")</p>
         }
         else
         {
             <div class="row">
                 <div class="col-md-6">
-                    Išverta dokumentų: @Model.Where(x => x.IsCompleted == true).Count() / @Model.Count()
+                    @SharedLocalizer.GetLocalizedHtmlString("translatedDocs"): @Model.Where(x => x.IsCompleted == true).Count() / @Model.Count()
                 </div>
 
                 <div class="col-md-6">
@@ -24,23 +26,23 @@
                             total += item.TranslationDictionarys.Where(x => x.NewValue != null).Count();
                         }
                     }
-                    Išversta žodžių iš viso: @total
+                    @SharedLocalizer.GetLocalizedHtmlString("totalwordsTranslated"): @total
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    Laukiama pativirtinimo: @Model.Where(x => x.IsWaiting == true).Count()
+                    @SharedLocalizer.GetLocalizedHtmlString("waitingForApproval"): @Model.Where(x => x.IsWaiting == true).Count()
                 </div>
             </div>
             <br />
         }
         @if (ViewBag.exist)
         {
-            <a class="btn btn-primary btn-sm btn-block" asp-controller="Project" asp-action="NewLocale">Pridėti vertimą</a>
+            <a class="btn btn-primary btn-sm btn-block" asp-controller="Project" asp-action="NewLocale">@SharedLocalizer.GetLocalizedHtmlString("newTranslation")</a>
         }
         else
         {
-            <a class="btn btn-primary btn-sm btn-block disabled">Pridėti vertimą</a>
+            <a class="btn btn-primary btn-sm btn-block disabled">@SharedLocalizer.GetLocalizedHtmlString("newTranslation")</a>
         }
 
     </div>

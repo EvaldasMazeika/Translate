@@ -1,5 +1,8 @@
 ﻿@model Translation
-<a class="btn btn-info" asp-controller="Project" asp-action="Index"><i class="fa fa-angle-double-left"></i> Grįžti atgal</a>
+
+@inject translate.web.Resources.LocService SharedLocalizer
+
+<a class="btn btn-info" asp-controller="Project" asp-action="Index"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 <hr />
 <div class="row">
     <div class="col-md-2">
@@ -9,8 +12,8 @@
         <small>@Model.Description</small>
     </div>
     <div class="col-md-4">
-        <p style="margin-bottom: 0px;">Verčiama iš: <strong>@Model.Document.Language.Name</strong></p>
-        <p style="margin-bottom: 0px;">Verčiama į: <strong>@Model.Language.Name</strong></p>
+        <p style="margin-bottom: 0px;">@SharedLocalizer.GetLocalizedHtmlString("translatingFrom"): <strong>@Model.Document.Language.Name</strong></p>
+        <p style="margin-bottom: 0px;">@SharedLocalizer.GetLocalizedHtmlString("translatingTo"): <strong>@Model.Language.Name</strong></p>
     </div>
     @if (Model.DeclineComment != null)
     {

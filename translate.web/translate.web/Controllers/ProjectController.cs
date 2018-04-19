@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using translate.web.Data;
 using translate.web.Models;
+using translate.web.Resources;
 using translate.web.ViewModels;
 
 namespace translate.web.Controllers
@@ -31,17 +32,20 @@ namespace translate.web.Controllers
         private readonly ILogger<ProjectController> _logger;
         private readonly IHostingEnvironment _environment;
         private readonly IFileProvider _fileProvider;
+        private readonly LocService _locService;
 
         public ProjectController(UserManager<AppIdentityUser> userManager,
             ApplContext context, ILogger<ProjectController> logger,
             IHostingEnvironment environment,
-            IFileProvider fileProvider)
+            IFileProvider fileProvider,
+            LocService locService)
         {
             _userManager = userManager;
             _context = context;
             _logger = logger;
             _environment = environment;
             _fileProvider = fileProvider;
+            _locService = locService;
         }
 
         [Route("")]
@@ -179,7 +183,7 @@ namespace translate.web.Controllers
 
                 if (doc.LanguageId == lang.Id)
                 {
-                    TempData["message"] = "Negalima versti į tą pačią kalbą";
+                    TempData["message"] = $"{_locService.GetLocalizedHtmlString("cantTranslateToSameLang")}";
                     return RedirectToAction("NewLocale");
                 }
 
@@ -188,7 +192,7 @@ namespace translate.web.Controllers
 
                 if (exist != null)
                 {
-                    TempData["message"] = "Toks vertimas jau egzistuoja";
+                    TempData["message"] = $"{_locService.GetLocalizedHtmlString("existTranslation")}";
                     return RedirectToAction("NewLocale");
                 }
 
@@ -301,12 +305,12 @@ namespace translate.web.Controllers
         {
             if (model.File == null || model.File.Length == 0)
             {
-                TempData["message"] = "Nepridėtas dokumentas";
+                TempData["message"] = $"{_locService.GetLocalizedHtmlString("noDocAttached")}";
                 return RedirectToAction("NewDocument");
             }
             if (model.File.Length > 11000000)
             {
-                TempData["message"] = "Failas neturi viršyti 10MB";
+                TempData["message"] = $"{_locService.GetLocalizedHtmlString("maxSizeValidation")}";
                 return RedirectToAction("NewDocument");
             }
 
@@ -319,7 +323,7 @@ namespace translate.web.Controllers
 
             if (ext != docType.Name)
             {
-                TempData["message"] = "Formatai nesutampa";
+                TempData["message"] = $"{_locService.GetLocalizedHtmlString("formatsValidation")}";
                 return RedirectToAction("NewDocument");
             }
 
@@ -339,7 +343,7 @@ namespace translate.web.Controllers
 
             if (exist != null)
             {
-                TempData["message"] = "Toks dokumentas jau egzistuoja";
+                TempData["message"] = $"{_locService.GetLocalizedHtmlString("docexists")}";
                 return RedirectToAction("NewDocument");
             }
 
@@ -352,7 +356,7 @@ namespace translate.web.Controllers
                     await LoadXmlDocumentAsync(projectId, model, docName);
                     return RedirectToAction("NewDocument");
                 default:
-                    TempData["message"] = "Formatas šiuo metu nepalaikomas";
+                    TempData["message"] = $"{_locService.GetLocalizedHtmlString("falseFormat")}";
                     return RedirectToAction("NewDocument");
             }
         }
@@ -399,7 +403,7 @@ namespace translate.web.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    TempData["messo"] = "Dokumentas sėkmingai įkeltas";
+                    TempData["messo"] = $"{_locService.GetLocalizedHtmlString("documentUpload")}";
                 }
             }
         }
@@ -460,7 +464,7 @@ namespace translate.web.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    TempData["messo"] = "Dokumentas sėkmingai įkeltas";
+                    TempData["messo"] = $"{_locService.GetLocalizedHtmlString("documentUpload")}";
                 }
             }
         }
@@ -647,8 +651,9 @@ namespace translate.web.Controllers
         {
             var closed = _context.Translations.Where(w => w.IsCompleted == true && w.Document.ProjectId == ProjectId).Count();
             var open = _context.Translations.Where(w => w.Document.ProjectId == ProjectId && w.IsCompleted == false).Count();
+            var waiting = _context.Translations.Where(w => w.IsWaiting == true && w.Document.ProjectId == ProjectId).Count();
 
-            var result = new TranslationsDocsViewModel { ClosedTtranslations = closed, OpenTranslations = open };
+            var result = new TranslationsDocsViewModel { ClosedTtranslations = closed, OpenTranslations = open, WaitingTranslations = waiting };
 
             string json = JsonConvert.SerializeObject(result);
             return new JsonResult(json);

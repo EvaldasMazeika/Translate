@@ -30,19 +30,19 @@
             if (type == "deleteTranslation") {
                 var translationId = button.getAttribute("translate");
 
-                            jQuery.ajax({
-                type: 'post',
-                url: '/Project/@ViewBag.projectId/DeleteTranslation',
-                data: JSON.stringify({
-                    Id: translationId
-                }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (result) {
-                    location.reload();
-                },
-                error: function (result) { }
-            });
+                jQuery.ajax({
+                    type: 'post',
+                    url: '/Project/@ViewBag.projectId/DeleteTranslation',
+                    data: JSON.stringify({
+                        Id: translationId
+                    }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (result) {
+                        location.reload();
+                    },
+                    error: function (result) { }
+                });
 
             }
 
@@ -61,11 +61,15 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (result) {
-                        jQuery("#localesList").load("/Project/@ViewBag.projectId/ReloadLocalesListAsync");
+
+                        jQuery("#localesList").load("/Project/@ViewBag.projectId/ReloadLocalesListAsync", function (responseTxt, statusTxt, xhr) {
+                            jQuery('#cogSpin').hide();
+                        });
                     },
                     error: function (result) {
-
-
+                    },
+                    beforeSend: function () {
+                        jQuery('#cogSpin').show();
                     }
                 });
 
@@ -117,7 +121,7 @@
                 var memberId = button.getAttribute('data-whatever');
                 var projectId = button.getAttribute('data-project');
                 var modal = jQuery('#DeleteMemberModal');
-                modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + memberName + ' iš projekto?');
+               // modal.find('.modal-body').text('Ar tikrai norite pašalinti ' + memberName + ' iš projekto?');
                 modal.find('#deleteMember').data("whatever", memberId);
                 modal.find('#deleteMember').data("project", projectId);
 

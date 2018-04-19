@@ -1,7 +1,9 @@
 ﻿@model TranslationDictionary
+@inject translate.web.Resources.LocService SharedLocalizer
+
 <div class="card">
     <div class="card-header">
-        <p style="float:left">Raktas: <strong>@Model.Name</strong></p><p style="float:right">Reikšmė: <strong>@Model.GivenValue</strong></p>
+        <p style="float:left">@SharedLocalizer.GetLocalizedHtmlString("key"): <strong>@Model.Name</strong></p><p style="float:right">@SharedLocalizer.GetLocalizedHtmlString("value"): <strong>@Model.GivenValue</strong></p>
     </div>
     <div class="card-body">
         <form>
@@ -9,7 +11,7 @@
                 <textarea id="textarea" class="form-control" rows="3">@Model.NewValue</textarea>
             </div>
             <button id="getTranslation" class="btn btn-danger">Yandex</button>
-            <button id="addWord" type="submit" class="btn btn-success" style="float:right">Išsaugoti</button>
+            <button id="addWord" type="submit" class="btn btn-success" style="float:right">@SharedLocalizer.GetLocalizedHtmlString("saveButton")</button>
         </form>
     </div>
 </div>
@@ -41,7 +43,7 @@
         var imput = jQuery('#textarea').val();
 
         if (jQuery.trim(imput) == '') {
-            alert('negali buti tuscia');
+            alert('@SharedLocalizer.GetLocalizedHtmlString("notEmpty")');
         } else {
 
             jQuery.ajax({
