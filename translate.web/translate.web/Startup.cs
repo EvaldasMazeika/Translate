@@ -129,10 +129,10 @@ namespace translate.web
                 };
             });
 
-            //services.Configure<MvcOptions>(options =>
-            //{
-            //    options.Filters.Add(new RequireHttpsAttribute());
-            //});
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new RequireHttpsAttribute());
+            });
 
 
             services.AddMvc();
@@ -155,9 +155,9 @@ namespace translate.web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-           // var optionss = new RewriteOptions().AddRedirectToHttps();
+            var optionss = new RewriteOptions().AddRedirectToHttps();
 
-           // app.UseRewriter(optionss);
+            app.UseRewriter(optionss);
 
             var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);

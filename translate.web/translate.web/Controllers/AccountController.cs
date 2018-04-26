@@ -161,7 +161,7 @@ namespace translate.web.Controllers
                 IdentityResult result = await _userManager.CreateAsync(user, model.Password);
                 if(result.Succeeded)
                 {
-                    if(_userManager.Users.Count() == 1) // jei zmogus pirmas, skiriam jam admino teises (kazkodel, kaip tuscia rodo 1)
+                    if(_userManager.Users.Count() == 1)
                     {
                         AppIdentityRole role = await _roleManager.FindByNameAsync("Administrator");
                         if(role != null)
@@ -187,6 +187,7 @@ namespace translate.web.Controllers
                     }
                 }
             }
+            ModelState.AddModelError(string.Empty, $"{_loc.GetLocalizedHtmlString("errorOcurred")}");
             return View(model);
         }
 
