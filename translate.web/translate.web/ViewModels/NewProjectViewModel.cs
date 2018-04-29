@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace translate.web.ViewModels
 {
@@ -18,6 +19,13 @@ namespace translate.web.ViewModels
         [Display(Name = "newProjectDescription")]
         [MaxLength(100, ErrorMessage = "tooLong")]
         public string Description { get; set; }
+
+
+        [DataType(DataType.Upload)]
+        public IFormFile File { get; set; }
+
+        [Display(Name = "documentLanguage")]
+        public Guid LanguageId { get; set; }
 
     }
 }

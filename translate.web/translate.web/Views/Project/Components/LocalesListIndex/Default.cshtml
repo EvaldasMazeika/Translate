@@ -6,10 +6,14 @@
 
 @if (!Model.Any())
 {
+    <a class="btn btn-primary" asp-controller="Project" asp-action="ProjectDocument" role="button">Pradinis dokumentas</a>
+    <hr />
     <h2 class="text-warning text-center">@SharedLocalizer.GetLocalizedHtmlString("addTranslationTitle")</h2>
 }
 else
 {
+    <a class="btn btn-primary" asp-controller="Project" asp-action="ProjectDocument" role="button">Pradinis dokumentas</a>
+    <hr />
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>

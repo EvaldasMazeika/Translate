@@ -33,6 +33,7 @@ namespace translate.web.Data
             {
                 DateCreated = DateTime.Now,
                 Name = "Administrator",
+                NormalizedName = "ADMINISTRATOR",
                 Description = "site role"
             };
             context.Roles.Add(adminRole);
@@ -41,6 +42,7 @@ namespace translate.web.Data
             {
                 DateCreated = DateTime.Now,
                 Name = "Translator",
+                NormalizedName = "TRANSLATOR",
                 Description = "translator role"
             };
             context.Roles.Add(translateRole);

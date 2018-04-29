@@ -351,10 +351,10 @@ namespace translate.web.Controllers
             {
                 case ".resx":
                     await LoadResxDocumentAsync(projectId, model, docName);
-                    return RedirectToAction("NewDocument");
+                    return RedirectToAction("ProjectDocument");
                 case ".xml":
                     await LoadXmlDocumentAsync(projectId, model, docName);
-                    return RedirectToAction("NewDocument");
+                    return RedirectToAction("ProjectDocument");
                 default:
                     TempData["message"] = $"{_locService.GetLocalizedHtmlString("falseFormat")}";
                     return RedirectToAction("NewDocument");
@@ -401,9 +401,14 @@ namespace translate.web.Controllers
                         _context.Add(dictionary);
                     }
 
+                    var pro = _context.Projects.Where(w => w.Id == projectId).FirstOrDefault();
+                    pro.HasDocument = true;
+
+                    _context.Update(pro);
+
                     await _context.SaveChangesAsync();
 
-                    TempData["messo"] = $"{_locService.GetLocalizedHtmlString("documentUpload")}";
+                   // TempData["messo"] = $"{_locService.GetLocalizedHtmlString("documentUpload")}";
                 }
             }
         }
@@ -793,6 +798,98 @@ namespace translate.web.Controllers
             return ViewComponent("LocalesListIndex", new { ProjectId = projectId });
         }
 
+        [Route("ProjectDocument")]
+        [HttpGet]
+        public IActionResult ProjectDocument(Guid projectId)
+        {
+            var hasDoc = _context.Projects.Where(w => w.Id == projectId)
+                .Include(i=>i.ProjectDocument)
+                    .ThenInclude(t=>t.Language)
+                .FirstOrDefault();
+
+            var lang = "";
+            if (hasDoc.HasDocument == true)
+            {
+                lang = hasDoc.ProjectDocument.Language.Name;
+            }
+
+            PrDocViewModel model = new PrDocViewModel { HasDoc = hasDoc.HasDocument, Language = lang };
+
+            ViewBag.projectId = projectId;
+            PopulateDocumentsTypesDropDown();
+
+            return View(model);
+        }
+
+        [Route("GetDocWordsAsync")]
+        [HttpGet]
+        public IActionResult GetDocWordsAsync(Guid projectId)
+        {
+            var model = _context.ProjectDocumentDictionarys.Where(w => w.Document.ProjectId == projectId).ToList();
+
+            var result = model.Select(s => new { key = s.Name, value = s.Value }).ToList();
+
+            return new JsonResult(result);
+        }
+
+        [Route("DownloadDocAsync")]
+        public IActionResult DownloadDocAsync(Guid projectId, [FromQuery] DownloadDocViewModel model)
+        {
+            var extension = _context.DocumentTypes.Where(w => w.Id == model.ExtensionId).FirstOrDefault();
+            var docId = _context.Projects.Where(w => w.Id == projectId)
+                .Include(i=>i.ProjectDocument)
+                .FirstOrDefault().ProjectDocument.Id;
+
+            switch (extension.Name)
+            {
+                case ".xml":
+                    return DownloadXmlAjax(projectId, docId, model.Title);
+                default:
+                    return BadRequest();
+            }
+        }
+
+        private IActionResult DownloadXmlAjax(Guid projectId, Guid docId, string title)
+        {
+            //var projectDocument = _context.ProjectDocuments.Where(x => x.Id == id).SingleOrDefault();
+
+            XmlDocument doc = new XmlDocument();
+
+            XmlDeclaration xmldecl;
+            xmldecl = doc.CreateXmlDeclaration("1.0", null, null);
+            xmldecl.Encoding = "utf-8";
+
+            doc.AppendChild(xmldecl);
+
+            XmlElement root = doc.CreateElement("root");
+            doc.AppendChild(root);
+
+            var dictionary = _context.ProjectDocumentDictionarys.Where(w => w.DocumentId == docId).ToList();
+
+            foreach (var item in dictionary)
+            {
+                XmlElement trans = doc.CreateElement("data");
+                var atrName = doc.CreateAttribute("name");
+                atrName.Value = item.Name;
+                trans.Attributes.Append(atrName);
+                var word = doc.CreateElement("value");
+                word.InnerText = item.Value;
+                trans.AppendChild(word);
+                root.AppendChild(trans);
+            }
+
+            MemoryStream stream = new MemoryStream();
+            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
+            writer.Formatting = System.Xml.Formatting.Indented;
+            writer.Indentation = 2;
+
+            doc.WriteTo(writer);
+            writer.Flush();
+
+            stream.Position = 0;
+
+            return File(stream, "text/xml", $"{title}.xml");
+        }
 
         [HttpGet]
         [Route("DownloadDoc")]

@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using translate.web.Data;
 using translate.web.Models;
@@ -215,7 +217,16 @@ namespace translate.web.Controllers
         [HttpGet]
         public IActionResult NewProject()
         {
+            PopulateLanguagesDropDown();
             return View();
+        }
+
+        private void PopulateLanguagesDropDown(object selected = null)
+        {
+            var query = from d in _context.Languages
+                        orderby d.Name
+                        select d;
+            ViewBag.LanguageId = new SelectList(query.AsNoTracking(), "Id", "Name", selected);
         }
 
         [HttpPost]
@@ -223,11 +234,45 @@ namespace translate.web.Controllers
         {
             if (ModelState.IsValid)
             {
+                bool hasDoc = false;
+                var docName = "";
+
+                if (model.File != null)
+                {
+                    if (model.File.Length > 11000000)
+                    {
+                        ModelState.AddModelError(String.Empty, "File too large.");
+                        return View(model);
+                    }
+
+                    var extArray = model.File.FileName.Split(".");
+                    var ext = $".{extArray.Last()}";
+
+                    if (ext != ".xml")
+                    {
+                        ModelState.AddModelError(String.Empty, "Supporinting only xml");
+                        return View(model);
+                    }
+
+                    if (model.File.FileName.Contains("\\"))
+                    {
+                        var array = model.File.FileName.Split("\\");
+                        docName = array.Last();
+                    }
+                    else
+                    {
+                        docName = model.File.FileName;
+                    }
+
+                    hasDoc = true;
+                }
+
                 var result = new Project
                 {
                     Name = model.Name,
                     Description = model.Description,
-                    CreateDate = DateTime.Now
+                    CreateDate = DateTime.Now,
+                    HasDocument = hasDoc
                 };
 
                 _context.Add(result);
@@ -244,12 +289,65 @@ namespace translate.web.Controllers
                 };
 
                 _context.Add(creator);
-
                 await _context.SaveChangesAsync();
+                // add words if has doc
+                if (hasDoc == true)
+                {
+                    await LoadXmlDocumentAsync(result.Id, model, docName);
+                }
+
+               
                 return RedirectToAction("Projects");
             }
 
             return View(model);
+        }
+
+        private async Task LoadXmlDocumentAsync(Guid projectId, NewProjectViewModel model, string docName)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await model.File.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
+                XmlDocument docs = new XmlDocument();
+                docs.Load(memoryStream);
+                XmlNodeList dataNodes = docs.GetElementsByTagName("data");
+
+                var lang = await _context.Languages.Where(w => w.Id == model.LanguageId).SingleOrDefaultAsync();
+                var project = await _context.Projects.Where(x => x.Id == projectId).SingleOrDefaultAsync();
+                var doc = await _context.DocumentTypes.Where(w => w.Name == ".xml").SingleOrDefaultAsync();
+
+                var projectDocument = new ProjectDocument
+                {
+                    Name = docName,
+                    Language = lang,
+                    Project = project,
+                    DocumentType = doc,
+                    AddedDate = DateTime.Now
+                };
+
+                _context.Add(projectDocument);
+
+                if (_context.SaveChanges() > 0)
+                {
+                    foreach (XmlNode item in dataNodes)
+                    {
+                        var nodeId = item.Attributes["name"].Value;
+                        var nodeValue = item.SelectSingleNode("value").InnerText;
+                        var dictionary = new ProjectDocumentDictionary
+                        {
+                            Document = projectDocument,
+                            Name = nodeId,
+                            Value = nodeValue
+                        };
+                        _context.Add(dictionary);
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                   // TempData["messo"] = $"{_locService.GetLocalizedHtmlString("documentUpload")}";
+                }
+            }
         }
 
         [HttpPost]

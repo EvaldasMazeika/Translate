@@ -2,7 +2,7 @@
 
 @inject translate.web.Resources.LocService SharedLocalizer
 
-<a asp-controller="Project" asp-action="ProjectDocuments" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
+<a asp-controller="Project" asp-action="ProjectDocument" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 <hr />
 @if (TempData["message"] != null)
 {

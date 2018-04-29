@@ -11,9 +11,10 @@ using translate.web.Data;
 namespace translate.web.Migrations
 {
     [DbContext(typeof(ApplContext))]
-    partial class ApplContextModelSnapshot : ModelSnapshot
+    [Migration("20180429170602_update1")]
+    partial class update1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,8 +283,7 @@ namespace translate.web.Migrations
 
                     b.HasIndex("LanguageId");
 
-                    b.HasIndex("ProjectId")
-                        .IsUnique();
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectDocuments");
                 });
@@ -449,8 +449,8 @@ namespace translate.web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("translate.web.Models.Project", "Project")
-                        .WithOne("ProjectDocument")
-                        .HasForeignKey("translate.web.Models.ProjectDocument", "ProjectId")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

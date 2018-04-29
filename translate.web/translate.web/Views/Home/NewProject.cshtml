@@ -5,17 +5,32 @@
 <a asp-controller="Home" asp-action="Projects" class="btn btn-info"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
 <hr />
 <h2>@SharedLocalizer.GetLocalizedHtmlString("newProjectTitle"):</h2>
-<form asp-action="NewProject">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+<form asp-controller="Home" asp-action="NewProject" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="File">Pradinis dokumentas (neprivalomas)</label>
+                <input type="file" asp-for="File" class="form-control-file">
+            </div>
+            <div class="form-group">
+                <label asp-for="LanguageId" class="control-label"></label>
+                <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.LanguageId"></select>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Description" class="control-label"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+    
     <button type="submit" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("createButton")</button>
 </form>
