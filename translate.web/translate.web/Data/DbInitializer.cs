@@ -13,10 +13,21 @@ namespace translate.web.Data
         public static void Initialize(ApplContext context)
         {
 
+
             if (context.Roles.Any())
             {
                 return;
             }
+
+            AppIdentityRole app = new AppIdentityRole
+            {
+                DateCreated = DateTime.Now,
+                Name = "Webmaster",
+                NormalizedName = "WEBMASTER",
+                Description = "master role"
+            };
+
+            context.Roles.Add(app);
 
             AppIdentityRole adminRole = new AppIdentityRole
             {

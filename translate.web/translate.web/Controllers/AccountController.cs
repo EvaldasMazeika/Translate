@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
+using translate.web.Data;
 using translate.web.Models;
 using translate.web.Resources;
 using translate.web.Services;
@@ -28,13 +29,15 @@ namespace translate.web.Controllers
         private readonly LocService _loc;
         private readonly IEmailSender _emailSender;
         private readonly IConfiguration _configuration;
+        private readonly ApplContext _context;
 
         public AccountController(SignInManager<AppIdentityUser> signInManager,
             UserManager<AppIdentityUser> userManager,
             RoleManager<AppIdentityRole> roleManager,
             LocService loc,
             IEmailSender emailSender,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ApplContext context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -42,6 +45,7 @@ namespace translate.web.Controllers
             _loc = loc;
             _emailSender = emailSender;
             _configuration = configuration;
+            _context = context;
         }
 
         [HttpGet]
@@ -148,6 +152,21 @@ namespace translate.web.Controllers
                     return View(model);
                 }
 
+                //check for same email
+                var emailExsist = await _userManager.FindByEmailAsync(model.Email);
+                if (emailExsist != null)
+                {
+                    ModelState.AddModelError(string.Empty, $"Account with same email exists.");
+                    return View(model);
+                }
+                //check for same username
+                var usernameExists = _context.Users.Where(w => w.UserName == model.UserName).FirstOrDefault();
+                if (usernameExists != null)
+                {
+                    ModelState.AddModelError(string.Empty, $"Account with same username exists.");
+                    return View(model);
+                }
+
                 var user = new AppIdentityUser
                 {
                     UserName = model.UserName,
@@ -163,7 +182,7 @@ namespace translate.web.Controllers
                 {
                     if(_userManager.Users.Count() == 1)
                     {
-                        AppIdentityRole role = await _roleManager.FindByNameAsync("Administrator");
+                        AppIdentityRole role = await _roleManager.FindByNameAsync("Webmaster");
                         if(role != null)
                         {
                             IdentityResult roleResult = await _userManager.AddToRoleAsync(user,role.Name);
@@ -258,7 +277,7 @@ namespace translate.web.Controllers
             }
 
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            var user = new AppIdentityUser { UserName = email, Email = email };
+            var user = new AppIdentityUser { UserName = email, Email = email, Name = email };
             var createResult = await _userManager.CreateAsync(user);
 
             if (createResult.Succeeded)

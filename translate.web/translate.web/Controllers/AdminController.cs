@@ -12,9 +12,10 @@ using translate.web.Data;
 using translate.web.Models;
 using translate.web.ViewModels;
 
+
 namespace translate.web.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator, Webmaster")]
     public class AdminController : Controller
     {
         private readonly ApplContext _context;
@@ -168,6 +169,44 @@ namespace translate.web.Controllers
             string json = JsonConvert.SerializeObject(list);
 
             return new JsonResult(json);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Webmaster")]
+        public IActionResult Users()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUsersAjax()
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var model = _context.Users.Where(w => w.Id != user.Id).ToList();
+
+            var result = model.Select(async s => new { userId = s.Id, fullName = s.UserName + " " + s.Surname, email = s.Email, state = await _userManager.IsInRoleAsync(await _userManager.FindByIdAsync(s.Id.ToString()), "Administrator") ? "Administratorius" : "Vertėjas", isAdmin = await _userManager.IsInRoleAsync(await _userManager.FindByIdAsync(s.Id.ToString()), "Administrator") }).ToList();
+
+            return new JsonResult(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatedToAdminAsync([FromBody] AppIdentityUser userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.Id.ToString());
+            await _userManager.AddToRoleAsync(user, "Administrator");
+            await _userManager.RemoveFromRoleAsync(user, "Translator");
+
+            return new JsonResult("success");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatedToOrdinaryAsync([FromBody] AppIdentityUser userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.Id.ToString());
+            await _userManager.AddToRoleAsync(user, "Translator");
+            await _userManager.RemoveFromRoleAsync(user, "Administrator");
+
+            return new JsonResult("success");
         }
 
     }

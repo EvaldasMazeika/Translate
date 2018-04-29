@@ -17,7 +17,7 @@ using translate.web.ViewModels;
 
 namespace translate.web.Controllers
 {
-    [Authorize(Roles = "Administrator, Translator")]
+    [Authorize(Roles = "Administrator, Translator, Webmaster")]
     public class HomeController : Controller
     {
         private readonly UserManager<AppIdentityUser> _userManager;

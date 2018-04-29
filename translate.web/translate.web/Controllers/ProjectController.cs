@@ -24,7 +24,7 @@ using translate.web.ViewModels;
 namespace translate.web.Controllers
 {
     [Route("Project/{projectId}")]
-    [Authorize(Roles = "Administrator, Translator")]
+    [Authorize(Roles = "Administrator, Translator, Webmaster")]
     public class ProjectController : Controller
     {
         private readonly UserManager<AppIdentityUser> _userManager;
