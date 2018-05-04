@@ -149,6 +149,11 @@ namespace translate.web.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var isCreator = _context.ProjectMembers.Where(x => x.ProjectId == projectId && x.EmployeeId == user.Id).Single().IsCreator;
+            var hasDoc = _context.Projects.Where(w => w.Id == projectId).SingleOrDefault().HasDocument;
+
+
+            ViewBag.hasDoc = (hasDoc == true) ? true : false;
+
             if (isCreator == false)
             {
                 ViewBag.creator = false;
@@ -178,60 +183,53 @@ namespace translate.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var doc = await _context.ProjectDocuments.Where(x => x.Id == model.DocumentId).Include(a => a.ProjectDocumentDictionarys).SingleOrDefaultAsync();
-                var lang = await _context.Languages.Where(x => x.Id == model.LanguageId).SingleOrDefaultAsync();
-
-                if (doc.LanguageId == lang.Id)
-                {
-                    TempData["message"] = $"{_locService.GetLocalizedHtmlString("cantTranslateToSameLang")}";
-                    return RedirectToAction("NewLocale");
-                }
-
-                // negalima sukurti identisko iraso, tikrinti kalba, dokumenta, zmogus.
-                var exist = await _context.Translations.Where(w => w.DocumentId == doc.Id && w.LanguageId == model.LanguageId && w.TranslatorId == model.TranslatorId).FirstOrDefaultAsync();
-
-                if (exist != null)
-                {
-                    TempData["message"] = $"{_locService.GetLocalizedHtmlString("existTranslation")}";
-                    return RedirectToAction("NewLocale");
-                }
-
+                var language = await _context.Languages.Where(w => w.Id == model.LanguageId).SingleOrDefaultAsync();
                 var translator = await _userManager.FindByIdAsync(model.TranslatorId.ToString());
+                var project = await _context.Projects.Where(w => w.Id == projectId).SingleOrDefaultAsync();
+
+                ProjectDocument document = null;
+
+                if (model.HasDoc)
+                {
+                    document = _context.ProjectDocuments.Where(w => w.ProjectId == projectId)
+                        .Include(i => i.ProjectDocumentDictionarys)
+                        .SingleOrDefault();
+                }
 
                 var result = new Translation
                 {
                     Title = model.Title,
-                    Description = model.Description,
-                    Document = doc,
                     IsCompleted = false,
-                    Language = lang,
+                    Language = language,
                     Translator = translator,
-                    AddedDate = DateTime.Now
+                    AddedDate = DateTime.Now,
+                    HasDocument = model.HasDoc,
+                    Project = project
                 };
                 _context.Add(result);
 
                 if (_context.SaveChanges() > 0)
                 {
-                    foreach (var item in doc.ProjectDocumentDictionarys)
+                    if (model.HasDoc)
                     {
-                        var word = new TranslationDictionary
+                        foreach (var item in document.ProjectDocumentDictionarys)
                         {
-                            Translations = result,
-                            Name = item.Name,
-                            GivenValue = item.Value,
-                            NewValue = null
-                        };
+                            var word = new TranslationDictionary
+                            {
+                                Translations = result,
+                                Name = item.Name,
+                                GivenValue = item.Value,
+                                NewValue = null
+                            };
 
-                        _context.Add(word);
-                    }
+                            _context.Add(word);
+                        }
 
-                    if (_context.SaveChanges() > 0)
-                    {
-                        return RedirectToAction("Index");
+                        _context.SaveChanges();
                     }
+                    return RedirectToAction("Index");
                 }
             }
-
             return View(model);
         }
 
@@ -241,6 +239,32 @@ namespace translate.web.Controllers
             var model = await _context.TranslationDictionarys.Where(x => x.Id == id).SingleOrDefaultAsync();
 
             return ViewComponent("EditorPanel", model);
+        }
+
+        [Route("GetNewWordAsync")]
+        public IActionResult GetNewWordAsync(Guid projectId, [FromQuery] Guid id)
+        {
+            InsertWordViewModel model = new InsertWordViewModel { Project = projectId, Translation = id};
+
+            return ViewComponent("NewWord", model);
+        }
+
+        [Route("CreateNewWord")]
+        [HttpPost]
+        public IActionResult CreateNewWord(Guid projectId, [FromBody] CreateNewWordViewModel model)
+        {
+            var translation = _context.Translations.Where(w => w.Id == model.TranslationId).SingleOrDefault();
+
+            var result = new TranslationDictionary { Name = model.KeyValue, GivenValue = model.ValueValue, NewValue = model.ValueValue, Translations = translation };
+            _context.Add(result);
+            if (_context.SaveChanges() > 0)
+            {
+                return new JsonResult("success");
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         private void PopulateDocumentsDropDown(Guid project, object selected = null)
@@ -480,15 +504,22 @@ namespace translate.web.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
+            var hasDocument = _context.Translations.Where(w => w.Id == id).SingleOrDefault().HasDocument;
+
+            if (hasDocument)
+            {
+                ViewBag.language = _context.ProjectDocuments.Where(w => w.ProjectId == ProjectId)
+                    .Include(i=>i.Language)
+                    .SingleOrDefault().Language.Name;
+            }
+
             var model = await _context.Translations.Where(x => x.Id == id)
                 .Include(i=>i.Language)
-                .Include(a => a.Document)
-                    .ThenInclude(t=>t.Language)
-                .Include(a => a.Document)
-                    .ThenInclude(z => z.Project).SingleOrDefaultAsync();
+                .SingleOrDefaultAsync();
 
             if (model.TranslatorId == user.Id)
             {
+                PopulateDocumentsTypesDropDown();
                 return View(model);
             }
 
@@ -500,13 +531,16 @@ namespace translate.web.Controllers
         public async Task<IActionResult> ReviewTranslation(Guid ProjectId, Guid id)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            var translation = _context.Translations.Where(w => w.Id == id).SingleOrDefault().IsCompleted;
-            if (translation)
+            var translation = _context.Translations.Where(w => w.Id == id)
+                .Include(i=>i.TranslationDictionarys)
+                .SingleOrDefault().TranslationDictionarys.FirstOrDefault();
+            if (translation != null)
             {
-                var model = await _context.TranslationDictionarys.Where(w => w.TranslationId == id).ToListAsync();
+              //  var model = await _context.TranslationDictionarys.Where(w => w.TranslationId == id && w.NewValue == null).ToListAsync();
+                ViewBag.translationId = id;
                 ViewBag.projectid = ProjectId;
-
-                return View(model);
+                PopulateDocumentsTypesDropDown();
+                return View(/*model*/);
             }
 
             return RedirectToAction("Index");
@@ -535,9 +569,9 @@ namespace translate.web.Controllers
             var access = _context.ProjectMembers.Where(w => w.ProjectId == ProjectId && w.EmployeeId == user.Id).SingleOrDefault().IsCreator;
             var translation = _context.Translations.Where(w => w.Id == id).SingleOrDefault().IsWaiting;
             var docType = _context.Translations.Where(w => w.Id == id)
-                .Include(i => i.Document)
-                    .ThenInclude(t => t.DocumentType)
-                .SingleOrDefault().Document.DocumentType.Name;
+                //.Include(i => i.Document)
+                //    .ThenInclude(t => t.DocumentType)
+                .SingleOrDefault()/*.Document.DocumentType.Name*/;
 
             if (access && translation)
             {
@@ -569,15 +603,10 @@ namespace translate.web.Controllers
         [Route("VerifyTranslation")]
         public async Task<IActionResult> VerifyTranslation(Guid ProjectId, [FromBody] VerifyTranslationViewModel model)
         {
-            var translation = await _context.Translations.Where(w => w.Id == model.Id)
-                .Include(i=>i.Document)
-                    .ThenInclude(t=>t.DocumentType)
-                .SingleOrDefaultAsync();
+            var translation = await _context.Translations.Where(w => w.Id == model.Id).SingleOrDefaultAsync();
             
-
             translation.IsWaiting = false;
             translation.IsCompleted = true;
-            translation.FileName = $"{model.Name}{translation.Document.DocumentType.Name}";
             _context.Update(translation);
 
             await _context.SaveChangesAsync();
@@ -606,7 +635,7 @@ namespace translate.web.Controllers
         [Route("GetTranslationsAjax")]
         public async Task<IActionResult> GetTranslationsAjax(Guid ProjectId, [FromQuery] Guid tranId)
         {
-            var model = await _context.TranslationDictionarys.Where(w => w.TranslationId == tranId).ToListAsync();
+            var model = await _context.TranslationDictionarys.Where(w => w.TranslationId == tranId && w.NewValue != null).ToListAsync();
             return new JsonResult(model);
         }
 
@@ -628,20 +657,6 @@ namespace translate.web.Controllers
         }
 
         [HttpGet]
-        [Route("ProjectDocuments")]
-        public async Task<IActionResult> ProjectDocuments(Guid ProjectId)
-        {
-            var user = _userManager.GetUserId(HttpContext.User);
-            ViewBag.IsCreator = _context.ProjectMembers.Where(x => x.ProjectId == ProjectId && x.EmployeeId.ToString() == user).Single().IsCreator;
-
-            var model = await _context.ProjectDocuments.Where(w => w.ProjectId == ProjectId)
-                .OrderByDescending(o=>o.AddedDate)
-                .ToListAsync();
-
-            return View(model);
-        }
-
-        [HttpGet]
         [Route("Translations")]
         public IActionResult Translations(Guid ProjectId)
         {
@@ -654,9 +669,9 @@ namespace translate.web.Controllers
         [Route("GetDocsCountAsync")]
         public IActionResult GetDocsCountAsync(Guid ProjectId)
         {
-            var closed = _context.Translations.Where(w => w.IsCompleted == true && w.Document.ProjectId == ProjectId).Count();
-            var open = _context.Translations.Where(w => w.Document.ProjectId == ProjectId && w.IsCompleted == false).Count();
-            var waiting = _context.Translations.Where(w => w.IsWaiting == true && w.Document.ProjectId == ProjectId).Count();
+            var closed = _context.Translations.Where(w => w.IsCompleted == true && w.ProjectId == ProjectId).Count();
+            var open = _context.Translations.Where(w => w.ProjectId == ProjectId && w.IsCompleted == false).Count();
+            var waiting = _context.Translations.Where(w => w.IsWaiting == true && w.ProjectId == ProjectId).Count();
 
             var result = new TranslationsDocsViewModel { ClosedTtranslations = closed, OpenTranslations = open, WaitingTranslations = waiting };
 
@@ -668,8 +683,8 @@ namespace translate.web.Controllers
         [Route("GetWordsCountAsync")]
         public IActionResult GetWordsCountAsync(Guid ProjectId)
         {
-            var translated = _context.TranslationDictionarys.Where(w => w.Translations.Document.ProjectId == ProjectId && w.NewValue != null).Count();
-            var leftTranslate = _context.TranslationDictionarys.Where(w => w.Translations.Document.ProjectId == ProjectId && w.NewValue == null).Count();
+            var translated = _context.TranslationDictionarys.Where(w => w.Translations.ProjectId == ProjectId && w.NewValue != null).Count();
+            var leftTranslate = _context.TranslationDictionarys.Where(w => w.Translations.ProjectId == ProjectId && w.NewValue == null).Count();
 
             var result = new TranslationsWordsViewModel { TranslatedCount = translated, LeftToTranslateCount = leftTranslate };
 
@@ -681,12 +696,12 @@ namespace translate.web.Controllers
         [Route("DownloadTranslation")]
         public IActionResult DownloadTranslation(Guid ProjectId, Guid id)
         {
-            var docType = _context.Translations.Where(w => w.Id == id)
-                .Include(i=>i.Document)
-                    .ThenInclude(t=>t.DocumentType)
-                .SingleOrDefault().Document.DocumentType.Name;
+            //var docType = _context.Translations.Where(w => w.Id == id)
+            //    //.Include(i=>i.Document)
+            //    //    .ThenInclude(t=>t.DocumentType)
+            //    .SingleOrDefault()/*.Document.DocumentType.Name*/;
 
-            switch (docType)
+            switch (/*docType*/"")
             {
                 case ".resx":
                     return ExportResx(id);
@@ -711,7 +726,7 @@ namespace translate.web.Controllers
             doc.AppendChild(root);
 
             var translation = _context.Translations.Where(x => x.Id == mineId).SingleOrDefault();
-            var document = _context.ProjectDocuments.Where(x => x.Id == translation.DocumentId).SingleOrDefault();
+          //  var document = _context.ProjectDocuments.Where(x => x.Id == translation.DocumentId).SingleOrDefault();
             
             var translations = _context.TranslationDictionarys.Where(x => x.TranslationId == mineId).ToList();
 
@@ -737,7 +752,7 @@ namespace translate.web.Controllers
 
             stream.Position = 0;
 
-            return File(stream, "text/xml", translation.FileName);
+            return File(stream, "text/xml", /*translation.FileName*/"");
         }
 
         [HttpPost]
@@ -847,6 +862,58 @@ namespace translate.web.Controllers
                 default:
                     return BadRequest();
             }
+        }
+
+        [Route("DownloadTranslationAsync")]
+        public IActionResult DownloadTranslationAsync(Guid projectId, [FromQuery] DownloadTranslationViewModel model)
+        {
+            var extension = _context.DocumentTypes.Where(w => w.Id == model.ExtensionId).FirstOrDefault();
+            switch (extension.Name)
+            {
+                case ".xml":
+                    return DownloadTranslationXml(projectId, model.Id, model.Title);
+                default:
+                    return BadRequest();
+            }
+        }
+
+        private IActionResult DownloadTranslationXml(Guid projectId, Guid id, string title)
+        {
+            XmlDocument doc = new XmlDocument();
+
+            XmlDeclaration xmldecl;
+            xmldecl = doc.CreateXmlDeclaration("1.0", null, null);
+            xmldecl.Encoding = "utf-8";
+
+            doc.AppendChild(xmldecl);
+
+            XmlElement root = doc.CreateElement("root");
+            doc.AppendChild(root);
+
+            var dictionary = _context.TranslationDictionarys.Where(w => w.TranslationId == id && w.NewValue != null).ToList();
+
+            foreach (var item in dictionary)
+            {
+                XmlElement trans = doc.CreateElement("data");
+                var atrName = doc.CreateAttribute("name");
+                atrName.Value = item.Name;
+                trans.Attributes.Append(atrName);
+                var word = doc.CreateElement("value");
+                word.InnerText = item.NewValue;
+                trans.AppendChild(word);
+                root.AppendChild(trans);
+            }
+            MemoryStream stream = new MemoryStream();
+            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
+            writer.Formatting = System.Xml.Formatting.Indented;
+            writer.Indentation = 2;
+
+            doc.WriteTo(writer);
+            writer.Flush();
+
+            stream.Position = 0;
+
+            return File(stream, "text/xml", $"{title}.xml");
         }
 
         private IActionResult DownloadXmlAjax(Guid projectId, Guid docId, string title)
@@ -1048,11 +1115,11 @@ namespace translate.web.Controllers
             doc.AppendChild(root);
 
             var what = _context.Translations.Where(x => x.Id == mineId).SingleOrDefault();
-            var document = _context.ProjectDocuments.Where(x => x.Id == what.DocumentId).SingleOrDefault();
+           // var document = _context.ProjectDocuments.Where(x => x.Id == what.DocumentId).SingleOrDefault();
 
             XmlDocument headerXml = new XmlDocument();
 
-            headerXml.LoadXml(document.Header);
+          //  headerXml.LoadXml(document.Header);
 
             var rooth = headerXml.FirstChild;
 
@@ -1089,7 +1156,7 @@ namespace translate.web.Controllers
 
             stream.Position = 0;
             
-            return File(stream, "text/xml", what.FileName);
+            return File(stream, "text/xml", /*what.FileName*/"");
         }
 
         string FormatXml(string xml)

@@ -36,14 +36,15 @@
             </div>
             <br />
         }
-        @if (ViewBag.exist)
+        <a class="btn btn-primary btn-sm btn-block" asp-controller="Project" asp-action="NewLocale">@SharedLocalizer.GetLocalizedHtmlString("newTranslation")</a>
+        @*@if (ViewBag.exist)
         {
             <a class="btn btn-primary btn-sm btn-block" asp-controller="Project" asp-action="NewLocale">@SharedLocalizer.GetLocalizedHtmlString("newTranslation")</a>
         }
         else
         {
             <a class="btn btn-primary btn-sm btn-block disabled">@SharedLocalizer.GetLocalizedHtmlString("newTranslation")</a>
-        }
+        }*@
 
     </div>
 </div>

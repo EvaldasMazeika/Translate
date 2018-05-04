@@ -1,64 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -117,32 +58,157 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="accessDenied" xml:space="preserve">
+    <value>Prieiga uždrausta</value>
+  </data>
+  <data name="accLocked" xml:space="preserve">
+    <value>Užrakinta</value>
+  </data>
   <data name="AccountButton" xml:space="preserve">
     <value>Paskyra</value>
   </data>
   <data name="AdministrationCaption" xml:space="preserve">
     <value>Administracija</value>
   </data>
+  <data name="allPosts" xml:space="preserve">
+    <value>Visi įrašai</value>
+  </data>
+  <data name="canLoginWith" xml:space="preserve">
+    <value>Prisijungti naudojant</value>
+  </data>
+  <data name="changeButton" xml:space="preserve">
+    <value>Pakeisti</value>
+  </data>
+  <data name="checkEmail" xml:space="preserve">
+    <value>Pasitikrinti el. paštą</value>
+  </data>
+  <data name="commentsTitle" xml:space="preserve">
+    <value>Komentarai
+</value>
+  </data>
+  <data name="confirmButton" xml:space="preserve">
+    <value>Patvirtinti</value>
+  </data>
+  <data name="createButton" xml:space="preserve">
+    <value>Sukurti</value>
+  </data>
+  <data name="createNewProjectButton" xml:space="preserve">
+    <value>Sukurti naują projektą</value>
+  </data>
   <data name="currentPassword" xml:space="preserve">
-    <value>Esamas slaptažodis</value>
+    <value>Dabartinis slaptažodis</value>
+  </data>
+  <data name="deleteAccButton" xml:space="preserve">
+    <value>Ištrinti profilį</value>
+  </data>
+  <data name="deleteAccText" xml:space="preserve">
+    <value>Ištrinant profilį, viskas, kas susiję su šiuo profiliu taip pat bus ištrinta</value>
+  </data>
+  <data name="deletionTitle" xml:space="preserve">
+    <value>Pašalinimas</value>
+  </data>
+  <data name="docsLink" xml:space="preserve">
+    <value>Dokumentai</value>
+  </data>
+  <data name="docsOptions" xml:space="preserve">
+    <value>Nustatymai</value>
+  </data>
+  <data name="docsType" xml:space="preserve">
+    <value>Tipas</value>
+  </data>
+  <data name="documentExample" xml:space="preserve">
+    <value>Dokumento pavyzdys</value>
+  </data>
+  <data name="documentsTitle" xml:space="preserve">
+    <value>Dokumentai</value>
+  </data>
+  <data name="documentType" xml:space="preserve">
+    <value>Dokumento tipas</value>
+  </data>
+  <data name="emailCodeTextToSend" xml:space="preserve">
+    <value>El. pašto patvirtinimo kodas</value>
+  </data>
+  <data name="emailCodeTitle" xml:space="preserve">
+    <value>Įveskite kodą</value>
+  </data>
+  <data name="emailReference" xml:space="preserve">
+    <value>Nuoroda</value>
+  </data>
+  <data name="emailSubjectConfirmation" xml:space="preserve">
+    <value>Patvirtinimas</value>
+  </data>
+  <data name="Enter2faCodeTitle" xml:space="preserve">
+    <value>Įveskite kodą, kad prisijungtumėte</value>
+  </data>
+  <data name="enterEmail" xml:space="preserve">
+    <value>Įveskite el. paštą</value>
+  </data>
+  <data name="enterNeededData" xml:space="preserve">
+    <value>Įveskite reikiamą informaciją</value>
+  </data>
+  <data name="forgotPassword" xml:space="preserve">
+    <value>Pamiršote slaptažodį?</value>
+  </data>
+  <data name="genericError" xml:space="preserve">
+    <value>Kažkas nutiko blogai..</value>
+  </data>
+  <data name="goBackButton" xml:space="preserve">
+    <value>Grįžti</value>
+  </data>
+  <data name="importantBadge" xml:space="preserve">
+    <value>Svarbu!</value>
+  </data>
+  <data name="information" xml:space="preserve">
+    <value>Informacija</value>
+  </data>
+  <data name="invitation" xml:space="preserve">
+    <value>Pakvietimas</value>
+  </data>
+  <data name="invitations" xml:space="preserve">
+    <value>Pakvietimai</value>
+  </data>
+  <data name="invitationText" xml:space="preserve">
+    <value>Jūs buvote pakviestas dalyvauti projekte</value>
+  </data>
+  <data name="langDeleteBody" xml:space="preserve">
+    <value>Ar esate įsitikinęs, jog norite ištrinti šią kalbą?</value>
+  </data>
+  <data name="langOpts" xml:space="preserve">
+    <value>Nustatymai</value>
+  </data>
+  <data name="langTitle" xml:space="preserve">
+    <value>Pavadinimas
+</value>
   </data>
   <data name="language" xml:space="preserve">
     <value>Kalba</value>
   </data>
+  <data name="languageCode" xml:space="preserve">
+    <value>Kalbos kodas</value>
+  </data>
+  <data name="languagesLink" xml:space="preserve">
+    <value>Kalbos</value>
+  </data>
+  <data name="languagesTitle" xml:space="preserve">
+    <value>Kalbos</value>
+  </data>
   <data name="loginButton" xml:space="preserve">
-    <value>Prisijungti</value>
+    <value>Prijungti mane</value>
   </data>
   <data name="loginCaption" xml:space="preserve">
-    <value>Prisijungimas</value>
+    <value>Prisijungti</value>
+  </data>
+  <data name="loginCodeMessage" xml:space="preserve">
+    <value>Jūsų prisijungimo kodas</value>
   </data>
   <data name="loginError" xml:space="preserve">
-    <value>Nepavyko prisijungti</value>
+    <value>Prisijungimas negalimas</value>
   </data>
   <data name="loginPasswordPlaceholder" xml:space="preserve">
     <value>Slaptažodis</value>
   </data>
   <data name="loginRemember" xml:space="preserve">
-    <value>Prisiminti mane?</value>
+    <value>Prisiminti</value>
   </data>
   <data name="loginUsernamePlaceholder" xml:space="preserve">
     <value>Slapyvardis</value>
@@ -151,31 +217,133 @@
     <value>Atsijungti</value>
   </data>
   <data name="mainMenu" xml:space="preserve">
-    <value>Pagrindinis</value>
+    <value>Pagrindinis menu</value>
   </data>
   <data name="mainWebsiteLink" xml:space="preserve">
-    <value>Pagrindinė svetainė</value>
+    <value>Pagrindinis puslapis</value>
+  </data>
+  <data name="mustValidCaptcha" xml:space="preserve">
+    <value>Įveskite CAPTCHA</value>
+  </data>
+  <data name="newDocument" xml:space="preserve">
+    <value>Naujas dokumentas</value>
+  </data>
+  <data name="newLanguage" xml:space="preserve">
+    <value>Nauja kalba</value>
   </data>
   <data name="newPassword" xml:space="preserve">
     <value>Naujas slaptažodis</value>
   </data>
+  <data name="newPostButton" xml:space="preserve">
+    <value>Naujas įrašas</value>
+  </data>
+  <data name="newProjectDescription" xml:space="preserve">
+    <value>Projekto aprašymas</value>
+  </data>
+  <data name="newProjectTitle" xml:space="preserve">
+    <value>Sukurti naują projektą</value>
+  </data>
   <data name="newUserLink" xml:space="preserve">
     <value>Naujas vartotojas?</value>
   </data>
+  <data name="noButton" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="noCode" xml:space="preserve">
+    <value>Negaunu kodo</value>
+  </data>
+  <data name="noDocsAdded" xml:space="preserve">
+    <value>Dokumentas nepridėtas</value>
+  </data>
+  <data name="noInvitations" xml:space="preserve">
+    <value>Pakvietimų neturite</value>
+  </data>
+  <data name="noLanguagesAdded" xml:space="preserve">
+    <value>Nepridėta jokių kalbų</value>
+  </data>
+  <data name="noNewPosts" xml:space="preserve">
+    <value>Jokių įrašų nesukurta</value>
+  </data>
+  <data name="noProjects" xml:space="preserve">
+    <value>Neturite jokių projektų</value>
+  </data>
   <data name="optionsCaption" xml:space="preserve">
-    <value>Pasirinkimai</value>
+    <value>Nustatymai</value>
   </data>
   <data name="passwordCaption" xml:space="preserve">
     <value>Slaptažodis</value>
   </data>
   <data name="passwordInfo" xml:space="preserve">
-    <value>Čia galite pasikeisti savo slaptažodį</value>
+    <value>Pakeisti slaptažodį</value>
+  </data>
+  <data name="passwordsNotEquals" xml:space="preserve">
+    <value>Slaptažodžiai nesutampa</value>
   </data>
   <data name="personalInfoCaption" xml:space="preserve">
     <value>Asmeninė informacija</value>
   </data>
+  <data name="postAuthor" xml:space="preserve">
+    <value>Autorius</value>
+  </data>
+  <data name="postCommentsCount" xml:space="preserve">
+    <value>Komentarų skaičius</value>
+  </data>
+  <data name="postCreateDate" xml:space="preserve">
+    <value>Sukurti datą</value>
+  </data>
+  <data name="PostDeletionBody" xml:space="preserve">
+    <value>Ar esate įsitikinęs, jog norite ištrinti šį įrašą?</value>
+  </data>
+  <data name="postIsImportant" xml:space="preserve">
+    <value>Svarbu</value>
+  </data>
+  <data name="postIsImportantBoolean" xml:space="preserve">
+    <value>Svarbus pranešimas?</value>
+  </data>
+  <data name="postLastComment" xml:space="preserve">
+    <value>Paskutinis komentaras</value>
+  </data>
+  <data name="postMessage" xml:space="preserve">
+    <value>Pranešimas</value>
+  </data>
+  <data name="postOptions" xml:space="preserve">
+    <value>Nustatymai</value>
+  </data>
   <data name="postsLink" xml:space="preserve">
-    <value>Pranešimai</value>
+    <value>Įrašai</value>
+  </data>
+  <data name="postsTitle" xml:space="preserve">
+    <value>Įrašai</value>
+  </data>
+  <data name="postTitle" xml:space="preserve">
+    <value>Pavadinimas</value>
+  </data>
+  <data name="profileCaption" xml:space="preserve">
+    <value>Profilis</value>
+  </data>
+  <data name="ProfileLocedMessage" xml:space="preserve">
+    <value>Trumpam sustabdyta dėl per didelio kiekio bandymų</value>
+  </data>
+  <data name="projectDeletionBody" xml:space="preserve">
+    <value>Ar tikrai norite ištrinti projektą?</value>
+  </data>
+  <data name="projectDescription" xml:space="preserve">
+    <value>Aprašymas</value>
+  </data>
+  <data name="projectsList" xml:space="preserve">
+    <value>Projektai</value>
+  </data>
+  <data name="publishButton" xml:space="preserve">
+    <value>Paskelbti</value>
+  </data>
+  <data name="recoverEmailText" xml:space="preserve">
+    <value>Sugrąžinti slaptažodį</value>
+  </data>
+  <data name="recoverySubject" xml:space="preserve">
+    <value>Slaptažodžio grąžinimas</value>
+  </data>
+  <data name="recoveryTitle" xml:space="preserve">
+    <value>Gražinimas</value>
   </data>
   <data name="registerBirthDate" xml:space="preserve">
     <value>Gimimo data</value>
@@ -193,7 +361,7 @@
     <value>Telefono numeris</value>
   </data>
   <data name="registerSurname" xml:space="preserve">
-    <value>Pavardė</value>
+    <value>Vardas</value>
   </data>
   <data name="registerUserName" xml:space="preserve">
     <value>Slapyvardis</value>
@@ -205,16 +373,25 @@
     <value>Registracija</value>
   </data>
   <data name="registrationPassSMALL" xml:space="preserve">
-    <value>Slaptažodis turi susidaryti iš skaičiaus, didžiosios raidės ir ne mažiau kaip 8 simbolių.</value>
+    <value>Slaptažodį turi sudaryti skaičius, didžioji ir mažoji raidė bei turi būti bent 8 simbolių ilgio</value>
   </data>
   <data name="repeatPassword" xml:space="preserve">
-    <value>Pakartotas naujas slaptažodis</value>
+    <value>Pakartokite naują slaptažodį</value>
   </data>
   <data name="required" xml:space="preserve">
-    <value>Šis laukas privalomas</value>
+    <value>Būtina užpildyti</value>
+  </data>
+  <data name="securityCaption" xml:space="preserve">
+    <value>Apsauga</value>
+  </data>
+  <data name="sendButton" xml:space="preserve">
+    <value>Siųsti</value>
   </data>
   <data name="subMenuProjects" xml:space="preserve">
     <value>Projektai</value>
+  </data>
+  <data name="successUpdated" xml:space="preserve">
+    <value>Sėkmingai atnaujinta</value>
   </data>
   <data name="tooLong" xml:space="preserve">
     <value>Per ilgas</value>
@@ -222,10 +399,307 @@
   <data name="tooShort" xml:space="preserve">
     <value>Per trumpas</value>
   </data>
+  <data name="tooYoung" xml:space="preserve">
+    <value>Turite būti pilnametis</value>
+  </data>
+  <data name="twoFactoBadState" xml:space="preserve">
+    <value>Išjungti</value>
+  </data>
+  <data name="twoFactoGoodState" xml:space="preserve">
+    <value>Įjungti</value>
+  </data>
+  <data name="twoFactorConfirmText" xml:space="preserve">
+    <value>Dviejų žingsnių atpažinimo sistemai pirmiausia reikia patvirtinti el. pašto adresą</value>
+  </data>
+  <data name="twoFactorOffButton" xml:space="preserve">
+    <value>Išjungti</value>
+  </data>
+  <data name="twoFactorOnButton" xml:space="preserve">
+    <value>Įjungti</value>
+  </data>
+  <data name="twostepState" xml:space="preserve">
+    <value>Dviejų žingsnių atpažinimo sistema</value>
+  </data>
+  <data name="twostepTitle" xml:space="preserve">
+    <value>Įjungti/išjungti dviejų žingsnių atpažinimo sistemą</value>
+  </data>
   <data name="updateButton" xml:space="preserve">
     <value>Atnaujinti</value>
   </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Sveiki!</value>
+  </data>
+  <data name="writeCommentTitle" xml:space="preserve">
+    <value>Komentuoti</value>
+  </data>
+  <data name="wrongCode" xml:space="preserve">
+    <value>Blogas kodas</value>
+  </data>
   <data name="wrongFormat" xml:space="preserve">
     <value>Netinkamas formatas</value>
+  </data>
+  <data name="yesButton" xml:space="preserve">
+    <value>Taip</value>
+  </data>
+  <data name="april" xml:space="preserve">
+    <value>Balandis</value>
+  </data>
+  <data name="august" xml:space="preserve">
+    <value>Rugpjūtis</value>
+  </data>
+  <data name="december" xml:space="preserve">
+    <value>Gruodis</value>
+  </data>
+  <data name="february" xml:space="preserve">
+    <value>Vasaris</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Sausis</value>
+  </data>
+  <data name="july" xml:space="preserve">
+    <value>Liepa</value>
+  </data>
+  <data name="june" xml:space="preserve">
+    <value>Birželis</value>
+  </data>
+  <data name="march" xml:space="preserve">
+    <value>Kovas</value>
+  </data>
+  <data name="may" xml:space="preserve">
+    <value>Gegužė</value>
+  </data>
+  <data name="november" xml:space="preserve">
+    <value>Lapkritis</value>
+  </data>
+  <data name="october" xml:space="preserve">
+    <value>Spalis</value>
+  </data>
+  <data name="ProjectCountTitle" xml:space="preserve">
+    <value>Projektų skaičius</value>
+  </data>
+  <data name="ProjectsCountdistribution" xml:space="preserve">
+    <value>Įgalinti kurti projektą</value>
+  </data>
+  <data name="RegistertedProjects" xml:space="preserve">
+    <value>Užregistruoti projektai</value>
+  </data>
+  <data name="september" xml:space="preserve">
+    <value>Rugsėjis</value>
+  </data>
+  <data name="addDocumentButton" xml:space="preserve">
+    <value>Pridėti naują dokumentą</value>
+  </data>
+  <data name="addedDate" xml:space="preserve">
+    <value>Data pridėta</value>
+  </data>
+  <data name="addTranslationTitle" xml:space="preserve">
+    <value>Pridėti vertimą</value>
+  </data>
+  <data name="allProjectDocuments" xml:space="preserve">
+    <value>Projekto dokumentai</value>
+  </data>
+  <data name="allProjectMembers" xml:space="preserve">
+    <value>Projekto nariai</value>
+  </data>
+  <data name="allTranslations" xml:space="preserve">
+    <value>Visi vertimai</value>
+  </data>
+  <data name="appointed" xml:space="preserve">
+    <value>Paskirta</value>
+  </data>
+  <data name="approve" xml:space="preserve">
+    <value>Patvirtinti</value>
+  </data>
+  <data name="approveTranslation" xml:space="preserve">
+    <value>Pridėti vertimą</value>
+  </data>
+  <data name="cancelButton" xml:space="preserve">
+    <value>Atšaukti</value>
+  </data>
+  <data name="closed" xml:space="preserve">
+    <value>Uždaryta</value>
+  </data>
+  <data name="continueButton" xml:space="preserve">
+    <value>Tęsti</value>
+  </data>
+  <data name="deleteButton" xml:space="preserve">
+    <value>Ištrinti</value>
+  </data>
+  <data name="deleteTranslateBody" xml:space="preserve">
+    <value>Ar tikrai norite ištrinti šį vertimą iš projekto?</value>
+  </data>
+  <data name="documentLanguage" xml:space="preserve">
+    <value>Dokumento kalba</value>
+  </data>
+  <data name="documentRemovalBody" xml:space="preserve">
+    <value>Ar esate tikras, jog norite ištrinti šį projektą? Viskas, kas susiję su projektu, bus ištrinta.</value>
+  </data>
+  <data name="documentTitle" xml:space="preserve">
+    <value>Dokumentas</value>
+  </data>
+  <data name="download" xml:space="preserve">
+    <value>Atsisiųsti</value>
+  </data>
+  <data name="emailAddress" xml:space="preserve">
+    <value>El. paštas</value>
+  </data>
+  <data name="errorOcurred" xml:space="preserve">
+    <value>Klaida</value>
+  </data>
+  <data name="example" xml:space="preserve">
+    <value>Pavyzdžiui</value>
+  </data>
+  <data name="finishTranslation" xml:space="preserve">
+    <value>Baigti vertimą</value>
+  </data>
+  <data name="givenTranslation" xml:space="preserve">
+    <value>Duotoji reikšmė</value>
+  </data>
+  <data name="inviteToProject" xml:space="preserve">
+    <value>Pakviesti į projektą</value>
+  </data>
+  <data name="inviteToProjectBody" xml:space="preserve">
+    <value>Įvesti egzistuojantį el. pašto adresą</value>
+  </data>
+  <data name="joinDate" xml:space="preserve">
+    <value>Prisijungimo data</value>
+  </data>
+  <data name="key" xml:space="preserve">
+    <value>Raktas</value>
+  </data>
+  <data name="leftToTranslate" xml:space="preserve">
+    <value>Liko išversti</value>
+  </data>
+  <data name="maxDocSize" xml:space="preserve">
+    <value>Maksimalus dokumento dydis: 10MB</value>
+  </data>
+  <data name="memberDeletionBody" xml:space="preserve">
+    <value>Ar tikrai norite išmesti narį iš projekto?</value>
+  </data>
+  <data name="myTranslations" xml:space="preserve">
+    <value>Mano vertimai</value>
+  </data>
+  <data name="nameSurname" xml:space="preserve">
+    <value>Vardas, pavardė</value>
+  </data>
+  <data name="newDocAddition" xml:space="preserve">
+    <value>Naujo dokumento įkėlimas</value>
+  </data>
+  <data name="newFileName" xml:space="preserve">
+    <value>Pavadinti projektą</value>
+  </data>
+  <data name="newTranslation" xml:space="preserve">
+    <value>Pridėti naują vertimą</value>
+  </data>
+  <data name="newTranslationTitle" xml:space="preserve">
+    <value>Naujas vertimas</value>
+  </data>
+  <data name="newTranslationWord" xml:space="preserve">
+    <value>Nauja reikšmė</value>
+  </data>
+  <data name="next" xml:space="preserve">
+    <value>Kitas</value>
+  </data>
+  <data name="noDucumentsTitle" xml:space="preserve">
+    <value>Projekte nėra pridėtų dokumentų</value>
+  </data>
+  <data name="notEmpty" xml:space="preserve">
+    <value>Negali būti tuščia</value>
+  </data>
+  <data name="notranslationsTitle" xml:space="preserve">
+    <value>Projekte nėra pridėtų vertimų</value>
+  </data>
+  <data name="notTranslated" xml:space="preserve">
+    <value>Neišversta</value>
+  </data>
+  <data name="open" xml:space="preserve">
+    <value>Atidaryti</value>
+  </data>
+  <data name="previous" xml:space="preserve">
+    <value>Prieš tai buvęs</value>
+  </data>
+  <data name="projectMembers" xml:space="preserve">
+    <value>Projekto nariai</value>
+  </data>
+  <data name="reject" xml:space="preserve">
+    <value>Atmesti</value>
+  </data>
+  <data name="rejectTranslation" xml:space="preserve">
+    <value>Atmesti vertimą</value>
+  </data>
+  <data name="saveButton" xml:space="preserve">
+    <value>Išsaugoti</value>
+  </data>
+  <data name="successSend" xml:space="preserve">
+    <value>Pakvietimas išsiųstas</value>
+  </data>
+  <data name="totalwordsTranslated" xml:space="preserve">
+    <value>Iš viso išversta</value>
+  </data>
+  <data name="translated" xml:space="preserve">
+    <value>Išversta</value>
+  </data>
+  <data name="translatedDocs" xml:space="preserve">
+    <value>Išversti dokumentai</value>
+  </data>
+  <data name="translatingFrom" xml:space="preserve">
+    <value>Verčiama iš</value>
+  </data>
+  <data name="translatingTo" xml:space="preserve">
+    <value>Verčiama į</value>
+  </data>
+  <data name="translationsFilter" xml:space="preserve">
+    <value>Rūšiuoti vertimus</value>
+  </data>
+  <data name="translationsLink" xml:space="preserve">
+    <value>Vertimai</value>
+  </data>
+  <data name="translator" xml:space="preserve">
+    <value>Vertėjas</value>
+  </data>
+  <data name="uploadButton" xml:space="preserve">
+    <value>Įkelti</value>
+  </data>
+  <data name="value" xml:space="preserve">
+    <value>Reikšmė</value>
+  </data>
+  <data name="verify" xml:space="preserve">
+    <value>Patvirtinti</value>
+  </data>
+  <data name="waitingForApproval" xml:space="preserve">
+    <value>Laukiama patvirtinimo</value>
+  </data>
+  <data name="wordsTranslated" xml:space="preserve">
+    <value>Išversti žodžiai</value>
+  </data>
+  <data name="writeReason" xml:space="preserve">
+    <value>Priežastis</value>
+  </data>
+  <data name="waiting" xml:space="preserve">
+    <value>Laukiama</value>
+  </data>
+  <data name="cantTranslateToSameLang" xml:space="preserve">
+    <value>Į tą pačią kalba versti negalima!</value>
+  </data>
+  <data name="docexists" xml:space="preserve">
+    <value>Šis dokumentas jau egzistuoja</value>
+  </data>
+  <data name="documentUpload" xml:space="preserve">
+    <value>Dokumentai sėkmingai patalpinti</value>
+  </data>
+  <data name="existTranslation" xml:space="preserve">
+    <value>Toks vertimas jau egzistuoja</value>
+  </data>
+  <data name="falseFormat" xml:space="preserve">
+    <value>Nepriimtinas formatas</value>
+  </data>
+  <data name="formatsValidation" xml:space="preserve">
+    <value>Netinkami formatai</value>
+  </data>
+  <data name="maxSizeValidation" xml:space="preserve">
+    <value>Failas negali viršyti 10MB</value>
+  </data>
+  <data name="noDocAttached" xml:space="preserve">
+    <value>Neprisegtas joks dokumentas</value>
   </data>
 </root>

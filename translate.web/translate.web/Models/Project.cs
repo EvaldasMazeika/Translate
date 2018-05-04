@@ -16,5 +16,6 @@ namespace translate.web.Models
 
         public ICollection<ProjectMember> ProjectMembers { get; set; }
         public ProjectDocument ProjectDocument { get; set; }
+        public ICollection<Translation> Translations { get; set; }
     }
 }

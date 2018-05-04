@@ -11,9 +11,10 @@ using translate.web.Data;
 namespace translate.web.Migrations
 {
     [DbContext(typeof(ApplContext))]
-    partial class ApplContextModelSnapshot : ModelSnapshot
+    [Migration("20180501093605_update3")]
+    partial class update3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -336,7 +337,9 @@ namespace translate.web.Migrations
 
                     b.Property<string>("DeclineComment");
 
-                    b.Property<bool>("HasDocument");
+                    b.Property<Guid>("DocumentId");
+
+                    b.Property<string>("FileName");
 
                     b.Property<bool>("IsCompleted");
 
@@ -344,17 +347,15 @@ namespace translate.web.Migrations
 
                     b.Property<Guid>("LanguageId");
 
-                    b.Property<Guid>("ProjectId");
-
                     b.Property<string>("Title");
 
                     b.Property<Guid>("TranslatorId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LanguageId");
+                    b.HasIndex("DocumentId");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("LanguageId");
 
                     b.HasIndex("TranslatorId");
 
@@ -475,15 +476,15 @@ namespace translate.web.Migrations
 
             modelBuilder.Entity("translate.web.Models.Translation", b =>
                 {
+                    b.HasOne("translate.web.Models.ProjectDocument", "Document")
+                        .WithMany("Translations")
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("translate.web.Models.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("translate.web.Models.Project", "Project")
-                        .WithMany("Translations")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("translate.web.Models.AppIdentityUser", "Translator")
                         .WithMany()

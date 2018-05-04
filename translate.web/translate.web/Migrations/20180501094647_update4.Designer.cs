@@ -11,9 +11,10 @@ using translate.web.Data;
 namespace translate.web.Migrations
 {
     [DbContext(typeof(ApplContext))]
-    partial class ApplContextModelSnapshot : ModelSnapshot
+    [Migration("20180501094647_update4")]
+    partial class update4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,6 +277,8 @@ namespace translate.web.Migrations
 
                     b.Property<Guid>("ProjectId");
 
+                    b.Property<Guid?>("TranslationId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DocumentTypeId");
@@ -284,6 +287,10 @@ namespace translate.web.Migrations
 
                     b.HasIndex("ProjectId")
                         .IsUnique();
+
+                    b.HasIndex("TranslationId")
+                        .IsUnique()
+                        .HasFilter("[TranslationId] IS NOT NULL");
 
                     b.ToTable("ProjectDocuments");
                 });
@@ -336,15 +343,13 @@ namespace translate.web.Migrations
 
                     b.Property<string>("DeclineComment");
 
-                    b.Property<bool>("HasDocument");
+                    b.Property<string>("FileName");
 
                     b.Property<bool>("IsCompleted");
 
                     b.Property<bool>("IsWaiting");
 
                     b.Property<Guid>("LanguageId");
-
-                    b.Property<Guid>("ProjectId");
 
                     b.Property<string>("Title");
 
@@ -353,8 +358,6 @@ namespace translate.web.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("LanguageId");
-
-                    b.HasIndex("ProjectId");
 
                     b.HasIndex("TranslatorId");
 
@@ -450,6 +453,10 @@ namespace translate.web.Migrations
                         .WithOne("ProjectDocument")
                         .HasForeignKey("translate.web.Models.ProjectDocument", "ProjectId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("translate.web.Models.Translation", "Translation")
+                        .WithOne("Document")
+                        .HasForeignKey("translate.web.Models.ProjectDocument", "TranslationId");
                 });
 
             modelBuilder.Entity("translate.web.Models.ProjectDocumentDictionary", b =>
@@ -479,11 +486,6 @@ namespace translate.web.Migrations
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("translate.web.Models.Project", "Project")
-                        .WithMany("Translations")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("translate.web.Models.AppIdentityUser", "Translator")
                         .WithMany()

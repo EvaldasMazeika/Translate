@@ -30,7 +30,7 @@ namespace translate.web.ViewComponents
                 ViewBag.exist = true;
             }
 
-            var model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId)
+            var model = await _context.Translations.Where(x => x.ProjectId == ProjectId)
                 .Include(i => i.TranslationDictionarys)
                 .ToListAsync();
 

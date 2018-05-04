@@ -28,7 +28,7 @@ namespace translate.web.ViewComponents
 
             var result = await _context.TranslationDictionarys.Where(x => x.TranslationId == model.Id)
                 .Include(a=>a.Translations)
-                .ThenInclude(q=>q.Document).Skip((model.PageIndex -1) * stat).Take(stat).ToListAsync();
+                /*.ThenInclude(q=>q.Document)*/.Skip((model.PageIndex -1) * stat).Take(stat).ToListAsync();
 
             ViewBag.trans = model.Id;
 

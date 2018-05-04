@@ -27,12 +27,19 @@ namespace translate.web.ViewComponents
         {
             ViewBag.yandexKey = _configuration["YandexApiKey"];
 
+            var projectId = _context.Translations.Where(w => w.Id == dictionary.TranslationId).SingleOrDefault().ProjectId;
+
+            ViewBag.languageId = _context.ProjectDocuments
+                .Where(w => w.ProjectId == projectId)
+                    .Include(i => i.Language)
+                    .SingleOrDefault().Language.Code;
+
             var model = await _context.TranslationDictionarys.Where(x => x.Id == dictionary.Id)
                 .Include(a => a.Translations)
                     .ThenInclude(t=>t.Language)
-                    .Include(a => a.Translations)
-                    .ThenInclude(a => a.Document)
-                        .ThenInclude(r=>r.Language)
+                //    .Include(a => a.Translations)
+                //    .ThenInclude(a => a.Document)
+                //        .ThenInclude(r=>r.Language)
                     .SingleOrDefaultAsync();
 
             return View(model);

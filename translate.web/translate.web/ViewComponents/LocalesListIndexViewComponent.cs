@@ -35,27 +35,24 @@ namespace translate.web.ViewComponents
 
             if (projectMember.ShowOnlyMine == false)
             {
-                 model = await _context.Translations.Where(x => x.Document.ProjectId == ProjectId)
-                    .Include(a => a.Document)
-                        .ThenInclude(i => i.Language)
-                    .Include(a => a.TranslationDictionarys)
-                    .Include(i => i.Translator)
-                    .Include(i => i.Language)
-                    .OrderByDescending(o => o.AddedDate)
-                    .ToListAsync();
+
+                model = await _context.Translations.Where(x => x.ProjectId == ProjectId)
+                   .Include(a => a.TranslationDictionarys)
+                   .Include(i => i.Translator)
+                   .Include(i => i.Language)
+                   .OrderByDescending(o => o.AddedDate)
+                   .ToListAsync();
             }
             else
             {
-                 model = await _context.Translations.Where(w => w.Document.ProjectId == ProjectId && w.TranslatorId.ToString() == user)
-                    .Include(a => a.Document)
-                        .ThenInclude(i => i.Language)
-                    .Include(a => a.TranslationDictionarys)
-                    .Include(i => i.Translator)
-                    .Include(i => i.Language)
-                    .OrderByDescending(o => o.AddedDate)
-                    .ToListAsync();
+                model = await _context.Translations.Where(w => w.ProjectId == ProjectId && w.TranslatorId.ToString() == user)
+                   .Include(a => a.TranslationDictionarys)
+                   .Include(i => i.Translator)
+                   .Include(i => i.Language)
+                   .OrderByDescending(o => o.AddedDate)
+                   .ToListAsync();
             }
-
+            ViewBag.docLanguage = _context.ProjectDocuments.Where(w => w.ProjectId == ProjectId).SingleOrDefault().Language.Name;
             return View(model);
         }
     }

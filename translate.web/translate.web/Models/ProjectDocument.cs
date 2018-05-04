@@ -27,7 +27,6 @@ namespace translate.web.Models
         public Language Language { get; set; }
 
         public ICollection<ProjectDocumentDictionary> ProjectDocumentDictionarys { get; set; }
-        public ICollection<Translation> Translations { get; set; }
         public DocumentType DocumentType { get; set; }
     }
 }

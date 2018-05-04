@@ -61,13 +61,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>@SharedLocalizer.GetLocalizedHtmlString("newFileName")</p>
-                <div class="input-group mb-3">
-                    <input id="docName" type="text" class="form-control">
-                    <div class="input-group-append">
-                        <span class="input-group-text" id="basic-addon2">@ViewBag.docType</span>
-                    </div>
-                </div>
+                <p>Tikrai norite patvirtinti vertimą?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("cancelButton")</button>
@@ -138,14 +132,12 @@
             e.preventDefault();
             var button = jQuery('#VerifyTranslation');
             var translationId = button.data('translationId');
-            var name = jQuery("#docName").val();
 
             jQuery.ajax({
                 type: 'post',
                 url: "/Project/@ViewBag.projectid/VerifyTranslation",
                 data: JSON.stringify({
-                    Id: translationId,
-                    Name: name
+                    Id: translationId
                 }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

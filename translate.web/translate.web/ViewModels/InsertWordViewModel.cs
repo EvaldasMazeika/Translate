@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace translate.web.ViewModels
 {
-    public class VerifyTranslationViewModel
+    public class InsertWordViewModel
     {
-        public Guid Id { get; set; }
+        public Guid Project { get; set; }
+        public Guid Translation { get; set; }
     }
 }

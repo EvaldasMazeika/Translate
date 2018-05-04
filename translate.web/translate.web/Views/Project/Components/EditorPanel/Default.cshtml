@@ -20,7 +20,7 @@
     jQuery('#getTranslation').click(function (e) {
         e.preventDefault();
         var to = "@Model.Translations.Language.Code";
-        var from = "@Model.Translations.Document.Language.Code";
+        var from = "@ViewBag.languageId";
         var lang = from + "-" + to;
         var imput = "@Model.GivenValue";
 
@@ -48,7 +48,7 @@
 
             jQuery.ajax({
                 type: 'POST',
-                url: '/Project/@Model.Translations.Document.ProjectId/AddWordToDict',
+                url: '/Project/@Model.Translations.ProjectId/AddWordToDict',
                 data: JSON.stringify({
                     Id: '@Model.Id',
                     NewWord: imput
@@ -60,7 +60,7 @@
                     var forwardIndex = parseInt(jQuery('#goForward').attr("data-page"));
                     var index = forwardIndex - 1;
                     jQuery("#editor").empty();
-                    jQuery('#editorList').load("/Project/@Model.Translations.Document.ProjectId/GetEditorListAsync?id=" + '@Model.TranslationId' + '&PageIndex=' + index, function () {
+                    jQuery('#editorList').load("/Project/@Model.Translations.ProjectId/GetEditorListAsync?id=" + '@Model.TranslationId' + '&PageIndex=' + index, function () {
                         jQuery('#goBack').attr("data-page", backIndex);
                         jQuery('#goForward').attr("data-page", forwardIndex);
                     });

@@ -1,21 +1,22 @@
-﻿@model IEnumerable<TranslationDictionary>
+﻿
 @inject translate.web.Resources.LocService SharedLocalizer
 
 
 <a class="btn btn-info" asp-controller="Project" asp-action="Index"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
+<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#downloadModal">Parsisiųsti dokumentą</button>
 <hr />
 <div class="table table-responsive">
     <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col">Key</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("givenTranslation")</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("newTranslationWord")</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col">Key</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("givenTranslation")</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("newTranslationWord")</th>
             </tr>
@@ -23,11 +24,40 @@
     </table>
 </div>
 
+<div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="downloadModalLabel">New message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Pavadinimas:</label>
+                        <input type="text" class="form-control" id="nameTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Dokumento tipas:</label>
+                        <select id="typeDoc" class="form-control" asp-items="ViewBag.DocumentTypeId"></select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="downloadBtn" type="button" class="btn btn-primary">Parsisiųsti</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts {
-    <script>
-                jQuery('#example').DataTable({
+<script>
+            jQuery('#example').DataTable({
             "ajax": {
-                "url": "/Project/@ViewBag.projectid/GetTranslationsAjax?tranId=@Model.First().TranslationId",
+                "url": "/Project/@ViewBag.projectid/GetTranslationsAjax?tranId=@ViewBag.translationId",
                 "dataSrc": ""
             },
             "columns": [
@@ -36,5 +66,18 @@
                 { "data": "newValue" }
             ]
         });
-    </script>
+
+
+    jQuery('#downloadBtn').click(function (e) {
+        e.preventDefault();
+        if (jQuery('#nameTitle').val().length > 0) {
+                var title = jQuery('#nameTitle').val();
+                var extId = jQuery('#typeDoc').val();
+
+                window.location = '/Project/@ViewBag.projectid/DownloadTranslationAsync?Id=@ViewBag.translationId&Title=' + title + '&ExtensionId=' + extId ;
+
+        }
+    });
+
+</script>
 }

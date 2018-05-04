@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col">
                 @SharedLocalizer.GetLocalizedHtmlString("leftToTranslate"):  <strong>@ViewBag.toTranslate</strong>
-                @if (ViewBag.toTranslate == 0)
+                @if (ViewBag.toTranslate == 0 && Model.Count() != 0)
                 {
                     <form asp-controller="Project" asp-action="CompleteTranslation" method="post" style="display:inline-flex">
                         <input type="hidden" name="transId" value="@ViewBag.trans" />
@@ -34,7 +34,7 @@
             @foreach (var item in Model)
             {
                 var saved = item.NewValue != null ? "list-group-item-success" : "";
-                <button id="li" type="button" class="list-group-item list-group-item-action @saved" data-pr="@item.Translations.Document.ProjectId" data-key="@item.Id">@item.GivenValue</button>
+                <button id="li" type="button" class="list-group-item list-group-item-action @saved" data-pr="@item.Translations.ProjectId" data-key="@item.Id">@item.GivenValue</button>
             }
         </div>
     </div>

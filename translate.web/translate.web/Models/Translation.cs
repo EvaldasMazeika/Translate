@@ -9,18 +9,17 @@ namespace translate.web.Models
     public class Translation
     {
         public Guid Id { get; set; }
-        public Guid DocumentId { get; set; }
         public Guid LanguageId { get; set; }
         public string Title { get; set; }
-        public string Description { get; set; }
         public bool IsCompleted { get; set; }
         public bool IsWaiting { get; set; }
         public string DeclineComment { get; set; }
         public Guid TranslatorId { get; set; }
-        public string FileName { get; set; }
         public DateTime AddedDate { get; set; }
+        public bool HasDocument { get; set; }
+        public Guid ProjectId { get; set; }
 
-        public ProjectDocument Document { get; set; }
+        public Project Project { get; set; }
         public Language Language { get; set; }
         public AppIdentityUser Translator { get; set; }
         public ICollection<TranslationDictionary> TranslationDictionarys { get; set; }

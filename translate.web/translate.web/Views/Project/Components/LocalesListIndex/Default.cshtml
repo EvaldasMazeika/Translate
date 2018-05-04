@@ -47,39 +47,58 @@ else
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr class="d-flex">
-                        @if (item.TranslatorId.ToString() == ViewBag.userId && item.IsWaiting == false && item.IsCompleted == false)
-                        {
-                            <td class="col-2"><a asp-controller="Project" asp-action="Editor" asp-route-id="@item.Id">@item.Title</a></td>
+                    var color = "";
+                    if (item.IsCompleted)
+                    {
+                        color = "table-success";
+                    } else if (item.IsWaiting)
+                    {
+                        color = "table-primary";
 
-                        }
-                        else if (item.IsCompleted == true)
-                        {
-                            <td class="col-2"><a asp-controller="Project" asp-action="ReviewTranslation" asp-route-id="@item.Id">@item.Title</a></td>
-                        }
-                        else
-                        {
-                            <td class="col-2">@item.Title</td>
-                        }
+                    }
+
+                    <tr class="d-flex @color">
+                        <td class="col-2">
+                            @if (item.TranslatorId.ToString() == ViewBag.userId && item.IsWaiting == false && item.IsCompleted == false)
+                            {
+                                <a asp-controller="Project" asp-action="Editor" asp-route-id="@item.Id">@item.Title</a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Project" asp-action="ReviewTranslation" asp-route-id="@item.Id">@item.Title</a>
+
+                            }
+                        </td>
                         <td class="col-sm-4">
-                            <div class="progress">
-                                @{
-                                    double all = item.TranslationDictionarys.Count() != 0 ? item.TranslationDictionarys.Count() : 1;
-                                    double proc = item.TranslationDictionarys.Where(x => x.NewValue != null).Count();
-                                }
-                                <div class="progress-bar bg-success" role="progressbar" style="width: @Math.Round(((proc/all)*100))%" aria-valuenow="@Math.Round(((proc/all)*100))" aria-valuemin="0" aria-valuemax="100">@Math.Round(((proc / all) * 100))%</div>
-                            </div>
+                            @if (item.HasDocument)
+                            {
+                                <div class="progress">
+                                    @{
+                                        double all = item.TranslationDictionarys.Count() != 0 ? item.TranslationDictionarys.Count() : 1;
+                                        double proc = item.TranslationDictionarys.Where(x => x.NewValue != null).Count();
+                                    }
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: @Math.Round(((proc/all)*100))%" aria-valuenow="@Math.Round(((proc/all)*100))" aria-valuemin="0" aria-valuemax="100">@Math.Round(((proc / all) * 100))%</div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <h6>pridėta žodžių: <Strong>@item.TranslationDictionarys.Count</Strong></h6>
+
+                            }
                         </td>
                         <td class="col-sm-3">
-                            @SharedLocalizer.GetLocalizedHtmlString("appointed"): <strong>@item.Translator.Name @item.Translator.Surname</strong> @item.Document.Language.Name >  @item.Language.Name
+                            @if (item.HasDocument)
+                            {
+                                <p>@SharedLocalizer.GetLocalizedHtmlString("appointed"): <strong>@item.Translator.Name @item.Translator.Surname </strong>@ViewBag.docLanguage > @item.Language.Name</p>
+                            }
+                            else
+                            {
+                                <p>@SharedLocalizer.GetLocalizedHtmlString("appointed"): <strong>@item.Translator.Name @item.Translator.Surname</strong> @item.Language.Name</p>
+                            }
                         </td>
                         <td class="col-sm-3">
                             <div class="btn-group btn-group-sm d-flex flex-wrap" style="float:right" role="group">
-                                @if (item.IsCompleted == true)
-                                {
-                                    <a asp-controller="Project" asp-action="DownloadTranslation" asp-route-id="@item.Id" class="btn btn-dark">@SharedLocalizer.GetLocalizedHtmlString("download")</a>
-                                }
-
                                 @if (ViewBag.creator)
                                 {
                                     if (item.IsWaiting == true)
@@ -87,7 +106,7 @@ else
                                         <a asp-controller="Project" asp-action="CheckTranslation" asp-route-id="@item.Id" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("verify")</a>
 
                                     }
-                                    <button type="button" id="deleteButton" data-toggle="modal" data-translate="@item.Id" data-project="@item.Document.ProjectId" data-name="@item.Title" data-target="#DeleteTranslationsModal" class="btn btn-danger btn-sm" style="float:right">@SharedLocalizer.GetLocalizedHtmlString("deleteButton")</button>
+                                    <button type="button" id="deleteButton" data-toggle="modal" data-translate="@item.Id" data-project="@item.ProjectId" data-name="@item.Title" data-target="#DeleteTranslationsModal" class="btn btn-danger btn-sm" style="float:right">@SharedLocalizer.GetLocalizedHtmlString("deleteButton")</button>
                                 }
                             </div>
                         </td>

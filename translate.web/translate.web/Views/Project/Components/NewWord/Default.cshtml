@@ -1,0 +1,60 @@
+﻿@model InsertWordViewModel
+@inject translate.web.Resources.LocService SharedLocalizer
+<div class="card">
+    <div class="card-header">
+        Naujo žodžio priskyrimas
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="form-group">
+                <label>Raktas</label>
+                <input type="text" id="keyValue" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Reikšmė</label>
+                <textarea class="form-control" id="valueValue" rows="3"></textarea>
+            </div>
+            <button id="newWordBtn" type="submit" class="btn btn-success" style="float:right">Pridėti</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    jQuery('#newWordBtn').click(function (e) {
+        e.preventDefault();
+        var keyInput = jQuery('#keyValue').val();
+        var valueInput = jQuery('#valueValue').val();
+
+        if (jQuery.trim(keyInput) == '' || jQuery.trim(valueInput) == '') {
+            alert('@SharedLocalizer.GetLocalizedHtmlString("notEmpty")');
+        } else {
+
+             jQuery.ajax({
+                type: 'POST',
+                url: '/Project/@Model.Project/CreateNewWord',
+                data: JSON.stringify({
+                    TranslationId: '@Model.Translation',
+                    KeyValue: keyInput,
+                    ValueValue: valueInput
+                }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var backIndex = parseInt(jQuery('#goBack').attr("data-page"));
+                    var forwardIndex = parseInt(jQuery('#goForward').attr("data-page"));
+                    var index = forwardIndex - 1;
+                    jQuery("#editor").empty();
+                    jQuery('#editorList').load("/Project/@Model.Project/GetEditorListAsync?id=" + '@Model.Translation' + '&PageIndex=' + index, function () {
+                        jQuery('#goBack').attr("data-page", backIndex);
+                        jQuery('#goForward').attr("data-page", forwardIndex);
+                    });
+
+                },
+                error: function (result) {
+                }
+            });
+
+        }
+
+     });
+</script>

@@ -10,10 +10,6 @@ namespace translate.web.ViewModels
     public class NewTranslationViewModel
     {
         [Required]
-        [Display(Name = "documentTitle")]
-        public Guid DocumentId { get; set; }
-
-        [Required]
         [Display(Name = "language")]
         public Guid LanguageId { get; set; }
 
@@ -24,13 +20,11 @@ namespace translate.web.ViewModels
         public string Title { get; set; }
 
         [Required]
-        [Display(Name = "projectDescription")]
-        [MinLength(5)]
-        [MaxLength(100)]
-        public string Description { get; set; }
-
-        [Required]
         [Display(Name = "translator")]
         public Guid TranslatorId { get; set; }
+
+        [Display(Name ="Naudoti dokumentą?")]
+        public bool HasDoc { get; set; }
+
     }
 }
