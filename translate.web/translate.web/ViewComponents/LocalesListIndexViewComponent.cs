@@ -53,7 +53,9 @@ namespace translate.web.ViewComponents
                    .ToListAsync();
             }
             if (_context.ProjectDocuments.Where(w=>w.ProjectId == ProjectId).Any())
-                ViewBag.docLanguage = _context.ProjectDocuments.Where(w => w.ProjectId == ProjectId).SingleOrDefault().Language.Name;
+                ViewBag.docLanguage = _context.ProjectDocuments.Where(w => w.ProjectId == ProjectId)
+                    .Include(i=>i.Language)
+                    .SingleOrDefault().Language.Name;
 
             return View(model);
         }
