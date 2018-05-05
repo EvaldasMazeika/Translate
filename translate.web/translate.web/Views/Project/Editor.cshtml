@@ -115,7 +115,7 @@
             if (jQuery('#nameTitle').val().length > 0) {
                 var title = jQuery('#nameTitle').val();
                 var extId = jQuery('#typeDoc').val();
-
+                jQuery('#downloadModal').modal('hide');
                 window.location = '/Project/@Model.ProjectId/DownloadTranslationAsync?Id=@Model.Id&Title=' + title + '&ExtensionId=' + extId ;
 
             }

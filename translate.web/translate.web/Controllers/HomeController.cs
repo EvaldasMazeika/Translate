@@ -344,8 +344,6 @@ namespace translate.web.Controllers
                     }
 
                     await _context.SaveChangesAsync();
-
-                   // TempData["messo"] = $"{_locService.GetLocalizedHtmlString("documentUpload")}";
                 }
             }
         }

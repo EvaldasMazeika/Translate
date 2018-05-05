@@ -373,9 +373,6 @@ namespace translate.web.Controllers
 
             switch (docType.Name)
             {
-                case ".resx":
-                    await LoadResxDocumentAsync(projectId, model, docName);
-                    return RedirectToAction("ProjectDocument");
                 case ".xml":
                     await LoadXmlDocumentAsync(projectId, model, docName);
                     return RedirectToAction("ProjectDocument");
@@ -431,69 +428,6 @@ namespace translate.web.Controllers
                     _context.Update(pro);
 
                     await _context.SaveChangesAsync();
-
-                   // TempData["messo"] = $"{_locService.GetLocalizedHtmlString("documentUpload")}";
-                }
-            }
-        }
-
-        private async Task LoadResxDocumentAsync(Guid projectId, UploadFileViewModel model, string docName)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                await model.File.CopyToAsync(memoryStream);
-                memoryStream.Position = 0;
-                XmlDocument docs = new XmlDocument();
-                docs.Load(memoryStream);
-                XmlNodeList nodeScheme = docs.GetElementsByTagName("xsd:schema");
-                XmlNodeList node = docs.GetElementsByTagName("resheader");
-                XmlNodeList dataNodes = docs.GetElementsByTagName("data");
-
-                var header = nodeScheme.Item(0).OuterXml;
-
-                var sb = new StringBuilder();
-                foreach (XmlNode item in node)
-                {
-                    sb.Append(item.OuterXml);
-                }
-                var header2 = sb.ToString();
-                var finalHeader = String.Concat(header, header2);
-                finalHeader = $"<root>{finalHeader}</root>";
-
-                var lang = await _context.Languages.Where(x => x.Id == model.LanguageId).SingleOrDefaultAsync();
-                var project = await _context.Projects.Where(x => x.Id == projectId).SingleOrDefaultAsync();
-                var doc = await _context.DocumentTypes.Where(w => w.Id == model.DocumentTypeId).SingleOrDefaultAsync();
-
-                var projectDocument = new ProjectDocument
-                {
-                    Name = docName,
-                    Language = lang,
-                    Header = finalHeader,
-                    Project = project,
-                    DocumentType = doc,
-                    AddedDate = DateTime.Now
-                };
-
-                _context.Add(projectDocument);
-
-                if (_context.SaveChanges() > 0)
-                {
-                    foreach (XmlNode item in dataNodes)
-                    {
-                        var nodeId = item.Attributes["name"].Value;
-                        var nodeValue = item.SelectSingleNode("value").InnerText;
-                        var dictionary = new ProjectDocumentDictionary
-                        {
-                            Document = projectDocument,
-                            Name = nodeId,
-                            Value = nodeValue
-                        };
-                        _context.Add(dictionary);
-                    }
-
-                    await _context.SaveChangesAsync();
-
-                    TempData["messo"] = $"{_locService.GetLocalizedHtmlString("documentUpload")}";
                 }
             }
         }
@@ -527,8 +461,8 @@ namespace translate.web.Controllers
         }
 
         [HttpGet]
-        [Route("ReviewTranslation")]
-        public async Task<IActionResult> ReviewTranslation(Guid ProjectId, Guid id)
+        [Route("ReviewTranslation/{id}")]
+        public async Task<IActionResult> ReviewTranslation(Guid ProjectId,[FromRoute] Guid id)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var translation = _context.Translations.Where(w => w.Id == id)
@@ -536,11 +470,10 @@ namespace translate.web.Controllers
                 .SingleOrDefault().TranslationDictionarys.FirstOrDefault();
             if (translation != null)
             {
-              //  var model = await _context.TranslationDictionarys.Where(w => w.TranslationId == id && w.NewValue == null).ToListAsync();
                 ViewBag.translationId = id;
                 ViewBag.projectid = ProjectId;
                 PopulateDocumentsTypesDropDown();
-                return View(/*model*/);
+                return View();
             }
 
             return RedirectToAction("Index");
@@ -568,10 +501,7 @@ namespace translate.web.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var access = _context.ProjectMembers.Where(w => w.ProjectId == ProjectId && w.EmployeeId == user.Id).SingleOrDefault().IsCreator;
             var translation = _context.Translations.Where(w => w.Id == id).SingleOrDefault().IsWaiting;
-            var docType = _context.Translations.Where(w => w.Id == id)
-                //.Include(i => i.Document)
-                //    .ThenInclude(t => t.DocumentType)
-                .SingleOrDefault()/*.Document.DocumentType.Name*/;
+            var docType = _context.Translations.Where(w => w.Id == id).SingleOrDefault();
 
             if (access && translation)
             {
@@ -692,69 +622,6 @@ namespace translate.web.Controllers
             return new JsonResult(json);
         }
 
-
-        [Route("DownloadTranslation")]
-        public IActionResult DownloadTranslation(Guid ProjectId, Guid id)
-        {
-            //var docType = _context.Translations.Where(w => w.Id == id)
-            //    //.Include(i=>i.Document)
-            //    //    .ThenInclude(t=>t.DocumentType)
-            //    .SingleOrDefault()/*.Document.DocumentType.Name*/;
-
-            switch (/*docType*/"")
-            {
-                case ".resx":
-                    return ExportResx(id);
-                case ".xml":
-                    return ExportXml(id);
-                default:
-                    return View("index");
-            }      
-        }
-
-        private FileStreamResult ExportXml(Guid mineId)
-        {
-            XmlDocument doc = new XmlDocument();
-
-            XmlDeclaration xmldecl;
-            xmldecl = doc.CreateXmlDeclaration("1.0", null, null);
-            xmldecl.Encoding = "utf-8";
-
-            doc.AppendChild(xmldecl);
-
-            XmlElement root = doc.CreateElement("root");
-            doc.AppendChild(root);
-
-            var translation = _context.Translations.Where(x => x.Id == mineId).SingleOrDefault();
-          //  var document = _context.ProjectDocuments.Where(x => x.Id == translation.DocumentId).SingleOrDefault();
-            
-            var translations = _context.TranslationDictionarys.Where(x => x.TranslationId == mineId).ToList();
-
-            foreach (var item in translations)
-            {
-                XmlElement trans = doc.CreateElement("data");
-                var atrName = doc.CreateAttribute("name");
-                atrName.Value = item.Name;
-                trans.Attributes.Append(atrName);
-                var word = doc.CreateElement("value");
-                word.InnerText = item.NewValue;
-                trans.AppendChild(word);
-                root.AppendChild(trans);
-            }
-
-            MemoryStream stream = new MemoryStream();
-            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
-            writer.Formatting = System.Xml.Formatting.Indented;
-            writer.Indentation = 2;
-
-            doc.WriteTo(writer);
-            writer.Flush();
-
-            stream.Position = 0;
-
-            return File(stream, "text/xml", /*translation.FileName*/"");
-        }
-
         [HttpPost]
         [Route("DeleteTranslation")]
         public async Task<IActionResult> DeleteTranslation([FromBody] Translation model)
@@ -860,7 +727,7 @@ namespace translate.web.Controllers
                 case ".xml":
                     return DownloadXmlAjax(projectId, docId, model.Title);
                 default:
-                    return BadRequest();
+                    return RedirectToAction("ProjectDocument");
             }
         }
 
@@ -873,7 +740,7 @@ namespace translate.web.Controllers
                 case ".xml":
                     return DownloadTranslationXml(projectId, model.Id, model.Title);
                 default:
-                    return BadRequest();
+                    return RedirectToAction("ReviewTranslation", new  { projectId = projectId, id = model.Id  });
             }
         }
 
@@ -918,8 +785,6 @@ namespace translate.web.Controllers
 
         private IActionResult DownloadXmlAjax(Guid projectId, Guid docId, string title)
         {
-            //var projectDocument = _context.ProjectDocuments.Where(x => x.Id == id).SingleOrDefault();
-
             XmlDocument doc = new XmlDocument();
 
             XmlDeclaration xmldecl;
@@ -958,123 +823,6 @@ namespace translate.web.Controllers
             return File(stream, "text/xml", $"{title}.xml");
         }
 
-        [HttpGet]
-        [Route("DownloadDoc")]
-        public IActionResult DownloadDoc(Guid ProjectId, Guid id)
-        {
-            var docType = _context.ProjectDocuments.Where(w => w.Id == id)
-                .Include(i => i.DocumentType)
-                .SingleOrDefault().DocumentType.Name;
-
-            switch (docType)
-            {
-                case ".resx":
-                    return DownloadResx(ProjectId, id);
-                case ".xml":
-                    return DownloadXml(ProjectId, id);
-                default:
-                    return View("Index");
-            }
-        }
-
-        private FileStreamResult DownloadXml(Guid projectId, Guid id)
-        {
-            var projectDocument = _context.ProjectDocuments.Where(x => x.Id == id).SingleOrDefault();
-
-            XmlDocument doc = new XmlDocument();
-
-            XmlDeclaration xmldecl;
-            xmldecl = doc.CreateXmlDeclaration("1.0", null, null);
-            xmldecl.Encoding = "utf-8";
-
-            doc.AppendChild(xmldecl);
-
-            XmlElement root = doc.CreateElement("root");
-            doc.AppendChild(root);
-
-            var dictionary = _context.ProjectDocumentDictionarys.Where(w => w.DocumentId == id).ToList();
-
-            foreach (var item in dictionary)
-            {
-                XmlElement trans = doc.CreateElement("data");
-                var atrName = doc.CreateAttribute("name");
-                atrName.Value = item.Name;
-                trans.Attributes.Append(atrName);
-                var word = doc.CreateElement("value");
-                word.InnerText = item.Value;
-                trans.AppendChild(word);
-                root.AppendChild(trans);
-            }
-
-            MemoryStream stream = new MemoryStream();
-            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
-            writer.Formatting = System.Xml.Formatting.Indented;
-            writer.Indentation = 2;
-
-            doc.WriteTo(writer);
-            writer.Flush();
-
-            stream.Position = 0;
-
-            return File(stream, "text/xml", projectDocument.Name);
-        }
-
-        private FileStreamResult DownloadResx(Guid ProjectId, Guid id)
-        {
-            var projectDocument = _context.ProjectDocuments.Where(x => x.Id == id).SingleOrDefault();
-
-            XmlDocument doc = new XmlDocument();
-
-            XmlDeclaration xmldecl;
-            xmldecl = doc.CreateXmlDeclaration("1.0", null, null);
-            xmldecl.Encoding = "utf-8";
-
-            doc.AppendChild(xmldecl);
-
-            XmlElement root = doc.CreateElement("root");
-            doc.AppendChild(root);
-
-            XmlDocument headerXml = new XmlDocument();
-
-            headerXml.LoadXml(projectDocument.Header);
-
-            var rooth = headerXml.FirstChild;
-
-            foreach (XmlNode item in rooth)
-            {
-                doc.DocumentElement.AppendChild(doc.ImportNode(item, true));
-            }
-
-            var dictionary = _context.ProjectDocumentDictionarys.Where(w => w.DocumentId == id).ToList();
-
-            foreach (var item in dictionary)
-            {
-                XmlElement trans = doc.CreateElement("data");
-                var atrName = doc.CreateAttribute("name");
-                var space = doc.CreateAttribute("xml:space");
-                atrName.Value = item.Name;
-                space.Value = "preserve";
-                trans.Attributes.Append(atrName);
-                trans.Attributes.Append(space);
-                var word = doc.CreateElement("value");
-                word.InnerText = item.Value;
-                trans.AppendChild(word);
-                root.AppendChild(trans);
-            }
-
-            MemoryStream stream = new MemoryStream();
-            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
-            writer.Formatting = System.Xml.Formatting.Indented;
-            writer.Indentation = 2;
-
-            doc.WriteTo(writer);
-            writer.Flush();
-
-            stream.Position = 0;
-
-            return File(stream, "text/xml", projectDocument.Name);
-        }
-
         private string GetContentType(string path)
         {
             var types = GetMimeTypes();
@@ -1097,66 +845,9 @@ namespace translate.web.Controllers
                 {".jpeg", "image/jpeg"},
                 {".gif", "image/gif"},
                 {".csv", "text/csv"},
-                {".resx", "text/xml" }
+                {".resx", "text/xml" },
+                {".json", "application/json" }
             };
-        }
-
-        private FileStreamResult ExportResx(Guid mineId)
-        {
-            XmlDocument doc = new XmlDocument();
-
-            XmlDeclaration xmldecl;
-            xmldecl = doc.CreateXmlDeclaration("1.0", null, null);
-            xmldecl.Encoding = "utf-8";
-
-            doc.AppendChild(xmldecl);
-
-            XmlElement root = doc.CreateElement("root");
-            doc.AppendChild(root);
-
-            var what = _context.Translations.Where(x => x.Id == mineId).SingleOrDefault();
-           // var document = _context.ProjectDocuments.Where(x => x.Id == what.DocumentId).SingleOrDefault();
-
-            XmlDocument headerXml = new XmlDocument();
-
-          //  headerXml.LoadXml(document.Header);
-
-            var rooth = headerXml.FirstChild;
-
-            foreach (XmlNode item in rooth)
-            {
-                doc.DocumentElement.AppendChild(doc.ImportNode(item, true));
-            }
-
-            // data add
-            var translations = _context.TranslationDictionarys.Where(x => x.TranslationId == mineId).ToList();
-
-            foreach (var item in translations)
-            {
-                XmlElement trans = doc.CreateElement("data");
-                var atrName = doc.CreateAttribute("name");
-                var space = doc.CreateAttribute("xml:space");
-                atrName.Value = item.Name;
-                space.Value = "preserve";
-                trans.Attributes.Append(atrName);
-                trans.Attributes.Append(space);
-                var word = doc.CreateElement("value");
-                word.InnerText = item.NewValue;
-                trans.AppendChild(word);
-                root.AppendChild(trans);
-            }
-
-            MemoryStream stream = new MemoryStream();
-            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
-            writer.Formatting = System.Xml.Formatting.Indented;
-            writer.Indentation = 2;
-
-            doc.WriteTo(writer);
-            writer.Flush();
-
-            stream.Position = 0;
-            
-            return File(stream, "text/xml", /*what.FileName*/"");
         }
 
         string FormatXml(string xml)

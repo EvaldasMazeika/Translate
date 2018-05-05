@@ -63,10 +63,13 @@ else
                             {
                                 <a asp-controller="Project" asp-action="Editor" asp-route-id="@item.Id">@item.Title</a>
                             }
-                            else
+                            else if (item.TranslationDictionarys.Count != 0)
                             {
                                 <a asp-controller="Project" asp-action="ReviewTranslation" asp-route-id="@item.Id">@item.Title</a>
-
+                            }
+                            else
+                            {
+                                @item.Title
                             }
                         </td>
                         <td class="col-sm-4">

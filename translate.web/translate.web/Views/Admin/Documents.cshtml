@@ -5,6 +5,7 @@
 @inject translate.web.Resources.LocService SharedLocalizer
 
 <a asp-action="NewDocument" asp-controller="Admin" class="btn btn-info" role="button">@SharedLocalizer.GetLocalizedHtmlString("newDocument")</a>
+<h5>Sistema veikia šiuo mentu veikia tik su XML tipo dokumentais.</h5>
 <hr />
 <h2>@SharedLocalizer.GetLocalizedHtmlString("documentsTitle")</h2>
 @if (!Model.Any())
