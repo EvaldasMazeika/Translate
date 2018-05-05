@@ -22,7 +22,8 @@
         var to = "@Model.Translations.Language.Code";
         var from = "@ViewBag.languageId";
         var lang = from + "-" + to;
-        var imput = "@Model.GivenValue";
+        var imput = "@Html.Raw(Model.GivenValue)";
+        imput = encodeURI(imput);
 
         jQuery.ajax({
             type: 'POST',
