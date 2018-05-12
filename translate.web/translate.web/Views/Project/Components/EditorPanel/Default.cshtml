@@ -3,14 +3,21 @@
 
 <div class="card">
     <div class="card-header">
-        <p style="float:left">@SharedLocalizer.GetLocalizedHtmlString("key"): <strong>@Model.Name</strong></p><p style="float:right">@SharedLocalizer.GetLocalizedHtmlString("value"): <strong>@Model.GivenValue</strong></p>
+        <p style="float:left">@SharedLocalizer.GetLocalizedHtmlString("key"): <strong>@Model.Name</strong></p>
+        @if (ViewBag.languageId != null)
+        {
+        <p style="float:right">@SharedLocalizer.GetLocalizedHtmlString("value"): <strong>@Model.GivenValue</strong></p>
+        }
     </div>
     <div class="card-body">
         <form>
             <div class="form-group">
                 <textarea id="textarea" class="form-control" rows="3">@Model.NewValue</textarea>
             </div>
+            @if (ViewBag.languageId != null)
+            {
             <button id="getTranslation" class="btn btn-danger">Yandex</button>
+            }     
             <button id="addWord" type="submit" class="btn btn-success" style="float:right">@SharedLocalizer.GetLocalizedHtmlString("saveButton")</button>
         </form>
     </div>

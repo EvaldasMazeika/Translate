@@ -392,6 +392,18 @@ namespace translate.web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult TermsOfUse()
+        {
+            return View();
+        }
+
         public IActionResult AccessDenied()
         {
             return View();

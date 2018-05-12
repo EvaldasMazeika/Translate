@@ -34,17 +34,18 @@
             @foreach (var item in Model)
             {
                 var saved = item.NewValue != null ? "list-group-item-success" : "";
-                <button id="li" type="button" class="list-group-item list-group-item-action @saved" data-pr="@item.Translations.ProjectId" data-key="@item.Id">@item.GivenValue</button>
+                if (ViewBag.hasDocument)
+                {
+                    <button id="li" type="button" class="list-group-item list-group-item-action @saved" data-pr="@item.Translations.ProjectId" data-key="@item.Id">@item.GivenValue</button>
+
+                }
+                else
+                {
+                     <button id="li" type="button" class="list-group-item list-group-item-action @saved" data-pr="@item.Translations.ProjectId" data-key="@item.Id">@item.NewValue</button>
+
+                }
+
             }
         </div>
     </div>
 </div>
-
-
-
-
-<script>
-    window.onload = function () {
-
-    };
-</script>

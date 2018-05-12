@@ -255,6 +255,13 @@ namespace translate.web.Controllers
         {
             var translation = _context.Translations.Where(w => w.Id == model.TranslationId).SingleOrDefault();
 
+            var exists = _context.TranslationDictionarys.Where(w => w.TranslationId == model.TranslationId && w.Name == model.KeyValue).FirstOrDefault();
+
+            if (exists != null)
+            {
+                return BadRequest();
+            }
+
             var result = new TranslationDictionary { Name = model.KeyValue, GivenValue = model.ValueValue, NewValue = model.ValueValue, Translations = translation };
             _context.Add(result);
             if (_context.SaveChanges() > 0)

@@ -28,8 +28,11 @@ namespace translate.web.ViewComponents
 
             var result = await _context.TranslationDictionarys.Where(x => x.TranslationId == model.Id)
                 .Include(a=>a.Translations)
-                /*.ThenInclude(q=>q.Document)*/.Skip((model.PageIndex -1) * stat).Take(stat).ToListAsync();
+                .Skip((model.PageIndex -1) * stat).Take(stat).ToListAsync();
 
+            var project = _context.Translations.Where(w => w.Id == model.Id).SingleOrDefault();
+
+            ViewBag.hasDocument = project.HasDocument;
             ViewBag.trans = model.Id;
 
             ViewBag.pageIndex = model.PageIndex;

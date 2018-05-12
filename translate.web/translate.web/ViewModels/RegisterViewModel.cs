@@ -65,7 +65,7 @@ namespace translate.web.ViewModels
                 throw new ArgumentException("Attribute not applied on registration");
             }
 
-            if (model.BirthDate > DateTime.Now.AddYears(-18))
+            if (model.BirthDate > DateTime.Now)
             {
                 var service = (LocService)validationContext
                          .GetService(typeof(LocService));
@@ -82,7 +82,7 @@ namespace translate.web.ViewModels
             if (!string.IsNullOrEmpty(this.ErrorMessage))
                 return service.GetLocalizedHtmlString(ErrorMessage);
 
-            return $"error";
+            return $"Error.";
         }
     }
 
