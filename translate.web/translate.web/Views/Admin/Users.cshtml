@@ -10,16 +10,16 @@
     <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
-                <th scope="col">Vardas pavardė</th>
-                <th scope="col">E-mail address</th>
-                <th scope="col">Būsena</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("nameSurname")</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("emailAddress")</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("state")</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <th scope="col">Vardas pavardė</th>
-                <th scope="col">E-mail address</th>
-                <th scope="col">Būsena</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("nameSurname")</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("emailAddress")</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("state")</th>
             </tr>
         </tfoot>
     </table>
@@ -28,17 +28,17 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Vartotojo teisės</h5>
+                <h5 class="modal-title">@SharedLocalizer.GetLocalizedHtmlString("userRoles")</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Norite pasirinktam vartotojui suteikti administratoriaus teises?</p>
+                <p>@SharedLocalizer.GetLocalizedHtmlString("giveAdmin")</p>
             </div>
             <div class="modal-footer">
-                <button id="toAdminBtn" type="button" class="btn btn-primary">Taip</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
+                <button id="toAdminBtn" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("yesButton")</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("noButton")</button>
             </div>
         </div>
     </div>
@@ -47,17 +47,17 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Vartotojo teisės</h5>
+                <h5 class="modal-title">@SharedLocalizer.GetLocalizedHtmlString("userRoles")</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Norite pasirinktam vartotojui atimti administratoriaus teises?</p>
+                <p>@SharedLocalizer.GetLocalizedHtmlString("removeAdmin")</p>
             </div>
             <div class="modal-footer">
-                <button id="toOrdinaryBtn" type="button" class="btn btn-primary">Taip</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ne</button>
+                <button id="toOrdinaryBtn" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("yesButton")</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("noButton")</button>
             </div>
         </div>
     </div>
@@ -74,7 +74,21 @@
                 { "data": "result.fullName" },
                 { "data": "result.email" },
                 { "data": "result.state" }
-            ]
+            ],
+            "language": {
+                "lengthMenu": "@SharedLocalizer.GetLocalizedHtmlString("dtrecords") _MENU_ @SharedLocalizer.GetLocalizedHtmlString("dtPerPage")",
+                "zeroRecords": "@SharedLocalizer.GetLocalizedHtmlString("dtRecorsNotFound")",
+                "info": "@SharedLocalizer.GetLocalizedHtmlString("dtshowingOf") _PAGE_ @SharedLocalizer.GetLocalizedHtmlString("dtof") _PAGES_",
+                "infoEmpty": "@SharedLocalizer.GetLocalizedHtmlString("dtNoRecords")",
+                "infoFiltered": "(@SharedLocalizer.GetLocalizedHtmlString("dtFilteredFrom") _MAX_ @SharedLocalizer.GetLocalizedHtmlString("dtTotalRecords"))",
+                "search": "@SharedLocalizer.GetLocalizedHtmlString("dtSearch")",
+                "paginate": {
+                    "first": "@SharedLocalizer.GetLocalizedHtmlString("dtFirst")",
+                    "last": "@SharedLocalizer.GetLocalizedHtmlString("dtLast")",
+                    "next": "@SharedLocalizer.GetLocalizedHtmlString("dtNext")",
+                    "previous": "@SharedLocalizer.GetLocalizedHtmlString("dtPrevious")"
+                }
+            }
         });
 
 

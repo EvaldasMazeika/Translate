@@ -783,6 +783,48 @@
   <data name="downloadTranslation" xml:space="preserve">
     <value>Download translation</value>
   </data>
+  <data name="dtFilteredFrom" xml:space="preserve">
+    <value>Filtered from</value>
+  </data>
+  <data name="dtFirst" xml:space="preserve">
+    <value>First</value>
+  </data>
+  <data name="dtLast" xml:space="preserve">
+    <value>Last</value>
+  </data>
+  <data name="dtNext" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="dtNoRecords" xml:space="preserve">
+    <value>No records available</value>
+  </data>
+  <data name="dtof" xml:space="preserve">
+    <value>of</value>
+  </data>
+  <data name="dtPerPage" xml:space="preserve">
+    <value>records per page</value>
+  </data>
+  <data name="dtPrevious" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="dtrecords" xml:space="preserve">
+    <value>Display</value>
+  </data>
+  <data name="dtRecorsNotFound" xml:space="preserve">
+    <value>No matching records found</value>
+  </data>
+  <data name="dtSearch" xml:space="preserve">
+    <value>Search:</value>
+  </data>
+  <data name="dtshowingOf" xml:space="preserve">
+    <value>Showing page</value>
+  </data>
+  <data name="dtTotalRecords" xml:space="preserve">
+    <value>total records</value>
+  </data>
+  <data name="giveAdmin" xml:space="preserve">
+    <value>Do you want to give ADMIN role to this user?</value>
+  </data>
   <data name="keyExists" xml:space="preserve">
     <value>This key already exists in translation...</value>
   </data>
@@ -798,8 +840,17 @@
   <data name="privacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
   </data>
+  <data name="removeAdmin" xml:space="preserve">
+    <value>Do you want to remove ADMIN role from this user?</value>
+  </data>
+  <data name="state" xml:space="preserve">
+    <value>State</value>
+  </data>
   <data name="termsOfUse" xml:space="preserve">
     <value>Terms of use</value>
+  </data>
+  <data name="userRoles" xml:space="preserve">
+    <value>User role</value>
   </data>
   <data name="usersLink" xml:space="preserve">
     <value>Users</value>

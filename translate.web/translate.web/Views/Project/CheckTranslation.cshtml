@@ -73,7 +73,7 @@
 
 
 @section scripts {
-    <script>
+<script>
         jQuery('#example').DataTable({
             "ajax": {
                 "url": "/Project/@ViewBag.projectid/GetTranslationsAjax?tranId=@Model.First().TranslationId",
@@ -83,7 +83,21 @@
                 { "data": "name" },
                 { "data": "givenValue" },
                 { "data": "newValue" }
-            ]
+            ],
+            "language": {
+                "lengthMenu": "@SharedLocalizer.GetLocalizedHtmlString("dtrecords") _MENU_ @SharedLocalizer.GetLocalizedHtmlString("dtPerPage")",
+                "zeroRecords": "@SharedLocalizer.GetLocalizedHtmlString("dtRecorsNotFound")",
+                "info": "@SharedLocalizer.GetLocalizedHtmlString("dtshowingOf") _PAGE_ @SharedLocalizer.GetLocalizedHtmlString("dtof") _PAGES_",
+                "infoEmpty": "@SharedLocalizer.GetLocalizedHtmlString("dtNoRecords")",
+                "infoFiltered": "(@SharedLocalizer.GetLocalizedHtmlString("dtFilteredFrom") _MAX_ @SharedLocalizer.GetLocalizedHtmlString("dtTotalRecords"))",
+                "search": "@SharedLocalizer.GetLocalizedHtmlString("dtSearch")",
+                "paginate": {
+                    "first": "@SharedLocalizer.GetLocalizedHtmlString("dtFirst")",
+                    "last": "@SharedLocalizer.GetLocalizedHtmlString("dtLast")",
+                    "next": "@SharedLocalizer.GetLocalizedHtmlString("dtNext")",
+                    "previous": "@SharedLocalizer.GetLocalizedHtmlString("dtPrevious")"
+                }
+            }
         });
 
 
@@ -149,5 +163,5 @@
 
         });
 
-    </script>
+</script>
 }
