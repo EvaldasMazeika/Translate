@@ -70,7 +70,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <p>By creating an account, you agree to our <a asp-controller="Account" asp-action="TermsOfUse">Terms of use</a> and <a asp-controller="Account" asp-action="Privacy">Privacy Policy</a>.</p>
+                            <p>@SharedLocalizer.GetLocalizedHtmlString("ByCreating") <a asp-controller="Account" asp-action="TermsOfUse">@SharedLocalizer.GetLocalizedHtmlString("termsOfUse")</a> @SharedLocalizer.GetLocalizedHtmlString("and") <a asp-controller="Account" asp-action="Privacy">@SharedLocalizer.GetLocalizedHtmlString("privacyPolicy")</a>.</p>
                         </div>
                     </div>
                     <div class="row">

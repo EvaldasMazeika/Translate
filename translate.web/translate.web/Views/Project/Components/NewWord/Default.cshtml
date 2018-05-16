@@ -2,19 +2,19 @@
 @inject translate.web.Resources.LocService SharedLocalizer
 <div class="card">
     <div class="card-header">
-        Naujo žodžio priskyrimas
+        @SharedLocalizer.GetLocalizedHtmlString("newWordAttach")
     </div>
     <div class="card-body">
         <form>
             <div class="form-group">
-                <label>Raktas</label>
+                <label>@SharedLocalizer.GetLocalizedHtmlString("key")</label>
                 <input type="text" id="keyValue" class="form-control">
             </div>
             <div class="form-group">
-                <label>Reikšmė</label>
+                <label>@SharedLocalizer.GetLocalizedHtmlString("value")</label>
                 <textarea class="form-control" id="valueValue" rows="3"></textarea>
             </div>
-            <button id="newWordBtn" type="submit" class="btn btn-success" style="float:right">Pridėti</button>
+            <button id="newWordBtn" type="submit" class="btn btn-success" style="float:right">@SharedLocalizer.GetLocalizedHtmlString("attachWord")</button>
         </form>
     </div>
 </div>
@@ -51,7 +51,7 @@
 
                 },
                 error: function (result) {
-                    alert("This key already exists in translatiion...");
+                    alert('@SharedLocalizer.GetLocalizedHtmlString("keyExists")');
                 }
             });
 

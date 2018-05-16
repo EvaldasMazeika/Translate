@@ -47,9 +47,9 @@
             function drawProjectsCount(result) {
 
                 var barChartData = {
-                    labels: ['@SharedLocalizer.GetLocalizedHtmlString("January")', '@SharedLocalizer.GetLocalizedHtmlString("february")', '@SharedLocalizer.GetLocalizedHtmlString("march")', '@SharedLocalizer.GetLocalizedHtmlString("april")', '@SharedLocalizer.GetLocalizedHtmlString("may")', '@SharedLocalizer.GetLocalizedHtmlString("june")', '@SharedLocalizer.GetLocalizedHtmlString("july")', '@SharedLocalizer.GetLocalizedHtmlString("august")', '@SharedLocalizer.GetLocalizedHtmlString("september")', '@SharedLocalizer.GetLocalizedHtmlString("October")', '@SharedLocalizer.GetLocalizedHtmlString("november")', '@SharedLocalizer.GetLocalizedHtmlString("december")'],
+                    labels: ['@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("January"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("february"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("march"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("april"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("may"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("june"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("july"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("august"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("september"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("October"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("november"))', '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("december"))'],
                     datasets: [{
-                        label: '@SharedLocalizer.GetLocalizedHtmlString("RegistertedProjects")',
+                        label: '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("RegistertedProjects"))',
                         backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
                         borderColor: window.chartColors.blue,
                         borderWidth: 1,
@@ -81,7 +81,7 @@
                         },
                         title: {
                             display: true,
-                            text: '@SharedLocalizer.GetLocalizedHtmlString("ProjectsCountdistribution")'
+                            text: '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("ProjectsCountdistribution"))'
                         }
                     }
                 });

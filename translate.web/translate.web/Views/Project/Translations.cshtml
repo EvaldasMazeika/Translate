@@ -99,9 +99,9 @@
                     label: 'Dataset 1'
                 }],
                 labels: [
-                    '@SharedLocalizer.GetLocalizedHtmlString("open")',
-                    '@SharedLocalizer.GetLocalizedHtmlString("closed")',
-                    '@SharedLocalizer.GetLocalizedHtmlString("waiting")'
+                    '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("open"))',
+                    '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("closed"))',
+                    '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("waiting"))'
                 ]
             },
             options: {
@@ -130,8 +130,8 @@
                     label: 'Dataset 2'
                 }],
                 labels: [
-                    '@SharedLocalizer.GetLocalizedHtmlString("translated")',
-                    '@SharedLocalizer.GetLocalizedHtmlString("notTranslated")'
+                    '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("translated"))',
+                    '@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("notTranslated"))'
                 ]
             },
             options: {

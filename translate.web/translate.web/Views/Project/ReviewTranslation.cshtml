@@ -3,20 +3,20 @@
 
 
 <a class="btn btn-info" asp-controller="Project" asp-action="Index"><i class="fa fa-angle-double-left"></i> @SharedLocalizer.GetLocalizedHtmlString("goBackButton")</a>
-<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#downloadModal">Parsisiųsti dokumentą</button>
+<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#downloadModal">@SharedLocalizer.GetLocalizedHtmlString("downloadTranslation")</button>
 <hr />
 <div class="table table-responsive">
     <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
-                <th scope="col">Key</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("key")</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("givenTranslation")</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("newTranslationWord")</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <th scope="col">Key</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("key")</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("givenTranslation")</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("newTranslationWord")</th>
             </tr>
@@ -28,7 +28,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="downloadModalLabel">New message</h5>
+                <h5 class="modal-title" id="downloadModalLabel">@SharedLocalizer.GetLocalizedHtmlString("downloadTranslation")</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -36,18 +36,18 @@
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Pavadinimas:</label>
+                        <label for="recipient-name" class="col-form-label">@SharedLocalizer.GetLocalizedHtmlString("postTitle"):</label>
                         <input type="text" class="form-control" id="nameTitle">
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Dokumento tipas:</label>
+                        <label for="message-text" class="col-form-label">@SharedLocalizer.GetLocalizedHtmlString("documentType"):</label>
                         <select id="typeDoc" class="form-control" asp-items="ViewBag.DocumentTypeId"></select>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button id="downloadBtn" type="button" class="btn btn-primary">Parsisiųsti</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("cancelButton")</button>
+                <button id="downloadBtn" type="button" class="btn btn-primary">@SharedLocalizer.GetLocalizedHtmlString("downloadButton")</button>
             </div>
         </div>
     </div>

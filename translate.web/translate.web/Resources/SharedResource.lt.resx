@@ -1,5 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -208,7 +267,7 @@
     <value>Slaptažodis</value>
   </data>
   <data name="loginRemember" xml:space="preserve">
-    <value>Prisiminti</value>
+    <value>Prisiminti mane?</value>
   </data>
   <data name="loginUsernamePlaceholder" xml:space="preserve">
     <value>Slapyvardis</value>
@@ -217,7 +276,7 @@
     <value>Atsijungti</value>
   </data>
   <data name="mainMenu" xml:space="preserve">
-    <value>Pagrindinis menu</value>
+    <value>Pagrindinis meniu</value>
   </data>
   <data name="mainWebsiteLink" xml:space="preserve">
     <value>Pagrindinis puslapis</value>
@@ -289,7 +348,7 @@
     <value>Komentarų skaičius</value>
   </data>
   <data name="postCreateDate" xml:space="preserve">
-    <value>Sukurti datą</value>
+    <value>Sukūrimo data</value>
   </data>
   <data name="PostDeletionBody" xml:space="preserve">
     <value>Ar esate įsitikinęs, jog norite ištrinti šį įrašą?</value>
@@ -361,7 +420,7 @@
     <value>Telefono numeris</value>
   </data>
   <data name="registerSurname" xml:space="preserve">
-    <value>Vardas</value>
+    <value>Pavardė</value>
   </data>
   <data name="registerUserName" xml:space="preserve">
     <value>Slapyvardis</value>
@@ -478,7 +537,7 @@
     <value>Projektų skaičius</value>
   </data>
   <data name="ProjectsCountdistribution" xml:space="preserve">
-    <value>Įgalinti kurti projektą</value>
+    <value>Sukurtų projektų pasiskirstymas</value>
   </data>
   <data name="RegistertedProjects" xml:space="preserve">
     <value>Užregistruoti projektai</value>
@@ -701,5 +760,56 @@
   </data>
   <data name="noDocAttached" xml:space="preserve">
     <value>Neprisegtas joks dokumentas</value>
+  </data>
+  <data name="acceptTranslation" xml:space="preserve">
+    <value>Tikrai norite patvirtinti vertimą?</value>
+  </data>
+  <data name="and" xml:space="preserve">
+    <value>ir</value>
+  </data>
+  <data name="attachWord" xml:space="preserve">
+    <value>Pridėti</value>
+  </data>
+  <data name="baseDocument" xml:space="preserve">
+    <value>Pradinis dokumentas</value>
+  </data>
+  <data name="ByCreating" xml:space="preserve">
+    <value>Sukuriant paskyrą, jūs sutinkate su mūsų</value>
+  </data>
+  <data name="downloadButton" xml:space="preserve">
+    <value>Parsisiųsti</value>
+  </data>
+  <data name="downloadDoc" xml:space="preserve">
+    <value>Parsisiųsti dokumentą</value>
+  </data>
+  <data name="downloadTranslation" xml:space="preserve">
+    <value>Parsisiųsti vertimą</value>
+  </data>
+  <data name="keyExists" xml:space="preserve">
+    <value>Šis raktas jau egzistuoja vertime...</value>
+  </data>
+  <data name="languageOfDoc" xml:space="preserve">
+    <value>Dokumento kalba</value>
+  </data>
+  <data name="newWordAttach" xml:space="preserve">
+    <value>Naujo žodžio priskyrimas</value>
+  </data>
+  <data name="newWordButton" xml:space="preserve">
+    <value>Naujas žodis</value>
+  </data>
+  <data name="privacyPolicy" xml:space="preserve">
+    <value>privatumo politika</value>
+  </data>
+  <data name="termsOfUse" xml:space="preserve">
+    <value>naudojimo sąlygos</value>
+  </data>
+  <data name="usersLink" xml:space="preserve">
+    <value>Vartotojai</value>
+  </data>
+  <data name="usersTitle" xml:space="preserve">
+    <value>Vartotojai</value>
+  </data>
+  <data name="wordsListCount" xml:space="preserve">
+    <value>Pridėta žodžių</value>
   </data>
 </root>

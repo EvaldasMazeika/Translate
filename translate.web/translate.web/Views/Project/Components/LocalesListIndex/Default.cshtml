@@ -6,13 +6,13 @@
 
 @if (!Model.Any())
 {
-    <a class="btn btn-primary" asp-controller="Project" asp-action="ProjectDocument" role="button">Pradinis dokumentas</a>
+<a class="btn btn-primary" asp-controller="Project" asp-action="ProjectDocument" role="button">@SharedLocalizer.GetLocalizedHtmlString("baseDocument")</a>
     <hr />
     <h2 class="text-warning text-center">@SharedLocalizer.GetLocalizedHtmlString("addTranslationTitle")</h2>
 }
 else
 {
-    <a class="btn btn-primary" asp-controller="Project" asp-action="ProjectDocument" role="button">Pradinis dokumentas</a>
+    <a class="btn btn-primary" asp-controller="Project" asp-action="ProjectDocument" role="button">@SharedLocalizer.GetLocalizedHtmlString("baseDocument")</a>
     <hr />
     <div class="table-responsive">
         <table class="table table-hover">
@@ -86,7 +86,7 @@ else
                             }
                             else
                             {
-                                <h6>pridėta žodžių: <Strong>@item.TranslationDictionarys.Count</Strong></h6>
+                                <h6>@SharedLocalizer.GetLocalizedHtmlString("wordsListCount"): <Strong>@item.TranslationDictionarys.Count</Strong></h6>
 
                             }
                         </td>

@@ -1,5 +1,7 @@
 ﻿@model Project
 
+
+@inject translate.web.Resources.LocService SharedLocalizer
 <div class="row">
     <div id="localesList" class="col-sm-8">
         @await Component.InvokeAsync("LocalesListIndex", new { ProjectId = Model.Id })
@@ -98,7 +100,7 @@
                     success: function (response) {
                         jQuery('#AddmemberModal').modal('hide');
                         jQuery("#alerti").append(`<div class="alert alert-success alert-dismissible fade show" role="alert">
-      Pakvietimas sėkmingai išsiųstas
+      @SharedLocalizer.GetLocalizedHtmlString("successSend")
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -107,7 +109,7 @@
                     error: function (response) {
                         jQuery('#AddmemberModal').modal('hide');
                         jQuery("#alerti").append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
-      Įvyko klaida
+      @SharedLocalizer.GetLocalizedHtmlString("errorOcurred")
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -149,7 +151,7 @@
                     error: function (result) {
                         jQuery('#DeleteMemberModal').modal('hide');
                         jQuery("#alerti").append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
-          Įvyko klaida
+          @SharedLocalizer.GetLocalizedHtmlString("errorOcurred")
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

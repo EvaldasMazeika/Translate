@@ -502,7 +502,7 @@ namespace translate.web.Controllers
             return BadRequest();
         }
 
-        [Route("CheckTranslation")]
+        [Route("CheckTranslation/{id}")]
         public async Task<IActionResult> CheckTranslation(Guid ProjectId, Guid id)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);

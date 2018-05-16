@@ -759,4 +759,55 @@
   <data name="noDocAttached" xml:space="preserve">
     <value>No document is attached</value>
   </data>
+  <data name="acceptTranslation" xml:space="preserve">
+    <value>Are you really want to accept this translation?</value>
+  </data>
+  <data name="and" xml:space="preserve">
+    <value>and</value>
+  </data>
+  <data name="attachWord" xml:space="preserve">
+    <value>Attach</value>
+  </data>
+  <data name="baseDocument" xml:space="preserve">
+    <value>Initial document</value>
+  </data>
+  <data name="ByCreating" xml:space="preserve">
+    <value>By creating an account, you agree to our</value>
+  </data>
+  <data name="downloadButton" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="downloadDoc" xml:space="preserve">
+    <value>Download document</value>
+  </data>
+  <data name="downloadTranslation" xml:space="preserve">
+    <value>Download translation</value>
+  </data>
+  <data name="keyExists" xml:space="preserve">
+    <value>This key already exists in translation...</value>
+  </data>
+  <data name="languageOfDoc" xml:space="preserve">
+    <value>Language of the document</value>
+  </data>
+  <data name="newWordAttach" xml:space="preserve">
+    <value>New word assignment</value>
+  </data>
+  <data name="newWordButton" xml:space="preserve">
+    <value>New word</value>
+  </data>
+  <data name="privacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="termsOfUse" xml:space="preserve">
+    <value>Terms of use</value>
+  </data>
+  <data name="usersLink" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="usersTitle" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="wordsListCount" xml:space="preserve">
+    <value>Words added</value>
+  </data>
 </root>

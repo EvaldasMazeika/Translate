@@ -11,14 +11,14 @@
     <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("key")</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("givenTranslation")</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("newTranslationWord")</th>
             </tr>
         </thead>
         <tfoot>
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("key")</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("givenTranslation")</th>
                 <th scope="col">@SharedLocalizer.GetLocalizedHtmlString("newTranslationWord")</th>
             </tr>
@@ -61,7 +61,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Tikrai norite patvirtinti vertimą?</p>
+                <p>@SharedLocalizer.GetLocalizedHtmlString("acceptTranslation")</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">@SharedLocalizer.GetLocalizedHtmlString("cancelButton")</button>
