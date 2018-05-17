@@ -861,4 +861,7 @@
   <data name="wordsListCount" xml:space="preserve">
     <value>Words added</value>
   </data>
+  <data name="docsNotification" xml:space="preserve">
+    <value>System at the moment works only with XML files.</value>
+  </data>
 </root>

@@ -863,4 +863,7 @@
   <data name="wordsListCount" xml:space="preserve">
     <value>Pridėta žodžių</value>
   </data>
+  <data name="docsNotification" xml:space="preserve">
+    <value>Sistema veikia šiuo mentu veikia tik su XML tipo dokumentais.</value>
+  </data>
 </root>
