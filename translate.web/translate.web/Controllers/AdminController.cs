@@ -184,7 +184,7 @@ namespace translate.web.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var model = _context.Users.Where(w => w.Id != user.Id).ToList();
 
-            var result = model.Select(async s => new { userId = s.Id, fullName = s.UserName + " " + s.Surname, email = s.Email, state = await _userManager.IsInRoleAsync(await _userManager.FindByIdAsync(s.Id.ToString()), "Administrator") ? "Administratorius" : "Vertėjas", isAdmin = await _userManager.IsInRoleAsync(await _userManager.FindByIdAsync(s.Id.ToString()), "Administrator") }).ToList();
+            var result = model.Select(async s => new { userId = s.Id, fullName = s.Name + " " + s.Surname, email = s.Email, state = await _userManager.IsInRoleAsync(await _userManager.FindByIdAsync(s.Id.ToString()), "Administrator") ? "Administratorius" : "Vertėjas", isAdmin = await _userManager.IsInRoleAsync(await _userManager.FindByIdAsync(s.Id.ToString()), "Administrator") }).ToList();
 
             return new JsonResult(result);
         }
