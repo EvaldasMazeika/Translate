@@ -13,12 +13,12 @@ namespace translate.web.ViewModels
         public string Provider { get; set; }
 
         [Required]
-        [Display(Name = "Gautas kodas")]
+        [Display(Name = "recievedCode")]
         public string Code { get; set; }
 
         public string ReturnUrl { get; set; }
 
-        [Display(Name = "Įsiminti naršyklę?")]
+        [Display(Name = "rememberBrowser")]
         public bool RememberBrowser { get; set; }
 
         [Display(Name = "Prisiminti mane?")]

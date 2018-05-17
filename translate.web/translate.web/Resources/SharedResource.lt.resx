@@ -866,4 +866,10 @@
   <data name="docsNotification" xml:space="preserve">
     <value>Sistema veikia šiuo mentu veikia tik su XML tipo dokumentais.</value>
   </data>
+  <data name="recievedCode" xml:space="preserve">
+    <value>Gautas kodas</value>
+  </data>
+  <data name="rememberBrowser" xml:space="preserve">
+    <value>Įsiminti naršyklę?</value>
+  </data>
 </root>

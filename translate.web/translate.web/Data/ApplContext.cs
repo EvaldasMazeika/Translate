@@ -40,8 +40,8 @@ namespace translate.web.Data
             builder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogin");
            // builder.Ignore<IdentityRoleClaim<Guid>>();
             builder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaim");
-            builder.Ignore<IdentityUserToken<Guid>>();
-           // builder.Entity<IdentityUserToken<Guid>>().ToTable("UserToken");
+          //  builder.Ignore<IdentityUserToken<Guid>>();
+            builder.Entity<IdentityUserToken<Guid>>().ToTable("UserToken");
 
             builder.Entity<ProjectMember>()
                 .HasKey(c => new { c.ProjectId, c.EmployeeId });

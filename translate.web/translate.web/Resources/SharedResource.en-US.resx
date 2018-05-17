@@ -864,4 +864,10 @@
   <data name="docsNotification" xml:space="preserve">
     <value>System at the moment works only with XML files.</value>
   </data>
+  <data name="recievedCode" xml:space="preserve">
+    <value>Recieved Code</value>
+  </data>
+  <data name="rememberBrowser" xml:space="preserve">
+    <value>Remember browser?</value>
+  </data>
 </root>
