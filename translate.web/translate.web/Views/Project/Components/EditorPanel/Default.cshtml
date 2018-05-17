@@ -29,7 +29,7 @@
         var to = "@Model.Translations.Language.Code";
         var from = "@ViewBag.languageId";
         var lang = from + "-" + to;
-        var imput = "@Html.Raw(Model.GivenValue)";
+        var imput = `@Html.Raw(Model.GivenValue)`;
         imput = encodeURI(imput);
 
         jQuery.ajax({
@@ -51,7 +51,7 @@
         var imput = jQuery('#textarea').val();
 
         if (jQuery.trim(imput) == '') {
-            alert('@SharedLocalizer.GetLocalizedHtmlString("notEmpty")');
+            alert('@Html.Raw(SharedLocalizer.GetLocalizedHtmlString("notEmpty"))');
         } else {
 
             jQuery.ajax({
